@@ -1,0 +1,2229 @@
+openapi: 3.0.1
+info:
+  title: avoindata-api
+  description: API for Fingrid Open Data
+  contact: { }
+  version: '1.0'
+servers:
+  - url: https://data.fingrid.fi/api
+paths:
+  /data:
+    get:
+      tags:
+        - Data
+      summary: GetMultipleTimeseriesData
+      description: 'Get data for multiple datasets. Returns empty array if no data is found. If only part of requested datasets have data in generel or for requested timespan, those data are returned.'
+      operationId: GetMultipleTimeseriesData
+      parameters:
+        - name: datasets
+          in: query
+          description: Comma-separated list of dataset ids
+          required: true
+          schema:
+            type: string
+          examples:
+            Example 1:
+              value: 245
+            Example 2:
+              value: 245247
+        - name: startTime
+          in: query
+          description: 'Starting time from which to query data. Timezone is optional, UTC is assumed if not provided. Response is always in UTC time. If you are using tester on this page use Example 1 format, if you are using curl use Example 2 format.'
+          schema:
+            type: string
+            format: date-time
+          examples:
+            Example 1:
+              value: '2023-06-28T12:00:00.0000000+00:00'
+            Example 2:
+              value: 2023-06-28T00:00%2b0300
+        - name: endTime
+          in: query
+          description: 'Ending time up to which to query data. Timezone is optional, UTC is assumed if not provided. Response is always in UTC time. If you are using tester on this page use Example 1 format, if you are using curl use Example 2 format.'
+          schema:
+            type: string
+            format: date-time
+          examples:
+            Example 1:
+              value: '2023-06-28T11:59:00.0000000+00:00'
+            Example 2:
+              value: 2023-06-28T23:59%2b0300
+        - name: format
+          in: query
+          description: 'Response format. Either json, csv or xml. Default is json.'
+          schema:
+            enum:
+              - json
+              - csv
+              - xml
+            type: string
+          examples:
+            Example 1:
+              value: json
+            Example 2:
+              value: csv
+            Example 3:
+              value: xml
+        - name: oneRowPerTimePeriod
+          in: query
+          description: 'If true, returns one row per time period, instead of one row per observation. Result has an attribute for each requested dataset. Currently does not support XML. Default is false.'
+          schema:
+            type: boolean
+          example: true
+        - name: page
+          in: query
+          description: Number of page. Default is 1.
+          schema:
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of results per page. Value can be between 1-20000. Default is 10.
+          schema:
+            maximum: 20000.0
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: locale
+          in: query
+          description: Language for response. Used only if oneRowPerTimePeriod is true. Either en or fi. Default is fi.
+          schema:
+            enum:
+              - en
+              - fi
+            type: string
+          example: en
+        - name: sortBy
+          in: query
+          description: Order results by this attribute. Accepts startTime and endTime. Default is startTime.
+          schema:
+            enum:
+              - startTime
+              - endTime
+            type: string
+          example: startTime
+        - name: sortOrder
+          in: query
+          description: Order results in this direction. Either asc or desc. Defaults to desc (or asc if oneRowPerTimePeriod is enabled).
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+          example: asc
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeseriesDataResponse'
+              examples:
+                'Example 1: JSON, one row per observation':
+                  value:
+                    data:
+                      - datasetId: 245
+                        startTime: '2023-06-28T12:15:00.0000000+00:00'
+                        endTime: '2023-06-28T12:30:00.0000000+00:00'
+                        value: 186.8
+                      - datasetId: 247
+                        startTime: '2023-06-28T12:15:00.0000000+00:00'
+                        endTime: '2023-06-28T12:30:00.0000000+00:00'
+                        value: 496.7
+                    pagination:
+                      total: 2
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 2
+                'Example 2: JSON, one row per time period':
+                  value:
+                    data:
+                      - startTime: '2023-06-28T12:15:00.0000000+00:00'
+                        endTime: '2023-06-28T12:30:00.0000000+00:00'
+                        Wind power generation forecast - updated every 15 minutes: 186.8
+                        Solar power generation forecast - updated every 15 minutes: 496.7
+                    pagination:
+                      total: 1
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 1
+                'Example 3: CSV, one row per observation':
+                  value:
+                    data: "\"datasetId\",\"startTime\",\"endTime\",\"value\"\n\"245\",\"2023-06-28T12:15:00.000Z\",\"2023-06-28T12:30:00.000Z\",\"186.8\"\n\"247\",\"2023-06-28T12:15:00.000Z\",\"2023-06-28T12:30:00.000Z\",\"496.7\""
+                    pagination:
+                      total: 2
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 2
+                'Example 4: CSV, one row per time period':
+                  value:
+                    data: "\"Start time UTC\",\"End time UTC\",\"Wind power generation forecast - updated every 15 minutes\",\"Solar power generation forecast - updated every 15 minutes\"\n\"2023-06-28T12:15:00.000Z\",\"2023-06-28T12:30:00.000Z\",\"186.8\",\"496.7\""
+                    pagination:
+                      total: 1
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 1
+                'Example 5: XML, one row per observation':
+                  value: <?xml version="1.0" encoding="UTF-8"?><events><event><datasetId>245</datasetId><startTimeUTC>2023-06-28T12:15:00.000Z</startTimeUTC><endTimeUTC>2023-06-28T12:30:00.000Z</endTimeUTC><value>186.8</value></event><event><datasetId>247</datasetId><startTimeUTC>2023-06-28T12:15:00.000Z</startTimeUTC><endTimeUTC>2023-06-28T12:30:00.000Z</endTimeUTC><value>496.7</value></event><pagination><currentPage>1</currentPage><perPage>2</perPage><from>0</from><to>1</to><total>2</total></pagination></events>
+        '422':
+          description: Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateError'
+              example:
+                name: string
+                message: string
+                stack: string
+                status: 0
+                fields: { }
+  /datasets:
+    get:
+      tags:
+        - Datasets
+      summary: GetDatasetShorts
+      description: 'Returns list of all public datasets, with pagination. If no parameters are given, returns all datasets sorted by dataset ID. If search parameter is given, returns datasets sorted by relevance.'
+      operationId: GetDatasetShorts
+      parameters:
+        - name: search
+          in: query
+          description: 'Search phrase to filter datasets. If given as parameter, other parameters are ignored, and results are sorted by relevance. Notes: 1) Search is case insensitive. 2) Search is done for dataset name, description, keywords and content groups. 3) Search is done for both Finnish and English versions of the fields.'
+          schema:
+            type: string
+          example: wind power production
+        - name: ids
+          in: query
+          description: Comma-separated list of dataset ids
+          schema:
+            type: string
+          examples:
+            Example 1:
+              value: 245
+            Example 2:
+              value: 245247
+        - name: page
+          in: query
+          description: Number of page. Default is 1.
+          schema:
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of results per page. Value can be between 1-20000. Default is 10.
+          schema:
+            maximum: 20000.0
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: orderBy
+          in: query
+          description: 'Order results by this attribute. Accepts "id", "nameFi", "nameEn". Default is id.'
+          schema:
+            enum:
+              - id
+              - nameFi
+              - nameEn
+            type: string
+          examples:
+            Example 1:
+              value: id
+            Example 2:
+              value: nameFi
+            Example 3:
+              value: nameEn
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/IWithPagination_DatasetSearchResult_'
+                  - $ref: '#/components/schemas/IWithPagination_DatasetShort_'
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      - id: 75
+                        modifiedAtUtc: '2023-10-20T08:29:10.0000000+00:00'
+                        type: timeseries
+                        organization: Fingrid
+                        nameFi: Tuulivoimatuotanto - varttitieto
+                        nameEn: Wind power generation - 15 min data
+                        descriptionFi: 'Suomen tuulivoimatuotannon varttitieto on summa Fingridille toimitetuista tuulivoimamittauksista seka arvioista, jotka Fingrid tekee mittaamattomista tuulipuistoista. Mittaamattomia puistoja on noin kaksi prosenttia kapasiteetista.'
+                        descriptionEn: Finnish 15 min wind power generation is a sum of measurements from wind parks supplied to Fingrid and of the estimate Fingrid makes from non-measured wind parks. Non-measured wind parks are about two percent of the production capacity.
+                        dataPeriodFi: 15 min
+                        dataPeriodEn: 15 min
+                        unitFi: MWh/h
+                        unitEn: MWh/h
+                        keyWordsFi:
+                          - Tuulivoimatuotanto
+                          - Tuotantolukema
+                          - Reaaliaikamittaustieto
+                          - Tuulivoima
+                        keyWordsEn:
+                          - Wind power generation
+                          - Power generation
+                          - Real time measurement
+                        contentGroupsFi:
+                          - Kulutus ja tuotanto
+                          - Tuulivoimatuotanto
+                        contentGroupsEn:
+                          - load-and-generation
+                          - windpower
+                        availableFormats:
+                          - json
+                          - csv
+                          - xml
+                        searchScore: 5.75652
+                      - id: 245
+                        modifiedAtUtc: '2023-10-20T08:29:10.0000000+00:00'
+                        type: timeseries
+                        organization: Fingrid
+                        nameFi: Tuulivoiman tuotantoennuste - paivitys 15 minuutin valein
+                        nameEn: Wind power generation forecast - updated every 15 minutes
+                        descriptionFi: '15 minuutin valein paivittyva Suomen tuulivoiman tuotantoennuste seuraavalle 36 tunnille. Ennuste perustuu tuuliennusteisiin ja tietoihin tuulivoimaloiden sijainnista, koosta ja kapasiteetista. Saatietoa saadaan useilta toimittajilta.'
+                        descriptionEn: 'Finnish wind power generation forecast for the next 36 hours. Updated every 15 minutes. The forecast is based on weather forecasts and data about the location, size and capacity of wind turbines. The weather data sourced from multiple providers.'
+                        dataPeriodFi: 15 min
+                        dataPeriodEn: 15 min
+                        unitFi: MWh/h
+                        unitEn: MWh/h
+                        keyWordsFi:
+                          - Tuulivoimaennuste
+                          - Tuulivoima
+                          - Tuotantoennuste
+                          - Ennuste
+                        keyWordsEn:
+                          - Wind Power Generation forecast
+                          - Wind Power
+                          - Generation forecast
+                          - Forecast
+                        contentGroupsFi:
+                          - Kulutus ja tuotanto
+                          - Tuulivoimatuotanto
+                        contentGroupsEn:
+                          - load-and-generation
+                          - windpower
+                        availableFormats:
+                          - json
+                          - csv
+                          - xml
+                        searchScore: 1.153681
+                    pagination:
+                      total: 2
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 2
+                Example 2:
+                  value:
+                    data:
+                      - id: 245
+                        modifiedAtUtc: '2023-10-20T08:29:10.0000000+00:00'
+                        type: timeseries
+                        organization: Fingrid
+                        nameFi: Tuulivoiman tuotantoennuste - paivitys 15 minuutin valein
+                        nameEn: Wind power generation forecast - updated every 15 minutes
+                        descriptionFi: '15 minuutin valein paivittyva Suomen tuulivoiman tuotantoennuste seuraavalle 36 tunnille. Ennuste perustuu tuuliennusteisiin ja tietoihin tuulivoimaloiden sijainnista, koosta ja kapasiteetista. Saatietoa saadaan useilta toimittajilta.'
+                        descriptionEn: 'Finnish wind power generation forecast for the next 36 hours. Updated every 15 minutes. The forecast is based on weather forecasts and data about the location, size and capacity of wind turbines. The weather data sourced from multiple providers.'
+                        dataPeriodFi: 15 min
+                        dataPeriodEn: 15 min
+                        unitFi: MWh/h
+                        unitEn: MWh/h
+                        contentGroupsFi:
+                          - Kulutus ja tuotanto
+                          - Tuulivoimatuotanto
+                        contentGroupsEn:
+                          - load-and-generation
+                          - windpower
+                        keyWordsFi:
+                          - Tuulivoimaennuste
+                          - Tuulivoima
+                          - Tuotantoennuste
+                          - Ennuste
+                        keyWordsEn:
+                          - Wind Power Generation forecast
+                          - Wind Power
+                          - Generation forecast
+                          - Forecast
+                        availableFormats:
+                          - json
+                          - csv
+                          - xml
+                      - id: 247
+                        modifiedAtUtc: '2023-10-20T08:29:10.0000000+00:00'
+                        type: timeseries
+                        organization: Fingrid
+                        nameFi: Aurinkovoiman tuotantoennuste - paivitys 15 minuutin valein
+                        nameEn: Solar power generation forecast - updated every 15 minutes
+                        descriptionFi: 15 minuutin valein paivittyva aurinkovoiman tuotantoennuste seuraavalle 36 tunnille. Aurinkovoimaennusteet perustuvat saaennusteisiin ja arvioihin Suomeen asennettujen aurinkopaneelien kokonaistuotantotehosta seka niiden sijainneista. Fingrid on arvioinut aurinkopaneeleiden kokonaistuotantotehon Energiaviraston jakeluverkkoyhtioilta saadun vuosittaisen kapasiteettitiedon ja aurinkopaneeleiden asennusten kasvuennusteiden mukaan. Paneelien maantieteellinen sijainti on arvioitu hyvin karkeasti kapasiteetin ilmoittaneen verkkoyhtioiden perusteella.
+                        descriptionEn: Solar power generation forecast for the next 36 hours. Updated every 15 minutes. Solar forecasts are based on weather forecasts and estimates of installed PV capacity and location in Finland. Total PV capacity is based on yearly capacity statistics from the Finnish energy authority and estimates on installation rate of new capacity. Location information is a very rough estimate based on Finnish distribution grid operators information.
+                        dataPeriodFi: 15 min
+                        dataPeriodEn: 15 min
+                        unitFi: MWh/h
+                        unitEn: MWh/h
+                        contentGroupsFi:
+                          - Kulutus ja tuotanto
+                        contentGroupsEn: [ ]
+                        keyWordsFi:
+                          - Aurinkovoima
+                          - Aurinkovoimaennuste
+                          - Tuotantoennuste
+                          - Ennuste
+                        keyWordsEn:
+                          - Solar power
+                          - Forecast
+                          - Generation forecast
+                          - Solar power forecast
+                        availableFormats:
+                          - json
+                          - csv
+                          - xml
+                    pagination:
+                      total: 2
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 2
+  '/datasets/{datasetId}':
+    get:
+      tags:
+        - Datasets
+      summary: GetDataset
+      description: Returns a single dataset or 404 error if not found
+      operationId: GetDataset
+      parameters:
+        - name: datasetId
+          in: path
+          description: The ID of the dataset to return
+          required: true
+          schema:
+            maximum: 999999.0
+            minimum: 1.0
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+              examples:
+                Example 1:
+                  value:
+                    id: 245
+                    modifiedAtUtc: '2023-10-20T08:29:10.0000000+00:00'
+                    type: timeseries
+                    status: active
+                    organization: Fingrid
+                    nameFi: Tuulivoiman tuotantoennuste - paivitys 15 minuutin valein
+                    nameEn: Wind power generation forecast - updated every 15 minutes
+                    descriptionFi: '15 minuutin valein paivittyva Suomen tuulivoiman tuotantoennuste seuraavalle 36 tunnille. Ennuste perustuu tuuliennusteisiin ja tietoihin tuulivoimaloiden sijainnista, koosta ja kapasiteetista. Saatietoa saadaan useilta toimittajilta.'
+                    descriptionEn: 'Finnish wind power generation forecast for the next 36 hours. Updated every 15 minutes. The forecast is based on weather forecasts and data about the location, size and capacity of wind turbines. The weather data sourced from multiple providers.'
+                    dataPeriodFi: 15 min
+                    dataPeriodEn: 15 min
+                    updateCadenceFi: 15 min
+                    updateCadenceEn: 15 min
+                    unitFi: MWh/h
+                    unitEn: MWh/h
+                    license:
+                      name: Creative Commons Attribution
+                      termsLink: ''
+                    keyWordsFi:
+                      - Tuulivoimaennuste
+                      - Tuulivoima
+                      - Tuotantoennuste
+                      - Ennuste
+                    keyWordsEn:
+                      - Wind Power Generation forecast
+                      - Wind Power
+                      - Generation forecast
+                      - Forecast
+                    contentGroupsFi:
+                      - Kulutus ja tuotanto
+                      - Tuulivoimatuotanto
+                    contentGroupsEn:
+                      - load-and-generation
+                      - windpower
+                    availableFormats:
+                      - json
+                      - csv
+                      - xml
+        '404':
+          description: The responder function for a not found dataset
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: string
+  '/datasets/{datasetId}/data':
+    get:
+      tags:
+        - Datasets
+      summary: GetDatasetData
+      description: Returns datasetdata or empty array if no data is found.
+      operationId: GetDatasetData
+      parameters:
+        - name: datasetId
+          in: path
+          description: The ID of the dataset to return
+          required: true
+          schema:
+            maximum: 999999.0
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: startTime
+          in: query
+          description: 'Starting time from which to query data. Timezone is optional, UTC is assumed if not provided. Response is always in UTC time. If you are using tester on this page use Example 1 format, if you are using curl use Example 2 format.'
+          schema:
+            type: string
+            format: date-time
+          examples:
+            Example 1:
+              value: '2023-06-28T12:00:00.0000000+00:00'
+            Example 2:
+              value: 2023-06-28T00:00%2b0300
+        - name: endTime
+          in: query
+          description: 'Ending time up to which to query data. Timezone is optional, UTC is assumed if not provided. Response is always in UTC time. If you are using tester on this page use Example 1 format, if you are using curl use Example 2 format.'
+          schema:
+            type: string
+            format: date-time
+          examples:
+            Example 1:
+              value: '2023-06-28T11:59:00.0000000+00:00'
+            Example 2:
+              value: 2023-06-28T23:59%2b0300
+        - name: format
+          in: query
+          description: 'Response format. Either json, csv or xml. Default is json.'
+          schema:
+            enum:
+              - json
+              - csv
+              - xml
+            type: string
+          examples:
+            Example 1:
+              value: json
+            Example 2:
+              value: csv
+            Example 3:
+              value: xml
+        - name: oneRowPerTimePeriod
+          in: query
+          description: 'If true, returns one row per time period, instead of one row per observation. Currently does not support XML. Default is false.'
+          schema:
+            type: boolean
+          example: true
+        - name: page
+          in: query
+          description: Number of page. Default is 1.
+          schema:
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of results per page. Value can be between 1-20000. Default is 10.
+          schema:
+            maximum: 20000.0
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: locale
+          in: query
+          description: Language for response. Used only if oneRowPerTimePeriod is true. Either en or fi. Default is fi.
+          schema:
+            enum:
+              - en
+              - fi
+            type: string
+          example: en
+        - name: sortBy
+          in: query
+          description: Order results by this attribute. Accepts startTime and endTime. Default is startTime.
+          schema:
+            enum:
+              - startTime
+              - endTime
+            type: string
+          example: startTime
+        - name: sortOrder
+          in: query
+          description: Order results in this direction. Either asc or desc. Defaults to desc (or asc if oneRowPerTimePeriod is enabled).
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+          example: asc
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeseriesDataResponse'
+              examples:
+                'Example 1: JSON, one row per observation':
+                  value:
+                    data:
+                      - datasetId: 245
+                        startTime: '2023-06-28T12:15:00.0000000+00:00'
+                        endTime: '2023-06-28T12:30:00.0000000+00:00'
+                        value: 186.8
+                      - datasetId: 245
+                        startTime: '2023-06-28T12:30:00.0000000+00:00'
+                        endTime: '2023-06-28T12:45:00.0000000+00:00'
+                        value: 496.7
+                    pagination:
+                      total: 2
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 2
+                'Example 2: JSON, one row per time period':
+                  value:
+                    data:
+                      - startTime: '2023-06-28T12:15:00.0000000+00:00'
+                        endTime: '2023-06-28T12:30:00.0000000+00:00'
+                        Wind power generation forecast - updated every 15 minutes: 186.8
+                    pagination:
+                      total: 1
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 1
+                'Example 3: CSV, one row per observation':
+                  value:
+                    data: "\"datasetId\",\"startTime\",\"endTime\",\"value\"\n\"245\",\"2023-06-28T12:15:00.000Z\",\"2023-06-28T12:30:00.000Z\",\"186.8\""
+                    pagination:
+                      total: 1
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 1
+                'Example 4: CSV, one row per time period':
+                  value:
+                    data: "\"Start time UTC\",\"End time UTC\",\"Wind power generation forecast - updated every 15 minutes\"\n\"2023-06-28T12:15:00.000Z\",\"2023-06-28T12:30:00.000Z\",\"186.8\""
+                    pagination:
+                      total: 1
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 1
+                'Example 5: XML, one row per observation':
+                  value: <?xml version="1.0" encoding="UTF-8"?><events><event><datasetId>245</datasetId><startTimeUTC>2023-06-28T12:15:00.000Z</startTimeUTC><endTimeUTC>2023-06-28T12:30:00.000Z</endTimeUTC><value>186.8</value></event><event><datasetId>245</datasetId><startTimeUTC>2023-06-28T12:15:00.000Z</startTimeUTC><endTimeUTC>2023-06-28T12:30:00.000Z</endTimeUTC><value>496.7</value></event><pagination><total>2</total><lastPage>1</lastPage><prevPage/><nextPage/><perPage>10</perPage><currentPage>1</currentPage><perPage>2</perPage><from>0</from><to>1</to></pagination></events>
+        '422':
+          description: Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateError'
+              example:
+                name: string
+                message: string
+                stack: string
+                status: 0
+                fields: { }
+  '/datasets/{datasetId}/data/latest':
+    get:
+      tags:
+        - Datasets
+      summary: GetLastDataByDataset
+      description: Return a last data by dataset or 404 error if not found
+      operationId: GetLastDataByDataset
+      parameters:
+        - name: datasetId
+          in: path
+          description: The ID of the dataset to return
+          required: true
+          schema:
+            maximum: 999999.0
+            minimum: 1.0
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeseriesData'
+              examples:
+                Example 1:
+                  value:
+                    datasetId: 245
+                    startTime: '2023-05-22T06:15:00.0000000+00:00'
+                    endTime: '2023-05-22T06:30:00.0000000+00:00'
+                    value: 1231.3
+        '404':
+          description: The responder function for a not found timeseriesdata
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: string
+  /health:
+    get:
+      tags:
+        - Healthcheck
+      summary: GetHealthStatus
+      description: Returns status of services
+      operationId: GetHealthStatus
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+              examples:
+                Example 1:
+                  value:
+                    app:
+                      status: OK
+                    database:
+                      status: OK
+                    network:
+                      status: OK
+                Example 2:
+                  value:
+                    app:
+                      status: OK
+                    database:
+                      status: OK
+                    network:
+                      status: ERROR
+                      message: Something went wrong
+  /notifications/active:
+    get:
+      tags:
+        - Notifications
+      summary: GetActiveNotifications
+      description: Return list of active service notification or empty response
+      operationId: GetActiveNotifications
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+              examples:
+                Example 1:
+                  value:
+                    - id: 1
+                      modifiedAtUtc: '2023-10-13T09:35:59.0000000+00:00'
+                      startTimeUtc: '2023-06-13T01:15:00.0000000+00:00'
+                      endTimeUtc: '2023-07-31T12:00:00.0000000+00:00'
+                      messageFi: Jarjestelmaa paivitetaan 27.10.2023 klo 12.00-14.00. Pahoittelemme mahdollista hairiota.
+                      messageEn: The system will be updated on 27 October 2023 at 12.00-14.00. We apologize for any inconvenience.
+                      linkFi: http://www.fingrid.fi
+                      linkEn: http://www.fingrid.fi/en
+                      linkTextFi: Lue lisaa
+                      linkTextEn: Read more
+                    - id: 2
+                      modifiedAtUtc: '2023-10-24T08:53:05.0000000+00:00'
+                      startTimeUtc: '2023-10-01T01:15:00.0000000+00:00'
+                      endTimeUtc: '2023-10-10T12:00:00.0000000+00:00'
+                      messageFi: Jarjestelmaa paivitetaan 09.10.2023 klo 12.00-14.00. Pahoittelemme mahdollista hairiota.
+                      messageEn: The system will be updated on 9 October 2023 at 12.00-14.00. We apologize for any inconvenience.
+  '/datasets/{datasetId}/files':
+    get:
+      tags:
+        - Datasets
+      summary: GetDatasetFileData
+      description: Returns datasetfiledata or empty list if not found or a 422 error if validation fails.
+      operationId: GetDatasetFileData
+      parameters:
+        - name: datasetId
+          in: path
+          description: The ID of the dataset to return
+          required: true
+          schema:
+            maximum: 999999.0
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: startTime
+          in: query
+          description: 'Starting time from which to query data. Timezone is optional, UTC is assumed if not provided. Response is always in UTC time. If you are using tester on this page use Example 1 format, if you are using curl use Example 2 format.'
+          schema:
+            type: string
+            format: date-time
+          examples:
+            Example 1:
+              value: '2023-06-28T12:00:00.0000000+00:00'
+            Example 2:
+              value: 2023-06-28T00:00%2b0300
+        - name: endTime
+          in: query
+          description: 'Ending time up to which to query data. Timezone is optional, UTC is assumed if not provided. Response is always in UTC time. If you are using tester on this page use Example 1 format, if you are using curl use Example 2 format.'
+          schema:
+            type: string
+            format: date-time
+          examples:
+            Example 1:
+              value: '2023-06-28T11:59:00.0000000+00:00'
+            Example 2:
+              value: 2023-06-28T23:59%2b0300
+        - name: page
+          in: query
+          description: Number of page. Default is 1.
+          schema:
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of results per page. Value can be between 1-20000. Default is 10.
+          schema:
+            maximum: 20000.0
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: sortOrder
+          in: query
+          schema:
+            enum:
+              - asc
+              - desc
+            type: string
+          example: asc
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IWithPagination_FileData_'
+              examples:
+                Example 1:
+                  value:
+                    data:
+                      - id: 282
+                        datasetId: 339
+                        createdAtUtc: '2023-10-06T09:59:10.0000000+00:00'
+                        modifiedAtUtc: '2023-10-06T09:59:10.0000000+00:00'
+                        filenameFi: Taajuusmittausdata 2021-07
+                        filenameEn: Frequency measurement data 2021-07
+                        messageFi: ''
+                        messageEn: ''
+                        link: /files/frequency_history/2021-07.zip
+                        fileType: application/zip
+                        size: 96468992
+                        dataFrom: '2021-07-01T12:00:00.0000000+00:00'
+                        dataTo: '2021-07-31T11:59:59.0000000+00:00'
+                      - id: 283
+                        datasetId: 339
+                        createdAtUtc: '2023-10-06T09:59:10.0000000+00:00'
+                        modifiedAtUtc: '2023-10-06T09:59:10.0000000+00:00'
+                        filenameFi: Taajuusmittausdata 2021-08
+                        filenameEn: Frequency measurement data 2021-08
+                        messageFi: 'Paivitetty 8.6.2022: Minuutti 27.8.2021 09:31 sisalsi hieman virheellista... '
+                        messageEn: 'Updated on 8 June 2022: Minute 2021/8/27 09:31 contained some incorrect... '
+                        link: /files/frequency_history/2021-08.zip
+                        fileType: application/zip
+                        size: 97517568
+                        dataFrom: '2021-08-01T12:00:00.0000000+00:00'
+                        dataTo: '2021-08-31T11:59:59.0000000+00:00'
+                      - id: 284
+                        datasetId: 339
+                        createdAtUtc: '2023-10-06T09:59:10.0000000+00:00'
+                        modifiedAtUtc: '2023-10-06T09:59:10.0000000+00:00'
+                        filenameFi: Taajuusmittausdata 2021-09
+                        filenameEn: Frequency measurement data 2021-09
+                        messageFi: ''
+                        messageEn: ''
+                        link: /files/frequency_history/2021-09.zip
+                        fileType: application/zip
+                        size: 95420416
+                        dataFrom: '2021-09-01T12:00:00.0000000+00:00'
+                        dataTo: '2021-09-30T11:59:59.0000000+00:00'
+                    pagination:
+                      total: 23
+                      lastPage: 8
+                      prevPage: 
+                      nextPage: 2
+                      perPage: 3
+                      currentPage: 1
+                      from: 0
+                      to: 3
+        '404':
+          description: The responder function for a not found dataset
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: string
+        '422':
+          description: Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateError'
+              example:
+                name: string
+                message: string
+                stack: string
+                status: 0
+                fields: { }
+  '/datasets/{datasetId}/files/{fileId}':
+    get:
+      tags:
+        - Datasets
+      summary: GetDatasetFile
+      description: Return a single datasetfile or 404 error if not found
+      operationId: GetDatasetFile
+      parameters:
+        - name: datasetId
+          in: path
+          description: The ID of the dataset to return
+          required: true
+          schema:
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: fileId
+          in: path
+          description: The ID of the file to return
+          required: true
+          schema:
+            minimum: 1.0
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileData'
+              example:
+                id: 0
+                modifiedAtUtc: string
+                createdAtUtc: string
+                filenameFi: string
+                filenameEn: string
+                messageFi: string
+                messageEn: string
+                link: string
+                fileType: string
+                size: 0
+                dataFrom: string
+                dataTo: string
+                datasetId: 0
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                required:
+                  - message
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: string
+        '422':
+          description: Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateError'
+              example:
+                name: string
+                message: string
+                stack: string
+                status: 0
+                fields: { }
+  /data/updates:
+    get:
+      tags:
+        - Data
+      summary: GetUpdatedTimeseriesData
+      description: Returns data by dataset ids that has been modified within the specified time period.
+      operationId: GetUpdatedTimeseriesData
+      parameters:
+        - name: datasets
+          in: query
+          description: Comma-separated list of dataset ids. Maximum number of ids is 50.
+          required: true
+          schema:
+            type: string
+          examples:
+            Example 1:
+              value: 245
+            Example 2:
+              value: 245247
+        - name: days
+          in: query
+          description: The number of days to look back for data modifications based on the modifiedAtUtc field. Only returns data where modifiedAtUtc is within this many days from now. Default is 1 day and maximum is 14 days.
+          schema:
+            maximum: 14.0
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: page
+          in: query
+          description: Number of page. Default is 1.
+          schema:
+            minimum: 1.0
+            type: integer
+            format: int32
+        - name: pageSize
+          in: query
+          description: Number of results per page. Value can be between 1-250. Default is 10.
+          schema:
+            maximum: 250.0
+            minimum: 1.0
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IWithPagination_TimeseriesDataWithModifiedAtUtc_'
+              examples:
+                Example with pagination:
+                  value:
+                    data:
+                      - datasetId: 245
+                        startTime: '2023-05-22T06:15:00.0000000+00:00'
+                        endTime: '2023-05-22T06:30:00.0000000+00:00'
+                        value: 1231.3
+                        modifiedAtUtc: '2023-05-22T06:30:00.0000000+00:00'
+                    pagination:
+                      total: 1
+                      lastPage: 1
+                      prevPage: 
+                      nextPage: 
+                      perPage: 10
+                      currentPage: 1
+                      from: 0
+                      to: 1
+        '422':
+          description: Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateError'
+              example:
+                name: string
+                message: string
+                stack: string
+                status: 0
+                fields: { }
+components:
+  schemas:
+    Notification:
+      required:
+        - id
+        - startTimeUtc
+        - endTimeUtc
+        - messageFi
+        - messageEn
+      type: object
+      properties:
+        id:
+          type: number
+          format: double
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        startTimeUtc:
+          type: string
+          format: date-time
+        endTimeUtc:
+          type: string
+          format: date-time
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        linkFi:
+          type: string
+        linkEn:
+          type: string
+        linkTextFi:
+          type: string
+        linkTextEn:
+          type: string
+      additionalProperties: false
+    StatusResponse:
+      required:
+        - status
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+      additionalProperties: false
+    HealthStatus:
+      required:
+        - network
+        - database
+        - app
+      type: object
+      properties:
+        network:
+          $ref: '#/components/schemas/StatusResponse'
+        database:
+          $ref: '#/components/schemas/StatusResponse'
+        app:
+          $ref: '#/components/schemas/StatusResponse'
+      additionalProperties: false
+    DatasetType:
+      enum:
+        - timeseries
+        - file
+      type: string
+    DatasetFormat:
+      enum:
+        - csv
+        - json
+        - app
+        - 7zip
+        - zip
+        - xlsx
+        - xml
+      type: string
+    Pick_Dataset.id-or-modifiedAtUtc-or-dataAvailableFromUtc-or-type-or-organization-or-nameFi-or-nameEn-or-descriptionFi-or-descriptionEn-or-contentGroupsFi-or-contentGroupsEn-or-keyWordsFi-or-keyWordsEn-or-availableFormats-or-dataPeriodFi-or-dataPeriodEn-or-unitFi-or-unitEn_:
+      required:
+        - id
+        - type
+        - organization
+        - nameFi
+        - nameEn
+        - descriptionFi
+        - descriptionEn
+        - dataPeriodFi
+        - dataPeriodEn
+        - unitFi
+        - unitEn
+      type: object
+      properties:
+        id:
+          type: number
+          format: double
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        dataAvailableFromUtc:
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/DatasetType'
+        organization:
+          type: string
+        nameFi:
+          type: string
+        nameEn:
+          type: string
+        descriptionFi:
+          type: string
+        descriptionEn:
+          type: string
+        contentGroupsFi:
+          type: array
+          items:
+            type: string
+        contentGroupsEn:
+          type: array
+          items:
+            type: string
+        keyWordsFi:
+          type: array
+          items:
+            type: string
+        keyWordsEn:
+          type: array
+          items:
+            type: string
+        availableFormats:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetFormat'
+        dataPeriodFi:
+          type: string
+        dataPeriodEn:
+          type: string
+        unitFi:
+          type: string
+        unitEn:
+          type: string
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    DatasetShort:
+      required:
+        - id
+        - type
+        - organization
+        - nameFi
+        - nameEn
+        - descriptionFi
+        - descriptionEn
+        - dataPeriodFi
+        - dataPeriodEn
+        - unitFi
+        - unitEn
+      type: object
+      properties:
+        id:
+          type: number
+          format: double
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        dataAvailableFromUtc:
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/DatasetType'
+        organization:
+          type: string
+        nameFi:
+          type: string
+        nameEn:
+          type: string
+        descriptionFi:
+          type: string
+        descriptionEn:
+          type: string
+        contentGroupsFi:
+          type: array
+          items:
+            type: string
+        contentGroupsEn:
+          type: array
+          items:
+            type: string
+        keyWordsFi:
+          type: array
+          items:
+            type: string
+        keyWordsEn:
+          type: array
+          items:
+            type: string
+        availableFormats:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetFormat'
+        dataPeriodFi:
+          type: string
+        dataPeriodEn:
+          type: string
+        unitFi:
+          type: string
+        unitEn:
+          type: string
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    DatasetSearchResult:
+      allOf:
+        - $ref: '#/components/schemas/Pick_Dataset.id-or-modifiedAtUtc-or-dataAvailableFromUtc-or-type-or-organization-or-nameFi-or-nameEn-or-descriptionFi-or-descriptionEn-or-contentGroupsFi-or-contentGroupsEn-or-keyWordsFi-or-keyWordsEn-or-availableFormats-or-dataPeriodFi-or-dataPeriodEn-or-unitFi-or-unitEn_'
+        - type: object
+          properties:
+            searchScore:
+              type: number
+              format: double
+    IPagination:
+      required:
+        - currentPage
+        - perPage
+        - from
+        - to
+      type: object
+      properties:
+        total:
+          type: number
+          format: double
+        lastPage:
+          type: number
+          format: double
+        nextPage:
+          type: number
+          format: double
+          nullable: true
+        prevPage:
+          type: number
+          format: double
+          nullable: true
+        currentPage:
+          type: number
+          format: double
+        perPage:
+          type: number
+          format: double
+        from:
+          type: number
+          format: double
+        to:
+          type: number
+          format: double
+      additionalProperties: false
+    IWithPagination_DatasetSearchResult_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetSearchResult'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    IWithPagination_DatasetShort_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pick_Dataset.id-or-modifiedAtUtc-or-dataAvailableFromUtc-or-type-or-organization-or-nameFi-or-nameEn-or-descriptionFi-or-descriptionEn-or-contentGroupsFi-or-contentGroupsEn-or-keyWordsFi-or-keyWordsEn-or-availableFormats-or-dataPeriodFi-or-dataPeriodEn-or-unitFi-or-unitEn_'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    DatasetStatus:
+      enum:
+        - active
+        - inactive
+      type: string
+    Organization:
+      type: string
+    License:
+      required:
+        - name
+        - termsLink
+      type: object
+      properties:
+        name:
+          type: string
+        termsLink:
+          type: string
+      additionalProperties: false
+    Dataset:
+      required:
+        - id
+        - type
+        - status
+        - organization
+        - nameFi
+        - nameEn
+        - descriptionFi
+        - descriptionEn
+        - dataPeriodFi
+        - dataPeriodEn
+        - unitFi
+        - unitEn
+      type: object
+      properties:
+        id:
+          type: number
+          format: double
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        dataAvailableFromUtc:
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/DatasetType'
+        status:
+          $ref: '#/components/schemas/DatasetStatus'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        nameFi:
+          type: string
+        nameEn:
+          type: string
+        descriptionFi:
+          type: string
+        descriptionEn:
+          type: string
+        dataPeriodFi:
+          type: string
+        dataPeriodEn:
+          type: string
+        unitFi:
+          type: string
+        unitEn:
+          type: string
+        updateCadenceFi:
+          type: string
+        updateCadenceEn:
+          type: string
+        license:
+          $ref: '#/components/schemas/License'
+        keyWordsFi:
+          type: array
+          items:
+            type: string
+        keyWordsEn:
+          type: array
+          items:
+            type: string
+        contentGroupsFi:
+          type: array
+          items:
+            type: string
+        contentGroupsEn:
+          type: array
+          items:
+            type: string
+        availableFormats:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetFormat'
+      additionalProperties: false
+    Record_string.string_:
+      type: object
+      additionalProperties:
+        type: string
+      description: Construct a type with a set of properties K of type T
+    Pick_TimeseriesDataPrivate.Exclude_keyofTimeseriesDataPrivate.datasetId-or-id__:
+      required:
+        - startTime
+        - endTime
+        - value
+      type: object
+      properties:
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        value:
+          type: number
+          format: double
+        additionalJson:
+          $ref: '#/components/schemas/Record_string.string_'
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    Omit_TimeseriesDataPrivate.datasetId-or-id_:
+      required:
+        - startTime
+        - endTime
+        - value
+      type: object
+      properties:
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        value:
+          type: number
+          format: double
+        additionalJson:
+          $ref: '#/components/schemas/Record_string.string_'
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    TimeseriesData:
+      allOf:
+        - required:
+            - datasetId
+          type: object
+          properties:
+            datasetId:
+              type: number
+              format: double
+        - $ref: '#/components/schemas/Pick_TimeseriesDataPrivate.Exclude_keyofTimeseriesDataPrivate.datasetId-or-id__'
+    TimeseriesDataOneRowPerTimePeriod:
+      required:
+        - endTime
+        - startTime
+      type: object
+      properties:
+        endTime:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+      additionalProperties:
+        anyOf:
+          - type: number
+            format: double
+          - type: string
+            format: date-time
+          - type: string
+        nullable: true
+    IWithPagination_TimeseriesData-or-TimeseriesDataOneRowPerTimePeriod_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/TimeseriesData'
+              - $ref: '#/components/schemas/TimeseriesDataOneRowPerTimePeriod'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    TimeseriesDataJsonResponse:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/TimeseriesData'
+              - $ref: '#/components/schemas/TimeseriesDataOneRowPerTimePeriod'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    TimeseriesDataCsvResponse:
+      required:
+        - pagination
+        - data
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+        data:
+          type: string
+    TimeseriesDataXmlResponse:
+      type: string
+    TimeseriesDataResponse:
+      anyOf:
+        - $ref: '#/components/schemas/IWithPagination_TimeseriesData-or-TimeseriesDataOneRowPerTimePeriod_'
+        - $ref: '#/components/schemas/TimeseriesDataCsvResponse'
+        - $ref: '#/components/schemas/TimeseriesDataXmlResponse'
+    FieldErrors:
+      type: object
+      additionalProperties:
+        required:
+          - message
+        type: object
+        properties:
+          value: { }
+          message:
+            type: string
+    ValidateError:
+      required:
+        - name
+        - message
+        - status
+        - fields
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+        stack:
+          type: string
+        status:
+          type: number
+          format: double
+        fields:
+          $ref: '#/components/schemas/FieldErrors'
+      additionalProperties: false
+    Pick_FileDataPrivate.Exclude_keyofFileDataPrivate.datasetId__:
+      required:
+        - id
+        - filenameFi
+        - filenameEn
+        - messageFi
+        - messageEn
+        - link
+        - fileType
+        - size
+        - dataFrom
+        - dataTo
+      type: object
+      properties:
+        id:
+          type: number
+          format: double
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        createdAtUtc:
+          type: string
+          format: date-time
+        filenameFi:
+          type: string
+        filenameEn:
+          type: string
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        link:
+          type: string
+        fileType:
+          type: string
+        size:
+          type: number
+          format: double
+        dataFrom:
+          type: string
+          format: date-time
+        dataTo:
+          type: string
+          format: date-time
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    Omit_FileDataPrivate.datasetId_:
+      required:
+        - id
+        - filenameFi
+        - filenameEn
+        - messageFi
+        - messageEn
+        - link
+        - fileType
+        - size
+        - dataFrom
+        - dataTo
+      type: object
+      properties:
+        id:
+          type: number
+          format: double
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        createdAtUtc:
+          type: string
+          format: date-time
+        filenameFi:
+          type: string
+        filenameEn:
+          type: string
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        link:
+          type: string
+        fileType:
+          type: string
+        size:
+          type: number
+          format: double
+        dataFrom:
+          type: string
+          format: date-time
+        dataTo:
+          type: string
+          format: date-time
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    FileData:
+      allOf:
+        - $ref: '#/components/schemas/Pick_FileDataPrivate.Exclude_keyofFileDataPrivate.datasetId__'
+        - required:
+            - datasetId
+          type: object
+          properties:
+            datasetId:
+              type: number
+              format: double
+    IWithPagination_FileData_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileData'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    TimeseriesDataWithModifiedAtUtc:
+      allOf:
+        - $ref: '#/components/schemas/TimeseriesData'
+        - required:
+            - modifiedAtUtc
+          type: object
+          properties:
+            modifiedAtUtc:
+              type: string
+              format: date-time
+    IWithPagination_TimeseriesDataWithModifiedAtUtc_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeseriesDataWithModifiedAtUtc'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    IWithPagination_Notification-Array_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Notification'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    Pick_Notification.Exclude_keyofNotification.id-or-modifiedAtUtc__:
+      required:
+        - messageFi
+        - messageEn
+        - startTimeUtc
+        - endTimeUtc
+      type: object
+      properties:
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        startTimeUtc:
+          type: string
+          format: date-time
+        endTimeUtc:
+          type: string
+          format: date-time
+        linkFi:
+          type: string
+        linkEn:
+          type: string
+        linkTextFi:
+          type: string
+        linkTextEn:
+          type: string
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    Omit_Notification.id-or-modifiedAtUtc_:
+      required:
+        - messageFi
+        - messageEn
+        - startTimeUtc
+        - endTimeUtc
+      type: object
+      properties:
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        startTimeUtc:
+          type: string
+          format: date-time
+        endTimeUtc:
+          type: string
+          format: date-time
+        linkFi:
+          type: string
+        linkEn:
+          type: string
+        linkTextFi:
+          type: string
+        linkTextEn:
+          type: string
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    MonitoringTimeseriesResult:
+      required:
+        - isPublic
+        - numericId
+        - id
+      type: object
+      properties:
+        isMoreThan2CadencesLate:
+          type: boolean
+        maxModTime:
+          type: string
+          format: date-time
+        expectedUpdateCadenceMin:
+          type: number
+          format: double
+        updateCadence:
+          type: string
+        isPublic:
+          type: boolean
+        numericId:
+          type: number
+          format: double
+        id:
+          type: string
+    MonitoringAisErrorResult:
+      required:
+        - ErrorMessage
+        - ErrorProcedure
+        - UserName
+        - ErrorDateTime
+      type: object
+      properties:
+        ErrorMessage:
+          type: string
+        ErrorProcedure:
+          type: string
+        UserName:
+          type: string
+        ErrorDateTime:
+          type: string
+          format: date-time
+    MonitoringGroupedAisErrorResult:
+      required:
+        - LatestErrorDateTime
+        - ErrorCount
+        - ErrorGroup
+      type: object
+      properties:
+        LatestErrorDateTime:
+          type: string
+          format: date-time
+        ErrorCount:
+          type: number
+          format: double
+        ErrorGroup:
+          type: string
+    MonitoringResult:
+      required:
+        - groupedAisErrors
+        - aisErrors
+        - timeseries
+      type: object
+      properties:
+        groupedAisErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonitoringGroupedAisErrorResult'
+        aisErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonitoringAisErrorResult'
+        timeseries:
+          type: array
+          items:
+            $ref: '#/components/schemas/MonitoringTimeseriesResult'
+    TimeseriesdataUpdatesStats:
+      required:
+        - errorsCount
+        - firstModifiedAtUtc
+        - count
+      type: object
+      properties:
+        errorsCount:
+          type: number
+          format: double
+        firstModifiedAtUtc:
+          type: string
+          format: date-time
+          nullable: true
+        count:
+          type: number
+          format: double
+    AdminDatasetSearchResult:
+      allOf:
+        - $ref: '#/components/schemas/DatasetSearchResult'
+        - required:
+            - existsInDb
+          type: object
+          properties:
+            existsInDb:
+              type: boolean
+    IWithPagination_AdminDatasetSearchResult_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminDatasetSearchResult'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    AdminDataset:
+      required:
+        - id
+        - type
+        - status
+        - organization
+        - nameFi
+        - nameEn
+        - descriptionFi
+        - descriptionEn
+        - dataPeriodFi
+        - dataPeriodEn
+        - unitFi
+        - unitEn
+        - isPublic
+      type: object
+      properties:
+        id:
+          type: number
+          format: double
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        dataAvailableFromUtc:
+          type: string
+          format: date-time
+        type:
+          $ref: '#/components/schemas/DatasetType'
+        status:
+          $ref: '#/components/schemas/DatasetStatus'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        nameFi:
+          type: string
+        nameEn:
+          type: string
+        descriptionFi:
+          type: string
+        descriptionEn:
+          type: string
+        dataPeriodFi:
+          type: string
+        dataPeriodEn:
+          type: string
+        unitFi:
+          type: string
+        unitEn:
+          type: string
+        updateCadenceFi:
+          type: string
+        updateCadenceEn:
+          type: string
+        license:
+          $ref: '#/components/schemas/License'
+        keyWordsFi:
+          type: array
+          items:
+            type: string
+        keyWordsEn:
+          type: array
+          items:
+            type: string
+        contentGroupsFi:
+          type: array
+          items:
+            type: string
+        contentGroupsEn:
+          type: array
+          items:
+            type: string
+        availableFormats:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetFormat'
+        contactPersons:
+          type: string
+        isPublic:
+          type: boolean
+      additionalProperties: false
+    IWithPagination_TimeseriesData_:
+      required:
+        - data
+        - pagination
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeseriesData'
+        pagination:
+          $ref: '#/components/schemas/IPagination'
+      additionalProperties: false
+    TimeseriesDataPrivate:
+      required:
+        - value
+        - endTime
+        - startTime
+        - datasetId
+        - id
+      type: object
+      properties:
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        additionalJson:
+          $ref: '#/components/schemas/Record_string.string_'
+        value:
+          type: number
+          format: double
+        endTime:
+          type: string
+          format: date-time
+        startTime:
+          type: string
+          format: date-time
+        datasetId:
+          type: string
+        id:
+          type: string
+    Pick_FileDataPrivate.Exclude_keyofFileDataPrivate.id__:
+      required:
+        - datasetId
+        - filenameFi
+        - filenameEn
+        - messageFi
+        - messageEn
+        - link
+        - fileType
+        - size
+        - dataFrom
+        - dataTo
+      type: object
+      properties:
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        datasetId:
+          type: string
+        createdAtUtc:
+          type: string
+          format: date-time
+        filenameFi:
+          type: string
+        filenameEn:
+          type: string
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        link:
+          type: string
+        fileType:
+          type: string
+        size:
+          type: number
+          format: double
+        dataFrom:
+          type: string
+          format: date-time
+        dataTo:
+          type: string
+          format: date-time
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    Omit_FileDataPrivate.id_:
+      required:
+        - datasetId
+        - filenameFi
+        - filenameEn
+        - messageFi
+        - messageEn
+        - link
+        - fileType
+        - size
+        - dataFrom
+        - dataTo
+      type: object
+      properties:
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        datasetId:
+          type: string
+        createdAtUtc:
+          type: string
+          format: date-time
+        filenameFi:
+          type: string
+        filenameEn:
+          type: string
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        link:
+          type: string
+        fileType:
+          type: string
+        size:
+          type: number
+          format: double
+        dataFrom:
+          type: string
+          format: date-time
+        dataTo:
+          type: string
+          format: date-time
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    FileMetadataCreationParams:
+      required:
+        - datasetId
+        - filenameFi
+        - filenameEn
+        - messageFi
+        - messageEn
+        - link
+        - fileType
+        - size
+        - dataFrom
+        - dataTo
+      type: object
+      properties:
+        modifiedAtUtc:
+          type: string
+          format: date-time
+        datasetId:
+          type: string
+        createdAtUtc:
+          type: string
+          format: date-time
+        filenameFi:
+          type: string
+        filenameEn:
+          type: string
+        messageFi:
+          type: string
+        messageEn:
+          type: string
+        link:
+          type: string
+        fileType:
+          type: string
+        size:
+          type: number
+          format: double
+        dataFrom:
+          type: string
+          format: date-time
+        dataTo:
+          type: string
+          format: date-time
+      description: 'From T, pick a set of properties whose keys are in the union K'
+    AdUser:
+      required:
+        - id
+        - name
+        - email
+        - intendeduse
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        intendeduse:
+          type: string
+      additionalProperties: false
+    ApiLog:
+      required:
+        - year
+        - month
+        - intendeduse
+        - path
+        - datasets
+        - searchParam
+        - count
+      type: object
+      properties:
+        year:
+          type: number
+          format: double
+        month:
+          type: number
+          format: double
+        intendeduse:
+          type: string
+        path:
+          type: string
+        datasets:
+          type: string
+        searchParam:
+          type: string
+        count:
+          type: number
+          format: double
+      additionalProperties: false
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: x-api-key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: x-api-key
+      in: query
+security:
+  - apiKeyHeader: [ ]
+  - apiKeyQuery: [ ]

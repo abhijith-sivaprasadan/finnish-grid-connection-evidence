@@ -1,0 +1,6 @@
+connection_point_id,operator,name,voltage_kv,source_url
+FI-FINGRID-VUOLIJOKI-400,Fingrid,VUOLIJOKI 400 kV,400,https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/
+FI-FINGRID-ALAPITKA-400,Fingrid,ALAPITKÄ 400 kV,400,https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/
+FI-FINGRID-ALAJARVI-400,Fingrid,ALAJÄRVI 400 kV,400,https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/
+FI-FINGRID-SEINAJOKI-400,Fingrid,SEINÄJOKI 400 kV,400,https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/
+FI-FINGRID-UUSNIVALA-400,Fingrid,UUSNIVALA 400 kV,400,https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/

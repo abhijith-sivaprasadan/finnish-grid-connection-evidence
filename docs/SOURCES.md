@@ -1,0 +1,43 @@
+# Source register
+
+Checked 17 October 2026. This register separates observed access from planned
+integration. Public availability alone is not treated as a blanket licence.
+
+| Source | Evidence/access verified | Reuse/terms | Implementation status |
+|---|---|---|---|
+| [Fingrid Grid Scope](https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/) and its [viewer](https://karttapalaute.fingrid.fi/?link=3opMB&setlanguage=en) | Browser map; consumption and production layers; named-point forecast tables and selected-year comparison tables | [Fingrid website terms](https://www.fingrid.fi/en/legal-terms/) permit use of other material with unchanged contents and source attribution, while reserving logo/trademark rights; no logo or map tiles copied | 18 manually transcribed observations, full provenance; no automated map scraping |
+| [Fingrid Open Data API](https://data.fingrid.fi/en/instructions) | Key required; x-api-key header; documented throttling; supplied OpenAPI export checked | Dataset [124](https://data.fingrid.fi/en/datasets/124) and [74](https://data.fingrid.fi/en/datasets/74) pages identify Creative Commons Attribution licences | Client aligned with supplied contract and synthetic tests; first authenticated live run pending |
+| [Fingrid development plan](https://www.fingrid.fi/en/grid/development/Main-grid-development-plan/) | Reference supplied in the project brief; project-level records have not been compiled | Check each report's reuse terms before redistribution | Empty project template; no inferred release of capacity |
+| [ENTSO-E Transparency Platform](https://transparency.entsoe.eu/) | Official token-management guide and generation document-code guide located | Platform terms and data-owner reuse conditions apply; no raw ENTSO-E data redistributed in this repo | Actual-load and generation clients; first authenticated live run pending |
+| [Netbeheer Nederland capacity map](https://www.netbeheernederland.nl/netcapaciteit-en-flexibiliteit/capaciteitskaart) | Official landing page links to the national map | Export schema, actual download retrieval and redistribution terms not verified here | Stretch, not ingested |
+
+Fingrid's Grid Scope landing page describes estimates for selected substations and
+warns that projects affect other points. Its data are not a comprehensive or
+guaranteed offer. The observation notes retain that qualification. The initial
+sample retains only selected explicit numeric values; it does not reproduce the
+map, logos or base layers. Original operator facts are attributed on every row.
+
+Source-access observations: plain page fetches did not expose the map's tables.
+The Firecrawl CLI failed DNS resolution in the restricted environment; its
+connector also returned a proxy tunnel error. The desktop browser successfully
+loaded the published viewer, so capacity compilation proceeded by direct
+interaction. This is not evidence that a public bulk API exists.
+
+API contract references:
+
+- [Fingrid developer portal](https://developer-data.fingrid.fi/api-details#api=avoindata-api&operation=GetDatasetData).
+  Its detailed dynamic schema was initially unavailable through text fetching.
+  The user subsequently supplied an [OpenAPI export](reference/avoindata-api.yaml),
+  now retained with a [checksum and contract audit](reference/README.md). The client
+  handles its integral-number pagination fields and optional navigation metadata.
+  A first real authenticated response still needs checking. Unknown shapes fail
+  rather than substitute values.
+- [ENTSO-E data-extraction guide](https://transparency.entsoe.eu/content/static_content/download?path=%2FStatic+content%2Fweb+api%2FRestfulAPI_IG.pdf).
+- [ENTSO-E token-management guide](https://transparency.entsoe.eu/content/static_content/download?path=%2FStatic+content%2FAPI-Token-Management.pdf).
+- [ENTSO-E terms](https://transparency.entsoe.eu/content/static_content/download?path=%2FStatic+content%2Fterms+and+conditions%2F181108_ENTSOE_Transparency_Terms_Conditions_MC_APPROVED.pdf).
+  Verify the current terms and covered data categories at first live use. This
+  implementation makes no claim that every platform dataset can be republished.
+
+Derived database files and future raw downloads are Git-ignored. The API clients
+store normalized values, interval bounds and provenance, but no keys or HTTP
+responses. See [capture log](CAPTURE_LOG.md) for evidence behind the shipped CSV.

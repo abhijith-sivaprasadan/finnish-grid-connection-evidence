@@ -1,0 +1,7 @@
+# Direct dependencies pinned to the locally verified Python 3.12 environment.
+requests==2.34.2
+pandas==2.3.3
+streamlit==1.66.0
+plotly==6.9.0
+defusedxml==0.7.1
+pytest==8.4.2

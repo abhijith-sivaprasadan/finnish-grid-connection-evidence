@@ -1,0 +1,14 @@
+.venv/
+.uv-cache/
+.firecrawl/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.tmp/
+.env
+.env.*
+!.env.example
+data/*.sqlite*
+data/raw/
+*.log
+.streamlit/secrets.toml
