@@ -14,7 +14,7 @@ reconfirmation of all 18 numeric estimates**. Do not present these as validated
 operator-confirmed connection offers. Fingrid and
 ENTSO-E API clients are implemented and tested with synthetic test payloads. The
 Fingrid client is also checked against the [supplied OpenAPI contract](docs/reference/README.md), but
-**live context ingestion has not run because credentials are not yet available**.
+**live context ingestion has not yet been verified with authenticated requests**.
 The full real-data MVP is therefore **not yet complete**. No model runs are included.
 
 ## Run locally
@@ -52,6 +52,8 @@ combinations in this selection. Estimates at different points must not be summed
 [Capture log](docs/CAPTURE_LOG.md) documents exactly what was read and spot-checked.
 [Source register](docs/SOURCES.md) records access, reuse terms and unresolved items.
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
+[ENTSO-E manual live check](docs/ENTSOE_LIVE.md) provides a secret-backed, opt-in
+GitHub Actions probe that never commits tokens or operational data.
 
 ## Evidence design
 
