@@ -16,3 +16,4 @@ jobs:
       - run: python -m pytest -q
       - run: python -m src.cli import-manual
       - run: python -m src.cli quality
+      - run: python -m src.audit_integrity

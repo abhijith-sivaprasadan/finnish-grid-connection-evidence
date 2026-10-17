@@ -64,6 +64,10 @@ entitlement.
 how to manually re-open each direction/year in Grid Scope and preserve audit
 evidence. Its downloadable 18-row checklist starts entirely **pending**; no
 independent numeric verification is claimed.
+[Internal verification and integrity audit](docs/INTEGRITY_AUDIT_2026_10_17.md)
+documents the difference between CSV-to-database consistency, operational
+interval validation and outstanding independent operator-value confirmation.
+The `python -m src.audit_integrity` command is part of continuous integration.
 [Two-minute Krios-facing walkthrough](docs/KRIOS_DEMO.md) shows what the
 outlook proves, what remains unverified, and how to discuss the portfolio
 deliverable without claiming operator-confirmed connection headroom.
