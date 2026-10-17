@@ -5,3 +5,7 @@ streamlit==1.66.0
 plotly==6.9.0
 defusedxml==0.7.1
 pytest==8.4.2
+
+# Hosted read-only PostgreSQL and opt-in GitHub Actions collector.
+SQLAlchemy>=2.0.40,<2.1
+psycopg[binary]>=3.2.9,<3.4
