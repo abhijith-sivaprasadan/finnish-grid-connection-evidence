@@ -18,6 +18,12 @@ import; ENTSO-E is an optional additional context feed.
 3. Set `FINGRID_API_KEY` in the same terminal that runs the importer. The client
    sends it only in the `x-api-key` header to `data.fingrid.fi`.
 
+For an optional first authenticated probe, see [Fingrid's secret-backed
+GitHub Actions smoke test](FINGRID_LIVE.md). The already-shared primary key
+should be regenerated before saving a replacement privately as a GitHub Actions
+repository secret named `FINGRID_API_KEY`. The `avoindata-api.yaml` file is
+Fingrid's API *specification*, not a key.
+
 Fingrid's documented limit is 10,000 requests/day and one request per two seconds
 per key. This client spaces requests by at least 2.1 seconds, including retries,
 within one process. Do not run concurrent importers with the same key. The request
