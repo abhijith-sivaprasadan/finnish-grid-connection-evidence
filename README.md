@@ -7,6 +7,14 @@ connection evidence**. It combines a small, source-transcribed Fingrid Grid Scop
 sample, an append-only SQLite evidence store, and a Streamlit dashboard. National
 operational data has its own schema and view; it never becomes substation capacity.
 
+**Free hosted option (not deployed yet):** PostgreSQL read-only backend and
+opt-in scheduled cloud ingestion have been added. The app can be hosted on
+Streamlit Community Cloud with a Neon Free database and daily GitHub Actions
+refresh. **No public URL or real Neon import is claimed.** Account owner must
+explicitly configure secrets, an independent read-only database role and the
+`ENABLE_PUBLIC_REFRESH=true` variable. See
+[Free hosting setup and strict cost controls](docs/FREE_HOSTING.md).
+
 **Current status:** the capacity-data path runs end to end with **18 source-transcribed
 indicative observations at five 400 kV points**, captured on **17 October 2026**.
 The original capture log describes same-source transcription checks, **not independent
@@ -37,7 +45,7 @@ After installation on Windows, you can also run
 Windows executable. Commands assume the repo root. No API keys are needed to view
 the published capacity sample.
 
-The dashboard reads `data/evidence.sqlite`, filters by point, direction, effective
+By default, the dashboard reads `data/evidence.sqlite`, filters by point, direction, effective
 year, source URL and capture snapshot, and exports selected evidence as CSV.
 It draws discrete points, preserves MW/MVA, and shows `not published` for missing
 combinations in this selection. Estimates at different points must not be summed.
@@ -73,6 +81,9 @@ outlook proves, what remains unverified, and how to discuss the portfolio
 deliverable without claiming operator-confirmed connection headroom.
 [Source register](docs/SOURCES.md) records access, reuse terms and unresolved items.
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
+[Free online hosting setup](docs/FREE_HOSTING.md) describes Neon Free +
+Streamlit Community Cloud deployment, private API key handling, strict daily
+interval coverage and opt-in scheduled refresh.
 [Persistent local import](docs/LIVE_CONTEXT_IMPORT.md) fetches all verified
 operational feeds, validates the responses, and atomically inserts into a
 Git-ignored SQLite database consumed by Streamlit.
