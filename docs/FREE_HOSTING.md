@@ -85,6 +85,28 @@ public dashboard. Only the separately enabled collector retrieves national
 operational data. It strictly rejects partial observed days and never
 converts national demand into per-substation headroom.
 
+## Troubleshooting Neon bootstrap (safe to share)
+
+On 18 October, a manual bootstrap run failed in the **Resolve selected Neon
+branch database privately** step. Its log confirmed that `NEON_API_KEY` and
+`NEON_PROJECT_ID` were available, but the previous script suppressed the exact
+error. The bootstrap import step was skipped; no tables were created by that run.
+
+Re-run the updated workflow once. It now reports a safe stage code:
+
+| Stage / code | Meaning | Fix |
+|---|---|---|
+| `LIST_BRANCHES: HTTP_401` / `HTTP_403` | Neon API key rejected or lacks permission for this project | Check the correct GitHub integration, organization and key permissions in Neon |
+| `LIST_BRANCHES: HTTP_404` | The API key cannot see the supplied project ID | Verify the Neon project currently connected to this repository |
+| `BRANCH_NOT_FOUND` | The requested Neon branch doesn't exist | Use one of the printed branch names; GitHub `main` is not necessarily Neon `main` |
+| `LIST_DATABASES: ...` | Neon cannot list databases on the selected branch | Check branch and API permissions |
+| `DATABASE_NOT_FOUND_OR_AMBIGUOUS` | No unique database was selected | Set `NEON_DATABASE_NAME` repository variable to an existing DB |
+| `GET_CONNECTION_URI: HTTP_4xx` | Cannot obtain a writer URI for the selected DB owner | Inspect Neon project role and key permissions |
+| `GET_CONNECTION_URI: returned URI failed TLS/driver validation` | URI shape/SSL configuration not accepted by the app | Review whether the project returns a supported direct PostgreSQL URI |
+
+The message **does not show passwords, connection strings or API response
+bodies**. Avoid pasting raw secrets to obtain help.
+
 ## 3. Create a separate SELECT-only PostgreSQL role (owner action)
 
 **Do not reuse the collector's writer URL in the public Streamlit app.**
