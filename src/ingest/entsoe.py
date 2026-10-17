@@ -1,4 +1,4 @@
-"""Conservative ENTSO-E A65/A75 parser. Unsupported curve types fail explicitly."""
+"""Conservative ENTSO-E A65/A75 parser with explicit A01/A03 block semantics."""
 from datetime import datetime, timedelta
 import os
 from defusedxml import ElementTree as ET
@@ -21,8 +21,11 @@ def normalize(xml, kind, retrieved_at):
         raise ValueError("Unexpected ENTSO-E document type")
     result = []
     for series in root.findall("TimeSeries"):
-        if series.findtext("curveType", "A01") != "A01":
-            raise ValueError("Only explicit sequential A01 points are supported; no gap interpolation")
+        # ENTSO-E documents A01 (fixed intervals) and A03 (variable-size,
+        # piecewise-constant blocks). A03 points are *change points*, not gaps.
+        curve = series.findtext("curveType", "A01")
+        if curve not in {"A01", "A03"}:
+            raise ValueError(f"Unsupported ENTSO-E curveType {curve!r}; supported: A01, A03")
         unit = series.findtext("quantity_Measure_Unit.name")
         if unit != "MAW":
             raise ValueError("Expected ENTSO-E MAW (MW) power units")
@@ -40,26 +43,55 @@ def normalize(xml, kind, retrieved_at):
             resolution = period.findtext("resolution")
             if resolution not in RESOLUTIONS:
                 raise ValueError("Unsupported ENTSO-E interval resolution")
-            step, positions = RESOLUTIONS[resolution], set()
+            step = RESOLUTIONS[resolution]
+            if end <= start or (end - start) % step:
+                raise ValueError("ENTSO-E period must have a positive, resolution-aligned duration")
+            interval_count = (end - start) // step
+            positions = set()
+            blocks = []
             for point in period.findall("Point"):
                 position = int(point.findtext("position"))
-                if position < 1 or position in positions:
+                if position < 1 or position > interval_count or position in positions:
                     raise ValueError("Invalid or duplicate ENTSO-E point position")
+                if curve == "A03" and blocks and position <= blocks[-1][0]:
+                    raise ValueError("ENTSO-E A03 change points must be strictly increasing")
                 positions.add(position)
+                blocks.append((position, float(point.findtext("quantity"))))
+            if curve == "A03" and (not blocks or blocks[0][0] != 1):
+                raise ValueError("ENTSO-E A03 variable block must begin at position 1")
+            for index, (position, quantity) in enumerate(blocks):
                 timestamp = start + (position - 1) * step
-                if timestamp + step > end:
-                    raise ValueError("ENTSO-E point exceeds period")
+                if curve == "A03":
+                    # The next reported position is the *end* of this constant
+                    # block; the final block extends to the Period's end.
+                    # Store one operator-described interval, not invented
+                    # 15-minute observations.
+                    following = (blocks[index + 1][0] if index + 1 < len(blocks)
+                                 else interval_count + 1)
+                    interval_end = start + (following - 1) * step
+                else:
+                    # A01 readings are explicit fixed-size intervals. A
+                    # missing position stays missing; never interpolate it.
+                    interval_end = timestamp + step
+                if interval_end <= timestamp or interval_end > end:
+                    raise ValueError("Invalid ENTSO-E interval bounds")
                 result.append(OperationalRecord(
                     source="entsoe", dataset_id=expected[kind], metric=metric, unit="MW",
-                    value=float(point.findtext("quantity")), timestamp_utc=timestamp.isoformat(),
-                    interval_end_utc=(timestamp + step).isoformat(), retrieved_at=retrieved_at, source_url=GUIDE,
+                    value=quantity, timestamp_utc=timestamp.isoformat(),
+                    interval_end_utc=interval_end.isoformat(), retrieved_at=retrieved_at, source_url=GUIDE,
                 ))
     if not result:
         raise ValueError("ENTSO-E response contains no supported points")
-    # Multiple overlapping series must not silently become a summed national quantity.
-    keys = [(r.dataset_id, r.metric, r.timestamp_utc, r.interval_end_utc) for r in result]
-    if len(keys) != len(set(keys)):
-        raise ValueError("Overlapping ENTSO-E series require explicit reconciliation")
+    # Distinct periods or TimeSeries for the same metric cannot overlap, even
+    # when block boundaries differ. Reject instead of overwriting or summing.
+    by_metric = {}
+    for record in result:
+        by_metric.setdefault((record.dataset_id, record.metric), []).append(record)
+    for values in by_metric.values():
+        values.sort(key=lambda r: r.timestamp_utc)
+        for previous, current in zip(values, values[1:]):
+            if current.timestamp_utc < previous.interval_end_utc:
+                raise ValueError("Overlapping ENTSO-E series require explicit reconciliation")
     return result
 
 
