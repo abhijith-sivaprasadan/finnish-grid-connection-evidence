@@ -64,6 +64,9 @@ entitlement.
 how to manually re-open each direction/year in Grid Scope and preserve audit
 evidence. Its downloadable 18-row checklist starts entirely **pending**; no
 independent numeric verification is claimed.
+[Two-minute Krios-facing walkthrough](docs/KRIOS_DEMO.md) shows what the
+outlook proves, what remains unverified, and how to discuss the portfolio
+deliverable without claiming operator-confirmed connection headroom.
 [Source register](docs/SOURCES.md) records access, reuse terms and unresolved items.
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
 [Persistent local import](docs/LIVE_CONTEXT_IMPORT.md) fetches all verified
