@@ -53,3 +53,21 @@ def test_persisted_national_operational_rows_are_visible(tmp_path, monkeypatch):
     dataframes = [w.value for w in app.dataframe]
     assert any("source" in frame.columns and "last_retrieved_utc" in frame.columns
                and "entsoe" in frame["source"].values for frame in dataframes)
+
+
+def test_power_availability_outlook_has_discrete_published_and_missing_counts(tmp_path, monkeypatch):
+    path = tmp_path / "outlook.sqlite"
+    ingest(ROOT / "data" / "manual", path)
+    monkeypatch.setenv("GRID_EVIDENCE_DB", str(path))
+    app = AppTest.from_file(str(ROOT / "app/dashboard.py")).run(timeout=30)
+    assert not app.exception
+    assert any(tab.label == "Power availability outlook" for tab in app.tabs)
+    # The first three metrics describe source data; these are comparison cells.
+    assert app.metric[3].value == "18"
+    assert app.metric[4].value == "12"
+    assert app.metric[5].value == "0"
+    frames = [component.value for component in app.dataframe]
+    assert any("not published in selected snapshot" in frame.astype(str).to_string()
+               for frame in frames)
+    assert any("500 MW" in frame.astype(str).to_string() for frame in frames)
+    assert any("380 MW" in frame.astype(str).to_string() for frame in frames)

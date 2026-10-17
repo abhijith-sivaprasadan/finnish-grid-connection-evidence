@@ -10,6 +10,8 @@ import streamlit as st
 from src.db import connect, db_path
 from src.quality import report
 from src.views import published, filter_capacity, coverage_matrix
+from src.availability import comparison_grid, coverage_summary
+from src.audit_capacity import audit_rows
 
 st.set_page_config(page_title="Finnish Grid Evidence", page_icon="⚡", layout="wide")
 st.caption("FINLAND  /  CONNECTION EVIDENCE")
@@ -24,6 +26,7 @@ with connect() as conn:
     projects = pd.read_sql_query("SELECT * FROM grid_project", conn)
     scenarios = pd.read_sql_query("SELECT * FROM scenario_result", conn)
     quality = report(conn)
+    audit_checklist = audit_rows(conn)
 
 a, b, c = st.columns(3)
 a.metric("Connection points", len(points))
@@ -32,8 +35,8 @@ c.metric("Operational records", len(context))
 if context.empty:
     st.warning("No operational rows in this local database yet. Authenticated source checks succeeded separately; see docs/LIVE_CONTEXT_IMPORT.md to populate this database. Capacity observations are source transcriptions, not independently validated connection offers.")
 
-estimate_tab, context_tab, project_tab, evidence_tab = st.tabs(
-    ["Published estimates", "National context", "Planned projects", "Evidence & quality"])
+estimate_tab, comparison_tab, context_tab, project_tab, evidence_tab = st.tabs(
+    ["Published estimates", "Power availability outlook", "National context", "Planned projects", "Evidence & quality"])
 
 with estimate_tab:
     if capacity.empty:
@@ -82,6 +85,74 @@ with estimate_tab:
             st.subheader("Current estimates without a published year")
             current = filter_capacity(current, selected, direction, snapshot=snapshot, source=source)
             st.dataframe(current, hide_index=True)
+
+with comparison_tab:
+    st.subheader("Power Availability Curve · indicative source evidence")
+    st.write("Compare Fingrid Grid Scope's source-transcribed connection-capacity estimates by point, direction and published year. Each marker is a discrete source observation, not a continuous forecast or confirmed connection offer.")
+    st.caption("Only one capture session is compared at a time. Missing entries are not zero MW, and points must not be summed. Forecast years are conditional.")
+    if capacity.empty or points.empty:
+        st.info("No published capacity source observations available. Run the manual source importer first.")
+    else:
+        all_years = sorted(int(year) for year in capacity.effective_year.dropna().unique())
+        snapshots = sorted(capacity.source_observed_at.unique(), reverse=True)
+        comp1, comp2 = st.columns(2)
+        with comp1:
+            outlook_snapshot = st.selectbox("Source capture session (UTC)", snapshots, key="outlook_snapshot")
+            outlook_years = st.multiselect("Published years", all_years, default=all_years, key="outlook_years")
+        with comp2:
+            outlook_labels = dict(zip(points.connection_point_id, points.name))
+            outlook_points = st.multiselect("Substations", list(outlook_labels),
+                                            default=list(outlook_labels),
+                                            format_func=outlook_labels.get, key="outlook_points")
+        comparison_points = points[points.connection_point_id.isin(outlook_points)]
+        outlook = comparison_grid(capacity, comparison_points, outlook_years,
+                                  snapshot=outlook_snapshot)
+        coverage = coverage_summary(outlook)
+        n1, n2, n3 = st.columns(3)
+        n1.metric("Published intersections", coverage["published"])
+        n2.metric("Not published in selection", coverage["not_published_in_selection"])
+        n3.metric("Needs source reconciliation", coverage["needs_reconciliation"])
+        if not outlook.empty:
+            for outlook_direction in ("consumption", "production"):
+                st.markdown(f"#### {outlook_direction.capitalize()} · published indicative")
+                direction_rows = outlook[outlook["Direction"] == outlook_direction]
+                pivot = direction_rows.pivot(index="Connection point",
+                                             columns="Year", values="Published estimate")
+                st.dataframe(pivot, width="stretch")
+                published_rows = direction_rows[direction_rows["Evidence"] == "published_indicative"]
+                if published_rows.empty:
+                    st.info("No published values for this direction and selection.")
+                    continue
+                for unit, group in published_rows.groupby("Unit"):
+                    plot_frame = group.copy()
+                    plot_frame["Published year"] = plot_frame["Year"].astype(str)
+                    fig = px.scatter(
+                        plot_frame, x="Published year", y="Value", color="Connection point",
+                        category_orders={"Published year": [str(y) for y in outlook_years]},
+                        hover_data=["Observation ID", "Source capture UTC", "Source URL"],
+                        labels={"Value": f"Published indicative capacity ({unit})"},
+                    )
+                    fig.update_traces(marker={"size": 11, "line": {"width": 1, "color": "white"}})
+                    fig.update_layout(height=375, margin={"t": 15, "l": 10, "r": 10, "b": 10},
+                                      legend={"orientation": "h", "y": -0.25})
+                    st.plotly_chart(fig, width="stretch")
+                    st.caption(f"{outlook_direction.capitalize()} · {unit}. Markers are not connected or interpolated.")
+            with st.expander("Point-year evidence and source links"):
+                st.dataframe(outlook, hide_index=True, width="stretch",
+                             column_config={"Source URL": st.column_config.LinkColumn("Source")})
+            st.download_button("Download comparison and missing-data statuses (CSV)",
+                               outlook.to_csv(index=False),
+                               "grid-scope-capacity-outlook.csv", "text/csv")
+        else:
+            st.info("Select at least one substation and one year to compare.")
+        st.divider()
+        st.markdown("#### Independent source recheck")
+        st.warning("The 18 Grid Scope figures were transcribed from the operator viewer; an independent numeric recheck is not yet documented. This checklist starts every row as pending.")
+        if audit_checklist:
+            st.download_button("Download independent recheck checklist (CSV)",
+                               pd.DataFrame(audit_checklist).to_csv(index=False),
+                               "grid-scope-independent-recheck.csv", "text/csv")
+        st.caption("To recheck values, independently reopen the source viewer, confirm the direction/year/unit and record a new check time plus evidence. A changed live value need not mean the historical transcription was wrong.")
 
 with context_tab:
     st.subheader("Finland-wide operational context")

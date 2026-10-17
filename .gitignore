@@ -10,5 +10,6 @@ __pycache__/
 !.env.example
 data/*.sqlite*
 data/raw/
+data/audit/
 *.log
 .streamlit/secrets.toml

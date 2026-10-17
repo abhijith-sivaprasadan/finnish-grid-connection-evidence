@@ -10,6 +10,10 @@
 - [x] Typed validators, versioned SQLite schema, atomic repeatable imports.
 - [x] Historical snapshots retained; conflicting input rejected.
 - [x] Streamlit filters, discrete published-year chart, gap labels and CSV export.
+- [x] Five-substation Power availability outlook for both directions across
+      2026/2030/2035, with 18 published / 12 missing cells in the source capture.
+- [x] Independent-source-recheck CSV exporter and per-row audit protocol;
+      all values marked pending until an actual second review.
 - [x] National context isolated from capacity; scenarios isolated from both.
 - [x] Fingrid and ENTSO-E client implementation and offline synthetic tests.
 - [x] Credential setup instructions and honest README.
@@ -24,7 +28,9 @@
 - [ ] Perform a real **local** persistence run and inspect both context feeds
       in the Streamlit National context tab; the public repo contains no live rows.
 - [ ] Reconcile one actual interval against each operator portal and independently
-      re-check the source-transcribed Grid Scope numeric estimates.
+      re-check the source-transcribed Grid Scope numeric estimates using the
+      [pending per-row review checklist](GRID_SCOPE_RECHECK.md); no completed
+      independent check has been recorded yet.
 - [ ] Run a separate ENTSO-E A75 generation smoke check before enabling that
       optional feed in persistent capture.
 

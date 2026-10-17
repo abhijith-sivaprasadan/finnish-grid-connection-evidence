@@ -38,9 +38,15 @@ Windows executable. Commands assume the repo root. No API keys are needed to vie
 the published capacity sample.
 
 The dashboard reads `data/evidence.sqlite`, filters by point, direction, effective
-year, source URL and capture snapshot, and exports the selected evidence as CSV.
+year, source URL and capture snapshot, and exports selected evidence as CSV.
 It draws discrete points, preserves MW/MVA, and shows `not published` for missing
 combinations in this selection. Estimates at different points must not be summed.
+The **Power availability outlook** tab compares **both** directions for all five
+points across 2026/2030/2035, showing **18 observed and 12 not-present-in-this-compiled-capture
+point-direction-year intersections** in the initial capture. Only one snapshot
+is shown at a time. No lines are drawn between published years. This is an
+indicative evidence comparison, not a ranked list of sites or a connection
+entitlement.
 
 ## What is real, and what is pending
 
@@ -54,6 +60,13 @@ combinations in this selection. Estimates at different points must not be summed
 | Netherlands | Source/access assessment only | No congestion data imported or Dutch model claimed |
 
 [Capture log](docs/CAPTURE_LOG.md) documents exactly what was read and spot-checked.
+[Independent source-recheck guide](docs/GRID_SCOPE_RECHECK.md) documents
+how to manually re-open each direction/year in Grid Scope and preserve audit
+evidence. Its downloadable 18-row checklist starts entirely **pending**; no
+independent numeric verification is claimed.
+[Two-minute Krios-facing walkthrough](docs/KRIOS_DEMO.md) shows what the
+outlook proves, what remains unverified, and how to discuss the portfolio
+deliverable without claiming operator-confirmed connection headroom.
 [Source register](docs/SOURCES.md) records access, reuse terms and unresolved items.
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
 [Persistent local import](docs/LIVE_CONTEXT_IMPORT.md) fetches all verified
@@ -100,7 +113,7 @@ explains what can inform later modelling and why the MVP is original code.
 | Grid analyst responsibility | Demonstrable output here |
 |---|---|
 | Own grid data | Audited registry, source-transcribed capacity records, two authenticated source smoke tests and a tested opt-in local persist operation |
-| Understand current/future grid | Dated published estimates with explicit forecast years and missing-data visibility |
+| Understand current/future grid | Five-substation two-direction capacity outlook across discrete published years, unreported-cell visibility, and source-linked audit checklist |
 | Model and assess | Clear modelling boundary and reserved scenario schema; no completed model claim |
 | Maintain a power-availability database | Reproducible SQLite evidence records and filterable dashboard |
 
