@@ -125,3 +125,24 @@ def test_postgres_operational_history_stays_separate(pg_engine,tmp_path):
     assert snap["context"].iloc[0]["value"]==8135.5
     assert snap["context"].iloc[0]["source"]=="entsoe"
     assert len(snap["capacity"])==18
+
+
+
+def test_hosted_streamlit_reads_postgres_without_api_keys(pg_engine,tmp_path,monkeypatch):
+    from streamlit.testing.v1 import AppTest
+    path=tmp_path/"data.sqlite"
+    ingest(ROOT/"data/manual",path)
+    with connect(path) as db:
+        mirror(pg_engine,collect_sqlite_rows(db))
+    monkeypatch.setenv("HOSTED_DASHBOARD","true")
+    monkeypatch.setenv("DATABASE_READ_URL",
+                       "postgresql://reader:PLACEHOLDER_NOT_A_REAL_KEY@localhost/ci?sslmode=require")
+    monkeypatch.delenv("FINGRID_API_KEY",raising=False)
+    monkeypatch.delenv("ENTSOE_API_TOKEN",raising=False)
+    monkeypatch.setattr("src.cloud_store.engine_for",lambda _:pg_engine)
+    app=AppTest.from_file(str(ROOT/"app/dashboard.py")).run(timeout=30)
+    assert not app.exception
+    assert app.metric[0].value=="5"
+    assert app.metric[1].value=="18"
+    assert app.metric[2].value=="0"
+    assert any("No persisted operational rows" in w.message for w in app.warning)
