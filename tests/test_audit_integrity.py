@@ -26,7 +26,7 @@ def test_committed_csv_matches_18_sqlite_records_but_does_not_claim_verified(tmp
     assert findings["source_values_independently_verified"] is False
     assert findings["operator_value_verification_pending"] is True
     assert findings["operational_rows_in_db"] is False
-    assert findings["internal_integrity_passed"] is True
+    assert findings["internal_integrity_passed"] is True, findings["findings"]
     assert [f["code"] for f in findings["findings"]]==["NO_PERSISTED_OPERATIONS"]
 
 
@@ -47,7 +47,7 @@ def test_synthetic_context_can_pass_structural_checks_without_source_verificatio
     with connect(db) as conn:
         assert insert(conn,record())
         result=audit(conn)
-    assert result["internal_integrity_passed"] is True
+    assert result["internal_integrity_passed"] is True, result["findings"]
     assert result["real_data_present"] is True  # database has rows: fixture is NOT live source proof
     assert result["operator_value_verification_pending"] is True
     assert result["counts"]["source_counts"]["entsoe:A65"]==1
