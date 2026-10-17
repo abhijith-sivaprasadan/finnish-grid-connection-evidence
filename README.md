@@ -7,12 +7,16 @@ connection evidence**. It combines a small, source-transcribed Fingrid Grid Scop
 sample, an append-only SQLite evidence store, and a Streamlit dashboard. National
 operational data has its own schema and view; it never becomes substation capacity.
 
-**Free hosted option (not deployed yet):** PostgreSQL read-only backend and
-opt-in scheduled cloud ingestion have been added. The app can be hosted on
-Streamlit Community Cloud with a Neon Free database and daily GitHub Actions
-refresh. **No public URL or real Neon import is claimed.** Account owner must
-explicitly configure secrets, an independent read-only database role and the
-`ENABLE_PUBLIC_REFRESH=true` variable. See
+**Free hosted option (not deployed yet):** The Streamlit read-only PostgreSQL
+backend and opt-in scheduled collector are implemented. The user linked the
+repository to an existing Neon project; its GitHub integration installed
+`NEON_API_KEY` (secret) and `NEON_PROJECT_ID` (variable). The repository
+can now privately discover the existing database writer URI and run the
+[manual Neon bootstrap workflow](.github/workflows/neon-bootstrap.yml)
+before the [scheduled refresh workflow](.github/workflows/cloud-refresh.yml)
+is explicitly enabled. **No public URL, successful live Neon import or
+automated refreshing is claimed until the respective workflows and hosted
+site actually run.** Create a separate read-only role for Streamlit and follow
 [Free hosting setup and strict cost controls](docs/FREE_HOSTING.md).
 
 **Current status:** the capacity-data path runs end to end with **18 source-transcribed
