@@ -9,10 +9,12 @@ Grid Scope observations and **0 national operational rows**. The one-time
 bootstrap trigger has since been retired. The regular manual bootstrap remains
 available for future rechecks.
 
-**Streamlit is not deployed and no public URL exists yet.** Source API
-collection remains off until the owner enables it, and the read-only database
-user and Streamlit secrets must still be set up. No new Neon project, paid
-service or recurring job was created by the bootstrap.
+**Streamlit deployment confirmed by the owner on 18 October 2026:**
+[https://finnish-grid-atlas.streamlit.app/](https://finnish-grid-atlas.streamlit.app/).
+The owner also reports the separate read-only Neon database connection is
+configured. Public readback has not been independently checked in this guide.
+Source API operational observations and automatic refresh remain pending.
+No new Neon project, paid service or recurring job was created by the bootstrap.
 
 The application runs on [Streamlit Community Cloud](https://share.streamlit.io/)
 and reads *persisted* observations from
@@ -90,13 +92,22 @@ do **not** need to run them again to import the 18-row capacity sample.
    appear in the Actions logs.
 5. For real operational data, confirm valid `FINGRID_API_KEY` and
    `ENTSOE_API_TOKEN` GitHub secrets (regenerate any previously exposed
-   keys). Only **then**, after checking reuse terms, explicitly enable
-   `ENABLE_PUBLIC_REFRESH=true` under GitHub repository Actions variables.
-   Daily collection remains off by default.
-6. Run **Actions → Hosted Finland evidence refresh (opt-in, free tier) →
-   Run workflow** once with `backfill_days=1` and inspect the result before
-   relying on any automatic schedule. The job resolves Neon credentials
-   privately each run. You no longer need `DATABASE_WRITE_URL` in GitHub.
+   keys) and review source reuse terms. Existing authenticated smoke tests
+   for Fingrid 124/74 and ENTSO-E A65 passed earlier in temporary runners.
+6. Open **Actions → Hosted Finland evidence refresh (opt-in, free tier) →
+   Run workflow** on GitHub `main` with `backfill_days=1` and an empty
+   `day` to retrieve the last conservative completed UTC day. **A manual
+   workflow dispatch now works without enabling automatic daily updates.**
+   The job resolves Neon credentials privately and checks all three source
+   streams for continuous coverage before any PostgreSQL write.
+7. Verify the run reports `hosted_postgres_mirror_completed`, plus
+   `validated_interval_counts` for two Fingrid datasets and ENTSO-E A65.
+   Reload Streamlit after its 10-minute cache expires; confirm the
+   operational-record count and freshness timestamp are now nonzero.
+8. Once a manual run works and you approve continuing daily API requests,
+   set GitHub Actions repository variable `ENABLE_PUBLIC_REFRESH=true`.
+   Scheduled refresh remains **off until this explicit opt-in**; to disable
+   it again set the variable to `false`.
 
 Bootstrap does not use Fingrid or ENTSO-E credentials and does not publish a
 public dashboard. Only the separately enabled collector retrieves national
