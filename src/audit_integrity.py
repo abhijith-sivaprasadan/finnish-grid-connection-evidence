@@ -60,7 +60,7 @@ def audit(conn, *, manual_file=None):
                       "source_published_on")
             for field in fields:
                 recorded = existing[field]
-                source = record.get(field, "")
+                source = record.get(field, "").strip()
                 if field == "effective_year":
                     correct = (None if source == "" else int(source))
                 elif field == "capacity_value":
@@ -121,7 +121,7 @@ def audit(conn, *, manual_file=None):
             "source_values_independently_verified": False,
             "counts": counts, "findings": findings,
             "internal_integrity_passed": passed,
-            "real_data_present": bool(operational),
+            "operational_rows_in_db": bool(operational),\n            "authenticated_live_origin_proven_by_db_alone": False,
             "operator_value_verification_pending": True,
             "requires_action": bool(codes & {"CSV_MISSING","CSV_NOT_IMPORTED","NO_CAPACITY","NO_PERSISTED_OPERATIONS"})}
 
