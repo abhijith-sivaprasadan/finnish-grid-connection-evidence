@@ -4,7 +4,7 @@ import os
 import pytest
 from sqlalchemy import create_engine, text
 
-from src.neon_connection import resolve_connection
+from src.neon_connection import resolve_connection, NeonLookupError
 from src.neon_bootstrap import bootstrap
 
 
@@ -59,7 +59,7 @@ def test_resolves_exact_existing_project_branch_and_database_without_guessing():
 
 def test_wrong_branch_fails_closed_without_silent_default_switch():
     fake=FakeSession(branches=[{"name":"main","id":"br-main-111"}])
-    with pytest.raises(ValueError,match="branch not found"):
+    with pytest.raises(NeonLookupError,match="BRANCH_NOT_FOUND.*available branch names: main"):
         resolve_connection("fragrant-dawn-65247206","FAKE_API_KEY",
                            branch_name="production",session=fake)
     assert len(fake.calls)==1
@@ -68,7 +68,7 @@ def test_wrong_branch_fails_closed_without_silent_default_switch():
 def test_multiple_unrelated_databases_require_explicit_selection():
     fake=FakeSession(databases=[{"name":"foo","owner_name":"foo_owner"},
                                 {"name":"bar","owner_name":"bar_owner"}])
-    with pytest.raises(ValueError,match="selection ambiguous"):
+    with pytest.raises(NeonLookupError,match="DATABASE_NOT_FOUND_OR_AMBIGUOUS"):
         resolve_connection("fragrant-dawn-65247206","FAKE_API_KEY",
                            session=fake)
     assert len(fake.calls)==2
@@ -86,7 +86,7 @@ def test_missing_api_key_and_disallowed_project_id_rejected_prior_to_network():
 
 def test_tls_required_and_no_unspecified_owner():
     fake=FakeSession(uri="postgresql://user:p@host/db?sslmode=disable")
-    with pytest.raises(ValueError,match="sslmode"):
+    with pytest.raises(NeonLookupError,match="GET_CONNECTION_URI: returned URI failed TLS/driver validation"):
         resolve_connection("fragrant-dawn-65247206","FAKE_API_KEY",session=fake)
     fake=FakeSession(databases=[{"name":"neondb"}])
     with pytest.raises(ValueError,match="owner role"):
@@ -121,3 +121,32 @@ def test_bootstrap_source_sample_against_real_ephemeral_postgres(pg_engine,tmp_p
     assert result["indicative_capacity_observations"]==18
     again=bootstrap(url)
     assert again["inserted"]["capacity_observation"]==0
+
+
+
+def test_missing_main_shows_existing_production_branch_without_switching():
+    fake = FakeSession(branches=[{"name": "production", "id": "br-production-222"}])
+    with pytest.raises(NeonLookupError) as err:
+        resolve_connection("fragrant-dawn-65247206", "FAKE_API_KEY",
+                           branch_name="main", session=fake)
+    assert "selected 'main'" in str(err.value)
+    assert "available branch names: production" in str(err.value)
+    assert "NOT_A_SECRET" not in str(err.value)
+    assert len(fake.calls) == 1
+
+
+def test_http_errors_include_safe_api_stage_not_source_body():
+    class Denied(FakeSession):
+        def get(self, url, *, headers, params, timeout, allow_redirects):
+            return FakeResponse({"error": "TOKEN_MUST_NOT_BE_PRINTED"}, status=403)
+    with pytest.raises(NeonLookupError, match="LIST_BRANCHES: HTTP_403") as err:
+        resolve_connection("fragrant-dawn-65247206", "FAKE_API_KEY",
+                           session=Denied())
+    assert "TOKEN_MUST_NOT_BE_PRINTED" not in str(err.value)
+    assert "FAKE_API_KEY" not in str(err.value)
+
+
+def test_reject_branch_name_injection():
+    with pytest.raises(NeonLookupError, match="invalid NEON_BRANCH_NAME"):
+        resolve_connection("fragrant-dawn-65247206", "FAKE_API_KEY",
+                           branch_name="main\n::warning::inject")
