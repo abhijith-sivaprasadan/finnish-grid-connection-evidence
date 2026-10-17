@@ -19,7 +19,7 @@ the backend collector. Existing local SQLite and tests continue to work.
 | GitHub Actions | Standard runners in the **public** repository | Free; 1 run/day after owner explicitly enables it |
 | Domain | No custom domain | Public `*.streamlit.app` subdomain, no domain purchase |
 | Scheduler | `.github/workflows/cloud-refresh.yml` | **Disabled** until `ENABLE_PUBLIC_REFRESH=true`; opt-in, does not run on PRs |
-| Database retention | Append-only | Monitor space; historical revision rows use storage; stop/trim with an audited policy before free limits |
+| Database retention | Append-only | Monitor space; historical revision rows use storage; collector stops writes above 750 MiB, before the 1 GB quota |
 
 The app is a **regularly refreshed evidence dashboard**, *not* a real-time
 SCADA feed. The conservative collector chooses a completed UTC day **three
@@ -126,7 +126,7 @@ can only query the SELECT-only database role's authorized objects.
 
 ## 5. Check the no-cost budget monthly
 
-- Neon: Free plan active, storage well below 1 GB, compute below the monthly
+- Neon: Free plan active, storage below the code-enforced 750 MiB upload limit and 1 GB project allowance, compute below the monthly
   100 CU-hour/project allowance, egress below 5 GB/month. A lightly visited
   portfolio site should usually consume little, but traffic affects usage.
 - Streamlit: Free Community Cloud plan still active; check memory and
