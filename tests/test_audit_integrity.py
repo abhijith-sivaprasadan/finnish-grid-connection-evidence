@@ -48,7 +48,7 @@ def test_synthetic_context_can_pass_structural_checks_without_source_verificatio
         assert insert(conn,record())
         result=audit(conn)
     assert result["internal_integrity_passed"] is True, result["findings"]
-    assert result["real_data_present"] is True  # database has rows: fixture is NOT live source proof
+    assert result["operational_rows_in_db"] is True  # database has rows: fixture is NOT live source proof
     assert result["operator_value_verification_pending"] is True
     assert result["counts"]["source_counts"]["entsoe:A65"]==1
 
