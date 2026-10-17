@@ -33,10 +33,9 @@ approved execution outside that restriction and a repo-local temporary base:
 In a normal terminal or CI, `python -m pytest -q` is sufficient. `--basetemp`
 designates a disposable test directory; never point it at valuable data.
 
-The original 48-test result is a Windows-local claim recorded before this import;
-remote CI results must be checked independently. This verifies application behavior.
-It does not validate the underlying grid
-estimates, prove connection rights, or substitute for the pending live-source checks.
+GitHub Actions **passed 52 tests** on 17 October 2026 (Ubuntu, Python 3.12), and independently rebuilt the manual-data SQLite evidence store from committed CSVs. [View passing CI run](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39064038557). The original 48-test result is a historical Windows-local run. The new CI run includes the additional data-quality and database-migration regression tests.
+
+The quality report recorded 18 numeric published-indicative observations and `mvp_data_ready=false` because there is no live Fingrid operational import. Passing CI establishes application behavior, **not** authenticity or network validity of the source-transcribed capacity figures, connection rights, or live API compatibility.
 
 The supplied OpenAPI export adds contract coverage for integral double-valued IDs
 and pagination fields, absent lastPage, returned page sizes, nullable nextPage,
