@@ -6,7 +6,7 @@ on:
       branch:
         description: "Existing Neon branch to use (typically main or production)"
         required: true
-        default: main
+        default: production
         type: string
 
 permissions:
