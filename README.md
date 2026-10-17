@@ -11,11 +11,15 @@ operational data has its own schema and view; it never becomes substation capaci
 indicative observations at five 400 kV points**, captured on **17 October 2026**.
 The original capture log describes same-source transcription checks, **not independent
 reconfirmation of all 18 numeric estimates**. Do not present these as validated
-operator-confirmed connection offers. Fingrid and
-ENTSO-E API clients are implemented and tested with synthetic test payloads. The
-Fingrid client is also checked against the [supplied OpenAPI contract](docs/reference/README.md), but
-**live context ingestion has not yet been verified with authenticated requests**.
-The full real-data MVP is therefore **not yet complete**. No model runs are included.
+operator-confirmed connection offers. Fingrid and ENTSO-E API clients are implemented, fixture-tested and checked
+against their relevant response structures. On **17 October 2026**, authenticated
+daily smoke runs succeeded for Fingrid consumption/production (datasets 124/74:
+96+96 rows) and ENTSO-E actual load (A65: 96 rows), all for **14 October UTC**.
+These verified **temporary** databases were deleted by Actions; no operational
+records are distributed with the repository. To retain data for the dashboard,
+run the opt-in [local persistent importer](docs/LIVE_CONTEXT_IMPORT.md) using
+your private credentials. ENTSO-E generation (A75) and independent verification
+of Grid Scope capacity estimates remain pending. No model runs are included.
 
 ## Run locally
 
@@ -43,7 +47,7 @@ combinations in this selection. Estimates at different points must not be summed
 | Evidence | This release | Meaning |
 |---|---|---|
 | Published indicative capacity | 18 source-transcribed readings; five points; selected 2026/2030/2035 entries | Reported Fingrid indicative estimates, awaiting independent source cross-check |
-| Operational context | Clients ready; no live rows yet | National Finnish load/production, not a substation measurement |
+| Operational context | Fingrid 124/74 and ENTSO-E A65 authenticated smoke tests passed; live local database not yet populated | National Finnish load/production, not a substation measurement |
 | Operator confirmation | Zero rows | Would require separate documentary evidence; public map values do not qualify |
 | Model scenarios | Separate schema, zero rows | PyPSA/pandapower are optional future studies |
 | Reinforcement projects | Separate schema and CSV template, zero rows | No source-verified project-to-point links in this release |
@@ -52,11 +56,14 @@ combinations in this selection. Estimates at different points must not be summed
 [Capture log](docs/CAPTURE_LOG.md) documents exactly what was read and spot-checked.
 [Source register](docs/SOURCES.md) records access, reuse terms and unresolved items.
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
+[Persistent local import](docs/LIVE_CONTEXT_IMPORT.md) fetches all verified
+operational feeds, validates the responses, and atomically inserts into a
+Git-ignored SQLite database consumed by Streamlit.
 [ENTSO-E manual live check](docs/ENTSOE_LIVE.md) provides a secret-backed, opt-in
 GitHub Actions probe that never commits tokens or operational data. The ENTSO-E
 parser handles both A01 sequential fixed intervals and A03 source-defined
-variable-length blocks without interpolation; a rerun is still needed to verify
-live compatibility after the initial A01-only parser rejected a real response.
+variable-length blocks without interpolation; the corrected A65 load parser
+passed an authenticated rerun on 17 October 2026.
 [Fingrid manual live check](docs/FINGRID_LIVE.md) performs the analogous
 secret-backed probe for consumption/production datasets 124/74 without storing
 API credentials or raw operational data in Git.
@@ -92,7 +99,7 @@ explains what can inform later modelling and why the MVP is original code.
 
 | Grid analyst responsibility | Demonstrable output here |
 |---|---|
-| Own grid data | Audited source registry, manual importer and tested operational clients; live refresh still pending |
+| Own grid data | Audited registry, source-transcribed capacity records, two authenticated source smoke tests and a tested opt-in local persist operation |
 | Understand current/future grid | Dated published estimates with explicit forecast years and missing-data visibility |
 | Model and assess | Clear modelling boundary and reserved scenario schema; no completed model claim |
 | Maintain a power-availability database | Reproducible SQLite evidence records and filterable dashboard |
@@ -131,4 +138,5 @@ Primary sources: [Fingrid Grid Scope](https://www.fingrid.fi/en/grid/grid-connec
 [Netbeheer Nederland](https://www.netbeheernederland.nl/netcapaciteit-en-flexibiliteit/capaciteitskaart).
 Source data retains the operator's rights and terms; no blanket data licence is
 asserted. This code is intended for the linked public portfolio repository; live API imports
-and independent capacity transcription verification are still pending.
+into a **local** database and independent capacity transcription verification
+are still pending.
