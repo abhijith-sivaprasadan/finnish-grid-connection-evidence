@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from datetime import datetime
 import json
 import os
 from pathlib import Path
@@ -29,6 +30,8 @@ def live_smoke(*, day: str = "", kind: str = "both", getter=None, today=None) ->
         raise SourceError("Set FINGRID_API_KEY privately; see docs/FINGRID_LIVE.md")
 
     get = getter or fetch
+    window_start = datetime.fromisoformat(start.replace("Z", "+00:00"))
+    window_end = datetime.fromisoformat(end.replace("Z", "+00:00"))
     counts = Counter()
     with TemporaryDirectory(prefix="fingrid-check-") as folder:
         with connect(Path(folder) / "evidence.sqlite") as conn:
@@ -45,7 +48,8 @@ def live_smoke(*, day: str = "", kind: str = "both", getter=None, today=None) ->
                             or record.dataset_id != str(dataset_id)
                             or record.metric != metric or record.unit != unit):
                         raise ValueError("Unexpected source/dataset/unit in Fingrid response")
-                    if not (start <= record.timestamp_utc.replace("+00:00", "Z") < end):
+                    timestamp = datetime.fromisoformat(record.timestamp_utc.replace("Z", "+00:00"))
+                    if not (window_start <= timestamp < window_end):
                         raise ValueError("Fingrid response timestamp is outside requested day")
                     if not insert(conn, record):
                         raise ValueError("Duplicate Fingrid observation in source response")
