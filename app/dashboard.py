@@ -30,7 +30,7 @@ a.metric("Connection points", len(points))
 b.metric("Published observations", len(capacity))
 c.metric("Operational records", len(context))
 if context.empty:
-    st.warning("Live operational context is pending API setup. Capacity observations below are real source transcriptions; no synthetic operational data is shown.")
+    st.warning("No operational rows in this local database yet. Authenticated source checks succeeded separately; see docs/LIVE_CONTEXT_IMPORT.md to populate this database. Capacity observations are source transcriptions, not independently validated connection offers.")
 
 estimate_tab, context_tab, project_tab, evidence_tab = st.tabs(
     ["Published estimates", "National context", "Planned projects", "Evidence & quality"])
@@ -87,9 +87,16 @@ with context_tab:
     st.subheader("Finland-wide operational context")
     st.write("These are national or bidding-zone time series. They are not measurements at the selected substations and are not estimates of connection capacity.")
     if context.empty:
-        st.info("Configure FINGRID_API_KEY and ENTSOE_API_TOKEN, then run the ingestion commands in docs/SETUP.md.")
-        st.code("python -m src.cli fingrid --start 2026-10-15T00:00:00Z --end 2026-10-16T00:00:00Z")
+        st.info("Fingrid and ENTSO-E load authenticated API smoke checks have passed, but this local database has no retained operational rows. Configure both secrets privately and run the persistent importer in docs/LIVE_CONTEXT_IMPORT.md.")
+        st.code("python -m src.sync_context --day 2026-10-14")
     else:
+        st.caption("These are source-described UTC intervals and retrieval revisions, not substation telemetry. ENTSO-E A03 blocks can have variable duration.")
+        summary = (context.groupby(["source", "dataset_id", "metric", "unit"], dropna=False)
+                   .agg(records=("value", "count"), earliest_utc=("timestamp_utc", "min"),
+                        latest_utc=("interval_end_utc", "max"),
+                        last_retrieved_utc=("retrieved_at", "max"))
+                   .reset_index())
+        st.dataframe(summary, hide_index=True, width="stretch")
         series_options = context[["source", "dataset_id", "metric", "unit"]].drop_duplicates()
         choices = list(series_options.itertuples(index=False, name=None))
         chosen = st.selectbox("Operational series", choices, format_func=lambda x: " / ".join(x))
