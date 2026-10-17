@@ -54,6 +54,9 @@ combinations in this selection. Estimates at different points must not be summed
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
 [ENTSO-E manual live check](docs/ENTSOE_LIVE.md) provides a secret-backed, opt-in
 GitHub Actions probe that never commits tokens or operational data.
+[Fingrid manual live check](docs/FINGRID_LIVE.md) performs the analogous
+secret-backed probe for consumption/production datasets 124/74 without storing
+API credentials or raw operational data in Git.
 
 ## Evidence design
 
