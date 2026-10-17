@@ -145,4 +145,4 @@ def test_hosted_streamlit_reads_postgres_without_api_keys(pg_engine,tmp_path,mon
     assert app.metric[0].value=="5"
     assert app.metric[1].value=="18"
     assert app.metric[2].value=="0"
-    assert any("No persisted operational rows" in w.message for w in app.warning)
+    assert any("No persisted operational rows" in w.value for w in app.warning)
