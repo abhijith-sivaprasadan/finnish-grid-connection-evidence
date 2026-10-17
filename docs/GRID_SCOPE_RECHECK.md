@@ -30,6 +30,17 @@ We have 18 published-value transcriptions across five 400-kV substations:
 
 These are the *existing project observations*, not fresh source verification.
 
+## Access limitation recorded (17 October 2026)
+
+The official Grid Scope [landing page](https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/)
+is publicly readable and confirms the separate consumption and production
+layers and the non-guaranteed nature of the estimates. A second, **read-only
+automated browser attempt** to open its interactive map failed at page
+retrieval. No individual figure was independently reproduced by this attempt,
+so **all 18 source-value audit statuses remain pending**. A human reviewer
+using the working browser map should complete the steps below. We do not
+interpret an automated-access failure as proof of zero or missing capacity.
+
 ## Prepare the review worksheet
 
 From the repository root, after importing the manual sample:
