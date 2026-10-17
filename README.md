@@ -14,10 +14,14 @@ repository to an existing Neon project; its GitHub integration installed
 can now privately discover the existing database writer URI and run the
 [manual Neon bootstrap workflow](.github/workflows/neon-bootstrap.yml)
 before the [scheduled refresh workflow](.github/workflows/cloud-refresh.yml)
-is explicitly enabled. **No public URL, successful live Neon import or
-automated refreshing is claimed until the respective workflows and hosted
-site actually run.** Create a separate read-only role for Streamlit and follow
-[Free hosting setup and strict cost controls](docs/FREE_HOSTING.md).
+is explicitly enabled. **Neon production bootstrapped successfully on 18 October 2026:**
+[one-time GitHub Actions run](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39079398497)
+created the cloud tables and read back **5 connection points and 18 indicative
+source-transcribed capacity observations**. There are **0 cloud national
+operational records** so far; source API refresh remains opt-in and disabled.
+The public Streamlit app is **not yet deployed** and no public URL is claimed.
+The separate SELECT-only database role and Streamlit secrets still require
+owner setup. See [Free hosting setup and cost controls](docs/FREE_HOSTING.md).
 
 **Current status:** the capacity-data path runs end to end with **18 source-transcribed
 indicative observations at five 400 kV points**, captured on **17 October 2026**.
