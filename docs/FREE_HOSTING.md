@@ -152,7 +152,8 @@ can only query the SELECT-only database role's authorized objects.
 
 ## Failure modes and boundaries
 
-- **Refresh variable disabled:** daily collection is skipped; one-time manual\n  bootstrap remains available, but there is no automatically updated time series.
+- **Refresh variable disabled:** daily collection is skipped; one-time manual
+  bootstrap remains available, but there is no automatically updated time series.
 - **Provider does not publish a full day:** the strict coverage check fails.
   It will not publish partial data as a complete day.
 - **Neon becomes unavailable or resource-limited:** app shows an error;
