@@ -19,6 +19,7 @@ from src.cloud_store import collect_sqlite_rows, engine_for, mirror
 from src.db import ROOT, connect
 from src.ingest.manual_grid_scope import ingest
 from src.sync_context import sync
+from src.schema import utc
 
 
 def verify_day(records, day):
@@ -86,8 +87,8 @@ def run(*, day="", backfill_days=1, url=None, today=None, syncer=sync,
                 rows = [dict(r) for r in conn.execute(
                     "SELECT * FROM operational_series WHERE "
                     "timestamp_utc >= ? AND timestamp_utc < ?",
-                    (selected.isoformat()+"T00:00:00Z",
-                     (selected + timedelta(days=1)).isoformat()+"T00:00:00Z"))]
+                    (utc(selected.isoformat()+"T00:00:00Z"),
+                     utc((selected + timedelta(days=1)).isoformat()+"T00:00:00Z")))]
             observed_counts[selected.isoformat()] = verify_day(rows, selected)
         with connect(local_db) as conn:
             batches = collect_sqlite_rows(conn)
