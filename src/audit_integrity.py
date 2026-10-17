@@ -121,7 +121,8 @@ def audit(conn, *, manual_file=None):
             "source_values_independently_verified": False,
             "counts": counts, "findings": findings,
             "internal_integrity_passed": passed,
-            "operational_rows_in_db": bool(operational),\n            "authenticated_live_origin_proven_by_db_alone": False,
+            "operational_rows_in_db": bool(operational),
+            "authenticated_live_origin_proven_by_db_alone": False,
             "operator_value_verification_pending": True,
             "requires_action": bool(codes & {"CSV_MISSING","CSV_NOT_IMPORTED","NO_CAPACITY","NO_PERSISTED_OPERATIONS"})}
 
