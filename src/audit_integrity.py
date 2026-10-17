@@ -65,6 +65,11 @@ def audit(conn, *, manual_file=None):
                     correct = (None if source == "" else int(source))
                 elif field == "capacity_value":
                     correct = float(source)
+                elif field == "source_observed_at":
+                    # The typed importer canonicalizes timestamps to six-digit
+                    # fractional UTC seconds; compare semantic instants.
+                    from src.schema import utc
+                    correct = utc(source)
                 else:
                     correct = None if field == "source_published_on" and not source else source
                 if recorded != correct:
