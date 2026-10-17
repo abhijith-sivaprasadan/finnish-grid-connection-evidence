@@ -1,6 +1,8 @@
 """Tests for the Neon GitHub Actions integration without real secrets."""
 from datetime import datetime, timezone
+import os
 import pytest
+from sqlalchemy import create_engine, text
 
 from src.neon_connection import resolve_connection
 from src.neon_bootstrap import bootstrap
@@ -91,8 +93,23 @@ def test_tls_required_and_no_unspecified_owner():
         resolve_connection("fragrant-dawn-65247206","FAKE_API_KEY",session=fake)
 
 
+@pytest.fixture
+def pg_engine():
+    url=os.environ.get("POSTGRES_TEST_URL")
+    if not url:
+        pytest.skip("Ephemeral PostgreSQL available in GitHub CI only")
+    engine=create_engine(url)
+    with engine.begin() as db:
+        for table in ("operational_series","capacity_observation","connection_point",
+                      "grid_project","scenario_result"):
+            db.execute(text(f"DROP TABLE IF EXISTS {table} CASCADE"))
+    try:
+        yield engine
+    finally:
+        engine.dispose()
+
+
 def test_bootstrap_source_sample_against_real_ephemeral_postgres(pg_engine,tmp_path,monkeypatch):
-    # Fixture is defined in test_cloud_store and needs to be accessible here.
     from sqlalchemy.engine import make_url
     url=make_url(str(pg_engine.url)).set(query={"sslmode":"require"}).render_as_string(hide_password=False)
     # The CI fixture uses a non-TLS ephemeral postgres. This test exercises
