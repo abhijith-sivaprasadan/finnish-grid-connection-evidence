@@ -52,10 +52,14 @@ can invalidate an existing token; follow the guide carefully.
 
 Implemented requests: actual total load (A65/A16) and generation per production
 type (A75/A16), Finland zone `10YFI-1--------U`. Queries are split into daily
-windows. The parser accepts explicit A01 point series at 15/30/60-minute resolution
-and rejects unsupported curves rather than inventing gap values. MAW is mapped
-to MW (the ENTSO-E code for megawatt); production-type and consumption direction
-remain in metric names. Generation components are not silently summed.
+windows. The parser supports ENTSO-E **A01** explicit fixed-size intervals and **A03**
+variable-sized constant-value blocks at 15/30/60-minute resolution. For A03,
+reported point positions mark block changes; the last block ends at the Period's
+published end. We persist **one source-defined interval per block** rather than
+fabricating new 15-minute measurements. A01 missing positions remain missing.
+Other curve types still fail explicitly; overlapping intervals of the same
+source/metric are rejected. MAW is mapped to MW (the ENTSO-E megawatt code);
+production-type/direction remain in metric names and are never silently summed.
 
 ## Configure secrets privately
 
