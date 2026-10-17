@@ -128,6 +128,12 @@ def mirror(engine, batches: dict) -> dict:
         raise ValueError("Cloud mirror requires all five typed evidence categories")
     result = {}
     with engine.begin() as db:
+        # Protect the 1 GB Neon Free storage allowance. The guard stops new
+        # uploads at 750 MiB; the owner must review retention/plan before
+        # proceeding. Database size is checked before writing source records.
+        size_bytes = db.execute(text("SELECT pg_database_size(current_database())")).scalar_one()
+        if size_bytes > 750 * 1024 * 1024:
+            raise ValueError("Hosted database above 750 MiB safe storage threshold; review free-plan capacity")
         for ddl in DDL:
             db.execute(text(ddl))
         for table, pk in TABLE_KEYS.items():
