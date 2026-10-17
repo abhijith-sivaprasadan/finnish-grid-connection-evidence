@@ -1,14 +1,15 @@
 # API setup and first live run
 
-The dashboard and CSV-to-SQLite path work without credentials. No API credentials
-are included in this repository, and no authenticated network import has yet been
-verified. The **Fingrid** client has been checked against the supplied
-[OpenAPI contract](reference/README.md); that YAML is **not** a key and is not the
-ENTSO-E API schema. Both live services still need authenticated source checks.
-The ENTSO-E-only [manual secret-backed smoke workflow](ENTSOE_LIVE.md) can
-validate real source access and temporary SQLite persistence after the repository
-owner configures a new secret. The full MVP requires a real Fingrid operational
-import; ENTSO-E is an optional additional context feed.
+The dashboard and CSV-to-SQLite path work without credentials. **No API secrets
+are included in this repository.** The supplied Fingrid [OpenAPI contract](reference/README.md)
+is an API specification, not a key or the ENTSO-E API schema.
+On **17 October 2026**, both Fingrid 124/74 and ENTSO-E A65 actual-load
+[authenticated smoke tests](LIVE_CONTEXT_IMPORT.md) passed for 14 October
+(96+96+96 time-series rows). Those tests deleted their temporary SQLite files.
+For an **opt-in persistent local importer**, follow
+[LIVE_CONTEXT_IMPORT.md](LIVE_CONTEXT_IMPORT.md); no live observations or
+secret values are committed to the public repository. ENTSO-E A75 generation
+is not yet independently live-checked.
 
 ## Fingrid
 
@@ -80,6 +81,11 @@ requires its token as a query parameter; this client avoids logging request URLs
 and emits sanitized HTTP errors. No credentials are used by the dashboard.
 
 ## First imports
+
+For a one-command atomic fetch of Fingrid 124/74 and ENTSO-E load A65
+into your **local** SQLite evidence database, see
+[LIVE_CONTEXT_IMPORT.md](LIVE_CONTEXT_IMPORT.md). Alternatively, use the
+individual CLI commands below.
 
 From the repo root, with the environment set:
 
