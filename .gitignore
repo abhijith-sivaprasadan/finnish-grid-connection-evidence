@@ -13,3 +13,5 @@ data/raw/
 data/audit/
 *.log
 .streamlit/secrets.toml
+
+.streamlit/secrets.*

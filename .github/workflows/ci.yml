@@ -5,7 +5,23 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: grid_test
+          POSTGRES_PASSWORD: ci_test_password_only
+          POSTGRES_DB: grid_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U grid_test -d grid_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      POSTGRES_TEST_URL: "postgresql+psycopg://grid_test:ci_test_password_only@127.0.0.1:5432/grid_test"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -1,6 +1,7 @@
 """Run with: python -m streamlit run app/dashboard.py"""
 from pathlib import Path
 import sys
+import os
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -12,6 +13,7 @@ from src.quality import report
 from src.views import published, filter_capacity, coverage_matrix
 from src.availability import comparison_grid, coverage_summary
 from src.audit_capacity import audit_rows
+from src.cloud_store import engine_for, read_snapshot
 
 st.set_page_config(page_title="Finnish Grid Evidence", page_icon="⚡", layout="wide")
 st.caption("FINLAND  /  CONNECTION EVIDENCE")
@@ -19,21 +21,79 @@ st.title("Where capacity is published.")
 st.markdown("Explore Fingrid's indicative connection estimates, with a traceable source for every observation.")
 st.info("Personal portfolio proof of concept. Published estimates are not connection rights, reservations, or operator confirmation. Screening is not a validated grid planning study.")
 
-with connect() as conn:
-    capacity = published(conn)
-    points = pd.read_sql_query("SELECT * FROM connection_point ORDER BY name", conn)
-    context = pd.read_sql_query("SELECT * FROM latest_operational ORDER BY timestamp_utc", conn)
-    projects = pd.read_sql_query("SELECT * FROM grid_project", conn)
-    scenarios = pd.read_sql_query("SELECT * FROM scenario_result", conn)
-    quality = report(conn)
-    audit_checklist = audit_rows(conn)
+# Hosted deployment must be explicitly enabled; otherwise keep the existing
+# local SQLite behavior. Public visitors NEVER receive database/API credentials.
+hosted = os.environ.get("HOSTED_DASHBOARD", "").lower() == "true"
+if hosted:
+    read_url = os.environ.get("DATABASE_READ_URL", "")
+    if not read_url:
+        st.error("Hosted database is not configured. No live data is being presented.")
+        st.stop()
+
+    @st.cache_data(ttl=600, show_spinner=False)
+    def load_hosted(_url):
+        engine = engine_for(_url)
+        try:
+            return read_snapshot(engine)
+        finally:
+            engine.dispose()
+
+    try:
+        snapshot_data = load_hosted(read_url)
+    except Exception:
+        # SQL driver exceptions may include credentials: never display them.
+        st.error("Hosted evidence database temporarily unavailable. No source values were invented.")
+        st.stop()
+    capacity = snapshot_data["capacity"]
+    points = snapshot_data["points"]
+    context = snapshot_data["context"]
+    projects = snapshot_data["projects"]
+    scenarios = snapshot_data["scenarios"]
+    quality = snapshot_data["quality"]
+    audit_checklist = []
+    for r in capacity.itertuples(index=False):
+        audit_checklist.append({
+            "observation_id": r.observation_id,
+            "connection_point": r.name,
+            "direction": r.direction,
+            "effective_year": r.effective_year,
+            "recorded_value": r.capacity_value,
+            "recorded_unit": r.capacity_unit,
+            "source_url": r.source_url,
+            "source_observed_at": r.source_observed_at,
+            "source_published_on": r.source_published_on or "",
+            "capacity_status": r.capacity_status,
+            "validity_notes": r.validity_notes,
+            "independent_recheck_status": "pending_independent_recheck",
+            "rechecked_on_utc": "",
+            "verified_value": "",
+            "verified_unit": "",
+            "verification_evidence_url": "",
+            "review_notes": "",
+        })
+    st.caption("Hosted read-only PostgreSQL snapshot · source ingestion is scheduled separately")
+else:
+    with connect() as conn:
+        capacity = published(conn)
+        points = pd.read_sql_query("SELECT * FROM connection_point ORDER BY name", conn)
+        context = pd.read_sql_query("SELECT * FROM latest_operational ORDER BY timestamp_utc", conn)
+        projects = pd.read_sql_query("SELECT * FROM grid_project", conn)
+        scenarios = pd.read_sql_query("SELECT * FROM scenario_result", conn)
+        quality = report(conn)
+        audit_checklist = audit_rows(conn)
 
 a, b, c = st.columns(3)
 a.metric("Connection points", len(points))
 b.metric("Published observations", len(capacity))
 c.metric("Operational records", len(context))
 if context.empty:
-    st.warning("No operational rows in this local database yet. Authenticated source checks succeeded separately; see docs/LIVE_CONTEXT_IMPORT.md to populate this database. Capacity observations are source transcriptions, not independently validated connection offers.")
+    st.warning("No persisted operational rows available for this selected database. Prior authenticated smoke checks used temporary databases, not the hosted dataset. Capacity observations are source transcriptions awaiting independent verification.")
+else:
+    latest_record = pd.to_datetime(context["interval_end_utc"], utc=True).max()
+    lag = (pd.Timestamp.now(tz="UTC") - latest_record).total_seconds() / 3600
+    st.caption(f"Newest displayed national operational interval: {latest_record.strftime('%Y-%m-%d %H:%M UTC')} · {lag:.0f} hours behind current UTC time")
+    if lag > 120:
+        st.warning("National operational data is older than five days. It must not be presented as live current measurements.")
 
 estimate_tab, comparison_tab, context_tab, project_tab, evidence_tab = st.tabs(
     ["Published estimates", "Power availability outlook", "National context", "Planned projects", "Evidence & quality"])
@@ -199,11 +259,12 @@ with evidence_tab:
     for issue in quality["issues"]:
         st.warning(issue)
     st.json(quality["counts"])
-    st.caption(f"SQLite: {db_path()}")
+    st.caption("Hosted PostgreSQL (read-only dashboard connection)" if hosted else f"SQLite: {db_path()}")
     st.markdown("[Grid Scope](https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/) · "
                 "[Fingrid Open Data](https://data.fingrid.fi/en/instructions) · "
                 "[ENTSO-E Transparency Platform](https://transparency.entsoe.eu/)")
-    st.write("Source capture and spot checks verify transcription. They do not validate the operator's estimates against network studies. See docs/SOURCES.md for the capture method and reuse terms.")
+    st.write("Source transcriptions and internal data-integrity checks do not validate the operator's estimates against network studies. See docs/SOURCES.md for capture provenance and reuse terms.")
+    st.markdown("National operational attribution: [Fingrid Open Data](https://data.fingrid.fi/en/about), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) · [ENTSO-E Transparency Platform](https://transparency.entsoe.eu/), source terms apply. Records are normalized from published intervals; no physical substation inference.")
     with st.expander("Model-derived scenarios (optional stretch)"):
         if scenarios.empty:
             st.info("No model runs have been performed. PyPSA and pandapower are outside this release.")
