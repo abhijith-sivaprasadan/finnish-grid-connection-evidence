@@ -1,11 +1,14 @@
 # API setup and first live run
 
-The dashboard and CSV-to-SQLite path work without credentials. On 17 October 2026,
-the user confirmed that API credentials had not been obtained. Live authentication
-has therefore not been verified. The client has been checked against the supplied
-[OpenAPI contract](reference/README.md); compatibility with the deployed API still
-needs a real authenticated response. Do not call the live
-pipeline complete until both first imports have succeeded and been checked.
+The dashboard and CSV-to-SQLite path work without credentials. No API credentials
+are included in this repository, and no authenticated network import has yet been
+verified. The **Fingrid** client has been checked against the supplied
+[OpenAPI contract](reference/README.md); that YAML is **not** a key and is not the
+ENTSO-E API schema. Both live services still need authenticated source checks.
+The ENTSO-E-only [manual secret-backed smoke workflow](ENTSOE_LIVE.md) can
+validate real source access and temporary SQLite persistence after the repository
+owner configures a new secret. The full MVP requires a real Fingrid operational
+import; ENTSO-E is an optional additional context feed.
 
 ## Fingrid
 
