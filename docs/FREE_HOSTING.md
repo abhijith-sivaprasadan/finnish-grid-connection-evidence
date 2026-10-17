@@ -48,19 +48,23 @@ URL through Neon's documented read-only management API methods:
 list branches, list databases, retrieve connection URI. It masks the
 credential and gives it only to a subsequent Actions step.
 
-By default the branch is `main` (Neon's normal initial branch); if you
-actually created `production`, select `production` in the manual workflow
-and set the GitHub Actions variable `NEON_BRANCH_NAME=production` for
-scheduled refresh. It fails rather than silently switching branches when a
-selected branch does not exist. Set optional `NEON_DATABASE_NAME` only when
-the branch contains multiple ambiguous databases. No new compute or branch is
-created by the integration workflows.
+**Verified branch for this project (18 October 2026): `production`.**
+GitHub Actions read-only diagnostic [run 39078919990](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39078919990)
+reported `BRANCH_NOT_FOUND` for `main` and discovered only `production`.
+The manual bootstrap and scheduled refresh now both default to `production`;
+keep the GitHub workflow itself on the GitHub branch `main`.
+You may optionally set the repository Actions variable
+`NEON_BRANCH_NAME=production` explicitly. If an already-defined
+`NEON_BRANCH_NAME` variable has another value, correct it before enabling
+scheduled refresh. The connection tool fails rather than silently switching
+branches. Set `NEON_DATABASE_NAME` only when multiple databases exist on
+the selected Neon branch. No new Neon compute or branch is created.
 
 ## 2. Bootstrap the already-existing Neon database (one-time owner action)
 
 1. Open **GitHub → Actions → Neon existing project bootstrap (manual)**.
 2. Click **Run workflow** on `main`. Select your existing Neon database
-   branch (usually `main` unless you explicitly created `production`).
+   branch `production` (confirmed by the Neon API on 18 October).
 3. The action uses only `NEON_API_KEY` and `NEON_PROJECT_ID`. It validates
    connectivity, creates the application tables/views and appends the
    *source-transcribed* 18 Grid Scope observations at five connection points.

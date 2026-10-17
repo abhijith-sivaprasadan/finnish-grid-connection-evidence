@@ -21,7 +21,7 @@ jobs:
     env:
       NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
       NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
-      NEON_BRANCH_NAME: ${{ vars.NEON_BRANCH_NAME || 'main' }}
+      NEON_BRANCH_NAME: ${{ vars.NEON_BRANCH_NAME || 'production' }}
       NEON_DATABASE_NAME: ${{ vars.NEON_DATABASE_NAME || '' }}
     steps:
       - uses: actions/checkout@v4
