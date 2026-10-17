@@ -16,11 +16,17 @@
 
 ## Needed to complete the real-data MVP
 
-- [ ] User obtains Fingrid API subscription/key and ENTSO-E API access/token.
-- [ ] Run each authenticated client on one completed day; reconcile actual payload
-      format, pagination, timestamps, units and one portal value.
-- [ ] Populate both national context feeds and inspect them in the dashboard.
-- [ ] Record that live verification here; until then the real-data MVP is incomplete.
+- [x] Configure private GitHub Actions secrets for Fingrid and ENTSO-E (keys
+      are never committed).
+- [x] Authenticated Fingrid 124/74 and ENTSO-E A65 load smoke tests for 14 Oct
+      2026 passed on 17 Oct (96+96 and 96 records respectively).
+- [x] Add atomic, opt-in local persistence command and synthetic regression tests.
+- [ ] Perform a real **local** persistence run and inspect both context feeds
+      in the Streamlit National context tab; the public repo contains no live rows.
+- [ ] Reconcile one actual interval against each operator portal and independently
+      re-check the source-transcribed Grid Scope numeric estimates.
+- [ ] Run a separate ENTSO-E A75 generation smoke check before enabling that
+      optional feed in persistent capture.
 
 ## Later operational coverage
 
