@@ -42,7 +42,7 @@ year, source URL and capture snapshot, and exports selected evidence as CSV.
 It draws discrete points, preserves MW/MVA, and shows `not published` for missing
 combinations in this selection. Estimates at different points must not be summed.
 The **Power availability outlook** tab compares **both** directions for all five
-points across 2026/2030/2035, showing **18 observed and 12 unreported
+points across 2026/2030/2035, showing **18 observed and 12 not-present-in-this-compiled-capture
 point-direction-year intersections** in the initial capture. Only one snapshot
 is shown at a time. No lines are drawn between published years. This is an
 indicative evidence comparison, not a ranked list of sites or a connection
