@@ -37,7 +37,10 @@ jobs:
     env:
       FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
       ENTSOE_API_TOKEN: ${{ secrets.ENTSOE_API_TOKEN }}
-      DATABASE_WRITE_URL: ${{ secrets.DATABASE_WRITE_URL }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+      NEON_BRANCH_NAME: ${{ vars.NEON_BRANCH_NAME || 'main' }}
+      NEON_DATABASE_NAME: ${{ vars.NEON_DATABASE_NAME || '' }}
       TARGET_DAY: ${{ inputs.day }}
       BACKFILL: ${{ inputs.backfill_days || '1' }}
     steps:
@@ -50,11 +53,13 @@ jobs:
           cache: pip
       - name: Check private configuration exists
         run: |
-          if [ -z "$FINGRID_API_KEY" ] || [ -z "$ENTSOE_API_TOKEN" ] || [ -z "$DATABASE_WRITE_URL" ]; then
-            echo "::error::FINGRID_API_KEY, ENTSOE_API_TOKEN and DATABASE_WRITE_URL must be configured as Actions secrets."
+          if [ -z "$FINGRID_API_KEY" ] || [ -z "$ENTSOE_API_TOKEN" ] || [ -z "$NEON_API_KEY" ] || [ -z "$NEON_PROJECT_ID" ]; then
+            echo "::error::FINGRID_API_KEY and ENTSOE_API_TOKEN must be secrets; NEON_API_KEY must be a secret and NEON_PROJECT_ID must be a repository variable."
             exit 1
           fi
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
+      - name: Resolve writer URL securely from Neon GitHub integration
+        run: python -m src.neon_connection --export-github-env
       - name: Fetch, validate and append into hosted PostgreSQL
         run: python -m src.cloud_sync --day "$TARGET_DAY" --backfill-days "$BACKFILL"

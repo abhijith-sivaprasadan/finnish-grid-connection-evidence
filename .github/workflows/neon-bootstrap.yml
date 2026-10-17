@@ -1,0 +1,48 @@
+name: Neon existing project bootstrap (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Existing Neon branch to use (typically main or production)"
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hosted-evidence-refresh
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    # No deployment or writes from PRs. Manual confirmation by repository owner.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+      NEON_BRANCH_NAME: ${{ inputs.branch }}
+      NEON_DATABASE_NAME: ${{ vars.NEON_DATABASE_NAME || '' }}
+    steps:
+      - name: Require authenticated Neon GitHub integration
+        run: |
+          if [ -z "$NEON_API_KEY" ] || [ -z "$NEON_PROJECT_ID" ]; then
+            echo "::error::Neon integration must configure NEON_API_KEY secret and NEON_PROJECT_ID repository variable."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Resolve selected Neon branch database privately
+        run: python -m src.neon_connection --export-github-env
+      - name: Write schema and source-transcribed sample, then verify readback
+        run: python -m src.neon_bootstrap
