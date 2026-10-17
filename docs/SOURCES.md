@@ -6,9 +6,9 @@ integration. Public availability alone is not treated as a blanket licence.
 | Source | Evidence/access verified | Reuse/terms | Implementation status |
 |---|---|---|---|
 | [Fingrid Grid Scope](https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/) and its [viewer](https://karttapalaute.fingrid.fi/?link=3opMB&setlanguage=en) | Browser map; consumption and production layers; named-point forecast tables and selected-year comparison tables | [Fingrid website terms](https://www.fingrid.fi/en/legal-terms/) permit use of other material with unchanged contents and source attribution, while reserving logo/trademark rights; no logo or map tiles copied | 18 manually transcribed observations, full provenance; no automated map scraping |
-| [Fingrid Open Data API](https://data.fingrid.fi/en/instructions) | Key required; x-api-key header; documented throttling; supplied OpenAPI export checked | Dataset [124](https://data.fingrid.fi/en/datasets/124) and [74](https://data.fingrid.fi/en/datasets/74) pages identify Creative Commons Attribution licences | Client aligned with supplied contract and synthetic tests; first authenticated live run pending |
+| [Fingrid Open Data API](https://data.fingrid.fi/en/instructions) | Authenticated on 17 Oct 2026, datasets 124/74: 96+96 records for 14 Oct UTC; x-api-key header | Dataset [124](https://data.fingrid.fi/en/datasets/124) and [74](https://data.fingrid.fi/en/datasets/74) pages identify Creative Commons Attribution licences | Client fixture and contract tests passed; first authenticated smoke tests passed; persistent local ingestion pending |
 | [Fingrid development plan](https://www.fingrid.fi/en/grid/development/Main-grid-development-plan/) | Reference supplied in the project brief; project-level records have not been compiled | Check each report's reuse terms before redistribution | Empty project template; no inferred release of capacity |
-| [ENTSO-E Transparency Platform](https://transparency.entsoe.eu/) | Official token-management guide and generation document-code guide located | Platform terms and data-owner reuse conditions apply; no raw ENTSO-E data redistributed in this repo | Actual-load and generation clients; first authenticated live run pending |
+| [ENTSO-E Transparency Platform](https://transparency.entsoe.eu/) | Authenticated A65 load smoke run passed 17 Oct 2026 (96 records for 14 Oct UTC), following A03 parser correction | Platform terms and data-owner reuse conditions apply; no raw ENTSO-E data redistributed in this repo | Live A65 verified in temporary SQLite; A75 generation still pending |
 | [Netbeheer Nederland capacity map](https://www.netbeheernederland.nl/netcapaciteit-en-flexibiliteit/capaciteitskaart) | Official landing page links to the national map | Export schema, actual download retrieval and redistribution terms not verified here | Stretch, not ingested |
 
 Fingrid's Grid Scope landing page describes estimates for selected substations and
@@ -30,7 +30,8 @@ API contract references:
   The user subsequently supplied an [OpenAPI export](reference/avoindata-api.yaml),
   now retained with a [checksum and contract audit](reference/README.md). The client
   handles its integral-number pagination fields and optional navigation metadata.
-  A first real authenticated response still needs checking. Unknown shapes fail
+  Authenticated Fingrid 124/74 responses were successfully parsed and
+  persisted to a temporary database on 17 October 2026. Unknown shapes still fail
   rather than substitute values.
 - [ENTSO-E data-extraction guide](https://transparency.entsoe.eu/content/static_content/download?path=%2FStatic+content%2Fweb+api%2FRestfulAPI_IG.pdf).
 - [ENTSO-E token-management guide](https://transparency.entsoe.eu/content/static_content/download?path=%2FStatic+content%2FAPI-Token-Management.pdf).
