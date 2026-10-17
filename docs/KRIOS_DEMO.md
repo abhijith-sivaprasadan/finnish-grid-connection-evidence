@@ -21,8 +21,9 @@ with separately configured, private keys.
    substations and the original 17 October 2026 capture. The comparison
    enumerates **30 possible** point × direction × year intersections
    (5 points × 2 directions × 2026/2030/2035). **18 were explicitly
-   transcribed and 12 were not published in this selection.** An absent cell is
-   not zero availability.
+   transcribed and 12 were absent from this compiled capture.** We do not
+   infer whether those 12 are absent from the live operator viewer. An absent
+   cell is not zero availability.
 2. **Separate consumption from production.** At ALAPITKÄ, the initial capture
    recorded **500 MW consumption for 2026** and **380 MW production for 2026**.
    These are **different directions**, not two interchangeable capacities,
