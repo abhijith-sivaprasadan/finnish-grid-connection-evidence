@@ -53,7 +53,10 @@ combinations in this selection. Estimates at different points must not be summed
 [Source register](docs/SOURCES.md) records access, reuse terms and unresolved items.
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
 [ENTSO-E manual live check](docs/ENTSOE_LIVE.md) provides a secret-backed, opt-in
-GitHub Actions probe that never commits tokens or operational data.
+GitHub Actions probe that never commits tokens or operational data. The ENTSO-E
+parser handles both A01 sequential fixed intervals and A03 source-defined
+variable-length blocks without interpolation; a rerun is still needed to verify
+live compatibility after the initial A01-only parser rejected a real response.
 [Fingrid manual live check](docs/FINGRID_LIVE.md) performs the analogous
 secret-backed probe for consumption/production datasets 124/74 without storing
 API credentials or raw operational data in Git.

@@ -89,7 +89,7 @@ def test_entsoe_positions_and_gaps_preserved():
     assert rows[0].unit == "MW"
 
 
-@pytest.mark.parametrize("kwargs", [{"curve": "A03"}, {"unit": "MWH"}, {"domain": "WRONG-ZONE"}])
+@pytest.mark.parametrize("kwargs", [{"curve": "A04"}, {"unit": "MWH"}, {"domain": "WRONG-ZONE"}])
 def test_entsoe_unsupported_semantics_rejected(kwargs):
     with pytest.raises(ValueError):
         entsoe.normalize(xml('<Point><position>1</position><quantity>10</quantity></Point>', **kwargs), "load", STAMP)
