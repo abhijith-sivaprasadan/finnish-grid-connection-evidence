@@ -146,3 +146,41 @@ def test_hosted_streamlit_reads_postgres_without_api_keys(pg_engine,tmp_path,mon
     assert app.metric[1].value=="18"
     assert app.metric[2].value=="0"
     assert any("No persisted operational rows" in w.value for w in app.warning)
+
+
+
+def test_dashboard_reader_role_cannot_write(pg_engine,tmp_path):
+    """Integration check of the deployment's distinct SELECT-only role."""
+    from sqlalchemy.engine import make_url
+    from sqlalchemy.exc import DBAPIError
+
+    path=tmp_path/"source.sqlite"
+    ingest(ROOT/"data/manual",path)
+    with connect(path) as db:
+        mirror(pg_engine,collect_sqlite_rows(db))
+    with pg_engine.begin() as owner:
+        owner.execute(text(
+            "CREATE ROLE grid_dashboard_ci LOGIN PASSWORD 'only_for_local_ci_postgres'"
+        ))
+        owner.execute(text("GRANT CONNECT ON DATABASE grid_test TO grid_dashboard_ci"))
+        owner.execute(text("GRANT USAGE ON SCHEMA public TO grid_dashboard_ci"))
+        owner.execute(text(
+            "GRANT SELECT ON connection_point, capacity_observation, operational_series, "
+            "grid_project, scenario_result, published_capacity, latest_operational "
+            "TO grid_dashboard_ci"
+        ))
+    reader_url=make_url(os.environ["POSTGRES_TEST_URL"]).set(
+        username="grid_dashboard_ci",password="only_for_local_ci_postgres")
+    reader=create_engine(reader_url)
+    try:
+        snap=read_snapshot(reader,today=datetime(2026,10,17,tzinfo=timezone.utc))
+        assert len(snap["capacity"])==18
+        with reader.begin() as session:
+            with pytest.raises(DBAPIError):
+                session.execute(text(
+                    "INSERT INTO connection_point "
+                    "(connection_point_id,operator,name,source_url) "
+                    "VALUES ('not-allowed','x','x','https://example.org')"
+                ))
+    finally:
+        reader.dispose()
