@@ -41,6 +41,19 @@ The network request may fail because of token access, publication delays,
 unsupported curve semantics or upstream response changes. These are meaningful
 validation failures; do not replace them with synthetic fallback values.
 
+**2026-10-17 live-log follow-up:** the user-supplied GitHub Actions log reached
+ENTSO-E and failed on the old A01-only curve restriction. The error did not reveal
+the actual returned curve code or XML. The updated parser accepts the documented
+**A03 variable-sized block** semantics as well as A01 and reports an explicit,
+non-secret code for any remaining unsupported curves. In A03, each point denotes
+the beginning of a constant-quantity block; the next point or Period end closes
+that block. It is **not** a missing-data gap, and the importer preserves one row
+per block without inventing intervening readings. Until the authenticated smoke
+workflow is rerun successfully, mark ENTSO-E live verification **pending**.
+
+Definition reference: [ACER field 44 curve type](https://www.acer.europa.eu/64-data-fields-related-secondary-rights-time-series-secondary-rights)
+and [ENTSO-E XML Schema Use, section on A01/A03](https://transparency.entsoe.eu/content/static_content/download?loggedUserIsPrivileged=false&path=%2FStatic+content%2Fknowledge+base%2Fentso-e-transparency-xml-schema-use-1-0.pdf).
+
 **Scientific scope:** Passing proves authenticated API access, conservative XML
 parsing and temporary SQLite insertion for that day. It does not independently
 verify Grid Scope substation estimates or demonstrate electrical connection
