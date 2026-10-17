@@ -34,8 +34,10 @@ def _expect(records, *, source, dataset_id, metric=None, unit, start, end):
                 or record.dataset_id != dataset_id or record.unit != unit
                 or (metric is not None and record.metric != metric)):
             raise ValueError(f"Unexpected {source} {dataset_id} record identity or units")
-        if source == "entsoe" and record.metric.startswith("generation_") and not record.metric.endswith("_production"):
-            raise ValueError("ENTSO-E production metrics must retain generation type and direction")
+        if source == "entsoe" and dataset_id == "A75" and not (
+                record.metric.startswith("generation_")
+                and record.metric.endswith("_production")):
+            raise ValueError("ENTSO-E A75 metrics must retain generation type and production direction")
         timestamp = datetime.fromisoformat(record.timestamp_utc.replace("Z", "+00:00"))
         endtime = datetime.fromisoformat(record.interval_end_utc.replace("Z", "+00:00"))
         if not (first <= timestamp < endtime <= last):
