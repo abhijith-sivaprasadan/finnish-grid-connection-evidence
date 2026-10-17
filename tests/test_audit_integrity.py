@@ -25,7 +25,7 @@ def test_committed_csv_matches_18_sqlite_records_but_does_not_claim_verified(tmp
     assert findings["counts"]["manual_csv_rows"]==18
     assert findings["source_values_independently_verified"] is False
     assert findings["operator_value_verification_pending"] is True
-    assert findings["real_data_present"] is False
+    assert findings["operational_rows_in_db"] is False
     assert findings["internal_integrity_passed"] is True
     assert [f["code"] for f in findings["findings"]]==["NO_PERSISTED_OPERATIONS"]
 
