@@ -1,5 +1,7 @@
 # Finnish Grid Connection Evidence Screener
 
+[![Evidence checks](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml)
+
 A personal portfolio proof of concept for screening **published Finnish grid
 connection evidence**. It combines a small, source-transcribed Fingrid Grid Scope
 sample, an append-only SQLite evidence store, and a Streamlit dashboard. National
