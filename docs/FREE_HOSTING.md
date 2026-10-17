@@ -1,8 +1,18 @@
 # Deploy the Finnish Grid Evidence dashboard online — free-tier path
 
-**Status: deployment-ready code path; no Neon project or Streamlit app is
-created by committing this repository. A live public URL does not exist until
-the account owner completes the steps below.**
+**Verified status (18 October 2026):** The existing Neon project
+`fragrant-dawn-65247206`, branch `production`, has been initialized using
+a one-time GitHub Actions run:
+[Neon production bootstrap #39079398497](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39079398497).
+Readback confirmed 5 connection points, 18 **indicative, independently unverified**
+Grid Scope observations and **0 national operational rows**. The one-time
+bootstrap trigger has since been retired. The regular manual bootstrap remains
+available for future rechecks.
+
+**Streamlit is not deployed and no public URL exists yet.** Source API
+collection remains off until the owner enables it, and the read-only database
+user and Streamlit secrets must still be set up. No new Neon project, paid
+service or recurring job was created by the bootstrap.
 
 The application runs on [Streamlit Community Cloud](https://share.streamlit.io/)
 and reads *persisted* observations from
@@ -60,7 +70,11 @@ scheduled refresh. The connection tool fails rather than silently switching
 branches. Set `NEON_DATABASE_NAME` only when multiple databases exist on
 the selected Neon branch. No new Neon compute or branch is created.
 
-## 2. Bootstrap the already-existing Neon database (one-time owner action)
+## 2. Bootstrap the already-existing Neon database (completed)
+
+**Completed and verified** by the [successful production bootstrap run](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39079398497).
+Steps below are preserved for reproducibility or repeating a readback test; you
+do **not** need to run them again to import the 18-row capacity sample.
 
 1. Open **GitHub → Actions → Neon existing project bootstrap (manual)**.
 2. Click **Run workflow** on `main`. Select your existing Neon database
