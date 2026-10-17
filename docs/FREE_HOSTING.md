@@ -32,47 +32,58 @@ larger Actions runners, or upgrade plans** if a strict $0 budget matters.
 Neon service usage may be throttled or suspended when quotas are reached.
 This setup cannot guarantee 24/7 uptime or an immutable future price.
 
-## 1. Create the free Neon database (owner action)
+## 1. Reuse the existing Neon–GitHub integration
 
-1. Register at https://console.neon.tech/ and choose **Free**, preferably a
-   nearby EU region. Confirm it displays **$0/month**.
-2. Create a project (e.g. `finnish-grid-evidence`) and note its database name
-   (commonly `neondb`). Never commit or share any database password/URL.
-3. Copy the *writer* PostgreSQL connection URL with SSL enabled; it is normally
-   of the form `postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require`.
-   The collector needs CREATE TABLE/VIEW, INSERT and SELECT privileges.
-4. In this public GitHub repository, go to **Settings → Secrets and variables →
-   Actions → Secrets**. Create `DATABASE_WRITE_URL` containing the URL.
-5. Ensure valid replacement API tokens are already saved there as
-   `FINGRID_API_KEY` and `ENTSOE_API_TOKEN`. Regenerate any previously
-   exposed API keys first. The new code does not contain tokens.
+As of 18 October 2026, the owner connected the existing repository to Neon
+project `fragrant-dawn-65247206`, organization
+`org-snowy-band-13101282`. The integration automatically added:
 
-**The API endpoints cannot be tested against your Neon instance without these
-private secrets. Do not paste them into an issue or chat.**
+- GitHub **secret** `NEON_API_KEY` (private: never show or copy to the app).
+- GitHub **repository variable** `NEON_PROJECT_ID` (public project ID).
 
-## 2. Bootstrap the hosted database (owner action)
+**Do not create another Neon project, paste the API key into chat, or create a
+writer connection URL secret.** The repository's
+[`src/neon_connection.py`](../src/neon_connection.py) resolves the writer
+URL through Neon's documented read-only management API methods:
+list branches, list databases, retrieve connection URI. It masks the
+credential and gives it only to a subsequent Actions step.
 
-1. Review source rights, attribution and the limits in
-   [SOURCES.md](SOURCES.md). Fingrid-produced Open Data is CC BY 4.0 and
-   requires a visible credit and license link; ENTSO-E and Grid Scope have
-   separately documented terms.
-2. Open **GitHub → repository Settings → Secrets and variables → Actions →
-   Variables**, add repository variable `ENABLE_PUBLIC_REFRESH` with value
-   `true` only when you explicitly approve hosted source retrieval.
-3. Open **Actions → Hosted Finland evidence refresh (opt-in, free tier) →
-   Run workflow** on the `main` branch. Leave the day blank and
-   `backfill_days=1`. This checks coverage for both Fingrid 124/74 and
-   ENTSO-E A65 before an **atomic Postgres upload**.
-4. Confirm the workflow concludes successfully and its safe output includes
-   `hosted_postgres_mirror_completed`, the requested UTC day, coverage
-   counts and inserted rows. No API keys or raw values are logged.
-5. Optionally run one manual backfill with 3 or 7 *consecutive* completed
-   days (ending at least two days earlier). If any feed has missing
-   intervals, the workflow **fails closed without uploading a partial batch**.
+By default the branch is `main` (Neon's normal initial branch); if you
+actually created `production`, select `production` in the manual workflow
+and set the GitHub Actions variable `NEON_BRANCH_NAME=production` for
+scheduled refresh. It fails rather than silently switching branches when a
+selected branch does not exist. Set optional `NEON_DATABASE_NAME` only when
+the branch contains multiple ambiguous databases. No new compute or branch is
+created by the integration workflows.
 
-The scheduled refresh begins only when the enable variable is present. To
-stop scheduled collection, set `ENABLE_PUBLIC_REFRESH=false` or delete it.
-Avoid leaving an enabled collector with missing secrets.
+## 2. Bootstrap the already-existing Neon database (one-time owner action)
+
+1. Open **GitHub → Actions → Neon existing project bootstrap (manual)**.
+2. Click **Run workflow** on `main`. Select your existing Neon database
+   branch (usually `main` unless you explicitly created `production`).
+3. The action uses only `NEON_API_KEY` and `NEON_PROJECT_ID`. It validates
+   connectivity, creates the application tables/views and appends the
+   *source-transcribed* 18 Grid Scope observations at five connection points.
+   A second run is idempotent; history must never be silently overwritten.
+   This does **not** confirm the 18 operator numbers against Grid Scope.
+4. Check that the run reports
+   `neon_schema_and_sample_readback_passed` with five points and 18
+   indicative capacity observations. No URL, raw readings or passwords should
+   appear in the Actions logs.
+5. For real operational data, confirm valid `FINGRID_API_KEY` and
+   `ENTSOE_API_TOKEN` GitHub secrets (regenerate any previously exposed
+   keys). Only **then**, after checking reuse terms, explicitly enable
+   `ENABLE_PUBLIC_REFRESH=true` under GitHub repository Actions variables.
+   Daily collection remains off by default.
+6. Run **Actions → Hosted Finland evidence refresh (opt-in, free tier) →
+   Run workflow** once with `backfill_days=1` and inspect the result before
+   relying on any automatic schedule. The job resolves Neon credentials
+   privately each run. You no longer need `DATABASE_WRITE_URL` in GitHub.
+
+Bootstrap does not use Fingrid or ENTSO-E credentials and does not publish a
+public dashboard. Only the separately enabled collector retrieves national
+operational data. It strictly rejects partial observed days and never
+converts national demand into per-substation headroom.
 
 ## 3. Create a separate SELECT-only PostgreSQL role (owner action)
 
@@ -141,8 +152,7 @@ can only query the SELECT-only database role's authorized objects.
 
 ## Failure modes and boundaries
 
-- **No secrets, variable disabled:** collection is skipped; no Neon data is
-  uploaded. The hosted app cannot truthfully call itself live.
+- **Refresh variable disabled:** daily collection is skipped; one-time manual\n  bootstrap remains available, but there is no automatically updated time series.
 - **Provider does not publish a full day:** the strict coverage check fails.
   It will not publish partial data as a complete day.
 - **Neon becomes unavailable or resource-limited:** app shows an error;
