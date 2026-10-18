@@ -1,67 +1,24 @@
 # Finnish Grid Connection Evidence Screener
 
-**Public Streamlit Atlas:** [finnish-grid-atlas.streamlit.app](https://finnish-grid-atlas.streamlit.app/) ·
-[Editorial design specification](docs/ATLAS_DESIGN.md)
+**Live Next.js Atlas:** [finnish-grid-atlas.vercel.app](https://finnish-grid-atlas.vercel.app/) ·
+[Original Streamlit Atlas](https://finnish-grid-atlas.streamlit.app/) ·
+[API specification](https://finnish-grid-atlas.vercel.app/api/openapi.json)
 
-The original Streamlit app and newer Next.js website are distinct views over
-source-qualified evidence. The Next.js site's blue-and-white design uses an
-independent abstract grid/network identity, not an official national flag or a
-geographic map. No presentation changes validate Grid Scope capacity estimates.
+A **personal, independent grid-data research and screening project**, not a grid operator, a network reconstruction, or a guarantee of available connection capacity. The Next.js website uses an abstract blue data-network identity, with no official flag, map, or agency branding. It exposes a read-only, source-linked REST API and national operational chronology while the original Python Streamlit application remains available.
 
+### Verified production status · 18 October 2026
 
-**New: full-stack website + REST API** — [Next.js site source](website/README.md)
-in `website/` provides separate research pages for overview, connections,
-national operations, methods and documented versioned
-[`/api/v1` read-only endpoints](website/src/app/api/v1). It reuses the
-existing source-evidence PostgreSQL database with the restricted
-`grid_dashboard_reader` role and keeps the Python collector unchanged.
-Node 22 CI runs locked dependency installation, a high-severity dependency
-audit, API regression tests, type checking, a production build and HTTP
-smoke tests. **The Next.js website is live** at https://finnish-grid-atlas.vercel.app/.
-Its public connection estimates currently use a labelled historical snapshot
-until the separate read-only Neon connection URL is configured in Vercel.
-The existing Streamlit site stays live.
+- **Neon PostgreSQL is connected** to Vercel through the restricted `grid_dashboard_reader` role. Production `/api/v1/health` returns HTTP 200; `/api/v1/overview` reports `data_mode:neon`.
+- **Five selected 400 kV points and 18 Fingrid Grid Scope source-transcribed indicative observations** were captured 17 October. **Independent verification of those 18 capacity values remains pending**. Missing values are unknown, not zero; conditional point estimates cannot be aggregated as actual headroom.
+- **576 persisted historical national operational rows:** two complete UTC days (15 and 16 October), each containing 96 validated 15-minute intervals from Fingrid consumption 124, 96 from Fingrid production 74, and 96 from ENTSO-E actual load A65. This is national context, **not substation telemetry**.
+- A repeatable [hosted Neon bootstrap](.github/workflows/neon-bootstrap.yml) and [source refresh](.github/workflows/cloud-refresh.yml) use private GitHub Actions secrets. The one-time [16 October refresh validation](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39121937364) inserted 288 new rows without altering existing capacity records.
+- **Daily source refresh approved and enabled**: GitHub Actions at **07:17 UTC**, one completed UTC day per run, default conservative three-day lag. Stop future scheduled collection by setting repository variable `ENABLE_PUBLIC_REFRESH=false`; manual dispatch remains separate.
+- A separate [daily strict production monitor](.github/workflows/site-monitor.yml) checks connected Neon mode, freshness, field provenance, and all three feeds without private credentials. The [runbook](docs/SITE_OPERATIONS.md) documents safe operations and failure recovery.
+- The site is deployed manually to Vercel; **GitHub-to-Vercel automatic deployment still requires linking GitHub in the Vercel account**. The existing Neon reader is a server-only, sensitive production environment variable, never committed to this repository.
 
 [![Evidence checks](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml)
 
-A personal portfolio proof of concept for screening **published Finnish grid
-connection evidence**. It combines a small, source-transcribed Fingrid Grid Scope
-sample, an append-only SQLite evidence store, and a Streamlit dashboard. National
-operational data has its own schema and view; it never becomes substation capacity.
-
-**Original Streamlit hosted option:** The Streamlit read-only PostgreSQL
-backend and opt-in scheduled collector are implemented. The user linked the
-repository to an existing Neon project; its GitHub integration installed
-`NEON_API_KEY` (secret) and `NEON_PROJECT_ID` (variable). The repository
-can now privately discover the existing database writer URI and run the
-[manual Neon bootstrap workflow](.github/workflows/neon-bootstrap.yml)
-before the [scheduled refresh workflow](.github/workflows/cloud-refresh.yml)
-is explicitly enabled. **Neon production bootstrapped successfully on 18 October 2026:**
-[one-time GitHub Actions run](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39079398497)
-created the cloud tables and read back **5 connection points and 18 indicative
-source-transcribed capacity observations**. A later authenticated persistent import stored **288 historical national
-operational records** (Fingrid consumption/production and ENTSO-E load,
-15 October 2026 UTC). Automated scheduled refresh remains opt-in.
-**Hosted app URL:** [Finnish Grid Atlas](https://finnish-grid-atlas.streamlit.app/).
-The account owner confirmed the Streamlit deployment and database connection
-on 18 October 2026. The Neon bootstrap had imported 5 points and 18 source-
-transcribed capacity observations; the initial operational import succeeded, but independent
-Grid Scope value verification remains pending. The site may sleep on the free
-hosting tier. See [Free hosting setup and cost controls](docs/FREE_HOSTING.md).
-
-**October 18 website note:** The production Vercel version is live but has no Neon reader environment variable. See [site operations](docs/SITE_OPERATIONS.md) for current blockers, daily monitoring and source verification. The hosted ingestion history below refers to Neon/Streamlit, not the still-disconnected Vercel build.\n\n**Current status:** the capacity-data path runs end to end with **18 source-transcribed
-indicative observations at five 400 kV points**, captured on **17 October 2026**.
-The original capture log describes same-source transcription checks, **not independent
-reconfirmation of all 18 numeric estimates**. Do not present these as validated
-operator-confirmed connection offers. Fingrid and ENTSO-E API clients are implemented, fixture-tested and checked
-against their relevant response structures. On **17 October 2026**, authenticated
-daily smoke runs succeeded for Fingrid consumption/production (datasets 124/74:
-96+96 rows) and ENTSO-E actual load (A65: 96 rows), all for **14 October UTC**.
-These verified **temporary** databases were deleted by Actions; no operational
-records are distributed with the repository. To retain data for the dashboard,
-run the opt-in [local persistent importer](docs/LIVE_CONTEXT_IMPORT.md) using
-your private credentials. ENTSO-E generation (A75) and independent verification
-of Grid Scope capacity estimates remain pending. No model runs are included.
+See [website architecture and API](website/README.md), [scientific scope and limitations](docs/SITE_OPERATIONS.md), and [free hosting and stop controls](docs/FREE_HOSTING.md). A75 generation, independent numerical confirmation of the Grid Scope sample, full network power flow and the optional Netherlands extension are **not complete**.
 
 ## Run locally
 
