@@ -94,21 +94,23 @@ anywhere in the current website branding. The abstract lines and nodes are **not
 actual Fingrid transmission topology or locations of substations. The social
 thumbnail is served at `/opengraph-image`.
 
-The public Vercel project is currently accessible, but the production
-environment is NOT connected to Neon until a separate restricted reader
-connection URL is configured. The original Streamlit instance already has
-a read-only Neon connection; Vercel secrets are a different environment.
+**Production Neon integration verified 18 October 2026:** the production
+Vercel `DATABASE_READ_URL` is scoped Sensitive/Production, the health endpoint
+returns HTTP 200 and the overview reports `data_mode:neon`. The 16 October
+source refresh inserted 288 rows and the public API read back **576** historical
+operational observations (two complete UTC days across three datasets).
+The standalone Streamlit instance has its own Neon configuration.
 
-To complete the live integration, use the existing dedicated Neon
-`grid_dashboard_reader` user on branch `production`, database `neondb`.
-From Vercel Project → Settings → Environment Variables, set
-`DATABASE_READ_URL` as **Sensitive**, scope **Production**, and keep it
-server-only (never `NEXT_PUBLIC_*`). The URI must have a `.neon.tech`
-hostname and `sslmode=require`, and should preferably be pooled.
+For connection rotation or recovery, use the dedicated
+`grid_dashboard_reader` user on the Neon `production` branch, `neondb`
+database. Vercel Project → Settings → Environment Variables uses
+`DATABASE_READ_URL` scoped **Sensitive/Production**, server-only
+(never `NEXT_PUBLIC_*`). It must use a `.neon.tech` host and
+`sslmode=require`; prefer the Neon pooler for serverless read queries.
 
 **Do not paste the connection string into a chat or GitHub commit**, and do
 not substitute the Neon database owner, backend collector writer, or
-`NEON_API_KEY`. After setting the secret, redeploy production, then require:
+`NEON_API_KEY`. After a credential rotation, redeploy production and require:
 - `/api/v1/health` → 200, database connected.
 - `/api/v1/overview` → `data_mode:"neon"`, nonzero operational rows.
 - `/operations` → nonempty, source-linked observations with UTC timestamps.
@@ -125,3 +127,11 @@ within the configured `MAX_OPERATIONAL_AGE_HOURS` (default 168). Standalone
 local execution without `EXPECT_LIVE_DB=true` still supports an explicitly
 declared historical snapshot. This monitor does not itself ingest new records. See
 [the production runbook](../docs/SITE_OPERATIONS.md).
+
+The **source collector** is distinct from the read-only website and monitor:
+daily ingestion was approved and enabled 18 October 2026 on the existing
+free-tier GitHub Actions schedule, **07:17 UTC daily**, with a conservative
+three-day publication lag. It is opt-out via repository variable
+`ENABLE_PUBLIC_REFRESH=false`; no push/PR collects source data. Stop it
+through the workflow or variable before the next run if desired. Successful
+source ingestion adds revision records and is not live telemetry.
