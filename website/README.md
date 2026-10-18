@@ -6,7 +6,7 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
-- `/` — Kerala2040-style research home with real summary counters
+- `/` — independent blue research homepage with sourced regional cartography
 - `/connections` — filtered point-specific indicative estimates
 - `/operations` — national operational chart and source intervals
 - `/method` — scientific method and validation limits
@@ -65,7 +65,7 @@ Never expose the DB URL as `NEXT_PUBLIC_*`. Do not use `neondb_owner`,
 web deployment. Python GitHub Actions remain the sole data collector.
 
 Deployment: **https://finnish-grid-atlas.vercel.app** on Vercel (project
-`finnish-grid-atlas`). The first production deploy was made from source files
+`finnish-grid-atlas`). Production releases are currently uploaded from source files
 because the Vercel account lacks a GitHub Login Connection. Automatic Git
 releases require connecting GitHub within Vercel. A dedicated Neon reader
 credential still needs to be configured in the Vercel project environment.
@@ -80,3 +80,31 @@ Until then, public connection observations come from the labelled Git snapshot.
 - Same-origin REST calls, cache headers and defensive response metadata.
 - No writes, user accounts, synthetic numerical observations or API keys.
 - The original Streamlit app stays online as a fallback.
+
+## Website artwork, source integrity and uptime
+
+The flag-like white cross has been removed from the icon and brand mark. The
+favicon, homepage geographic context and dynamically rendered social thumbnail
+are based on **Natural Earth 1:110m simplified country boundaries**, with Sweden,
+Russia, Norway, Estonia, the Baltic and an approximate Åland marker. Geographic
+shapes are not generated or estimated by an image model. The network nodes and
+links overlaid on the map are **decorative**: not actual transmission routes,
+site coordinates, queue allocations or source-provided topology. The icon's
+graphical direction was developed from commissioned concept artwork; the final
+SVG and thumbnail use source-based geography for cartographic correctness.
+
+Run `npm run build` to generate the `/opengraph-image` PNG route. The new
+social thumbnail is accessible on the deployed website and is supplied via
+standard Open Graph metadata, along with the non-official map favicon.
+
+A dedicated public-monitor workflow checks production pages and the API once
+daily with no private credentials:
+`node website/scripts/check-public-site.mjs`.
+By default the check accepts an **explicitly declared snapshot** and permits
+`/api/v1/health` to be HTTP 503; this is NOT a live-data success claim.
+Only after confirming a working database reader, stored operations and the
+ingestion schedule should the owner set `EXPECT_LIVE_DB=true` in repository
+Actions variables. Then the monitor enforces Neon, operational coverage and
+`MAX_OPERATIONAL_AGE_HOURS` (default 168 h), and fails on broken/old data.
+
+See [site operations and secure Neon setup](../docs/SITE_OPERATIONS.md).

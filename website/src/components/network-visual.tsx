@@ -1,47 +1,46 @@
+import { atlasRegions, atlasNodes, atlasEdges } from "@/lib/atlas-geography";
+
 /**
- * Conceptual point-index visual. Node positions and edges are purely illustrative:
- * NOT geographic coordinates, transmission topology, or available capacity.
+ * Geographic overview based on public-domain Natural Earth boundaries.
+ * Decorative lines and dots are NOT transmission topology or actual substations.
+ * The separate /connections catalogue is the source for named sample points.
  */
 export function NetworkVisual() {
   return <div className="network-panel">
-    <div className="network-head"><span><span className="network-light" /> ATLAS / POINT INDEX</span><span>400 kV SAMPLE</span></div>
-    <svg className="network-visual" viewBox="0 0 540 430" role="img"
-      aria-label="Illustrative five-point connection evidence schematic; lines and positions do not represent actual grid geography or topology">
+    <div className="network-head">
+      <span><span className="network-light" aria-hidden="true" /> FINLAND / REGIONAL CONTEXT</span>
+      <span>OPEN EVIDENCE ATLAS</span>
+    </div>
+    <svg className="network-visual" viewBox="100 100 550 485" preserveAspectRatio="xMidYMid meet"
+      role="img" aria-label="Simplified geographic boundaries: Finland with Sweden to the west, Norway to the northwest, Russia to the east, Åland and the Baltic Sea in the southwest. Decorative blue network overlay is not transmission-grid topology or actual substation locations.">
       <defs>
-        <pattern id="atlasDots" width="24" height="24" patternUnits="userSpaceOnUse">
-          <circle cx="1.5" cy="1.5" r="1" fill="#7fb4f5" fillOpacity=".25" />
-        </pattern>
-        <linearGradient id="lineBlue" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0" stopColor="#73bafa" stopOpacity=".88" />
-          <stop offset="1" stopColor="#2c6bb8" stopOpacity=".72" />
+        <linearGradient id="atlasLand" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#fff"/><stop offset="1" stopColor="#b6dfff"/>
         </linearGradient>
       </defs>
-      <rect x="0" y="0" width="540" height="430" fill="url(#atlasDots)" />
-      <circle cx="260" cy="210" r="185" fill="none" stroke="#5c92d2" strokeOpacity=".20" />
-      <circle cx="260" cy="210" r="130" fill="none" stroke="#5c92d2" strokeOpacity=".12" />
-      <path d="M78 147 L248 92 L432 178 L342 323 L126 333 L78 147 L342 323 M248 92 L126 333" fill="none" stroke="url(#lineBlue)" strokeWidth="2.1" opacity=".85" />
-      <path d="M78 147 L432 178 M248 92 L342 323" fill="none" stroke="#79a8e6" strokeDasharray="3 9" strokeWidth="1" opacity=".5" />
-      {[
-        { x: 78, y: 147 }, { x: 248, y: 92 }, { x: 432, y: 178 },
-        { x: 342, y: 323 }, { x: 126, y: 333 },
-      ].map((point, index) => <g key={index}>
-        <circle cx={point.x} cy={point.y} r="18" fill="#77bfff" fillOpacity=".12"/>
-        <circle cx={point.x} cy={point.y} r="8.5" fill="#ffffff" stroke="#8dd5ff" strokeWidth="3" />
-        <circle cx={point.x} cy={point.y} r="2.3" fill="#003580" />
+      <path d={atlasRegions.norway} fill="#215797" opacity=".94" stroke="#7cadde" strokeWidth="1.3"/>
+      <path d={atlasRegions.sweden} fill="#194a88" opacity=".97" stroke="#73a4d5" strokeWidth="1.3"/>
+      <path d={atlasRegions.russia} fill="#183e76" opacity=".97" stroke="#73a4d5" strokeWidth="1.3"/>
+      <path d={atlasRegions.estonia} fill="#245f9d" opacity=".97" stroke="#73a4d5" strokeWidth="1.3"/>
+      <path d={atlasRegions.finland} fill="url(#atlasLand)" stroke="#eefaff" strokeWidth="3.2" strokeLinejoin="round"/>
+      {atlasEdges.map(([a,b],i)=><path key={i}
+        d={`M${atlasNodes[a].x} ${atlasNodes[a].y} L${atlasNodes[b].x} ${atlasNodes[b].y}`}
+        fill="none" stroke="#1471c8" strokeWidth="3" strokeLinecap="round" opacity=".8"/>)}
+      {atlasNodes.map((n,i)=><g key={i}>
+        <circle cx={n.x} cy={n.y} r="10" fill="#e1f3ff" stroke="#4384ca" strokeWidth="2"/>
+        <circle cx={n.x} cy={n.y} r="5.4" fill="#0a5ead"/>
       </g>)}
-      <g className="network-labels">
-        <text x="55" y="116">VUOLIJOKI</text>
-        <text x="237" y="56">ALAPITKÄ</text>
-        <text x="392" y="144">ALAJÄRVI</text>
-        <text x="337" y="360">SEINÄJOKI</text>
-        <text x="88" y="369">UUSNIVALA</text>
-      </g>
-      <g transform="translate(205 196)">
-        <rect x="0" y="0" width="138" height="56" rx="7" fill="#f0f7ff" stroke="#7eb2e4" strokeOpacity=".5" />
-        <text x="15" y="22" fill="#164b86" fontSize="10" letterSpacing="1.2">PUBLIC EVIDENCE</text>
-        <text x="15" y="43" fill="#003580" fontSize="16" fontWeight="700">5 connection points</text>
+      <circle cx="273.8" cy="529" r="3.7" fill="#e7f8ff"/>
+      <g fill="#9fcef3" fontFamily="Arial, sans-serif" fontSize="15" fontWeight="700" letterSpacing="1.5">
+        <text x="166" y="398">SWEDEN</text>
+        <text x="549" y="335">RUSSIA</text>
+        <text x="173" y="551" fontSize="12">BALTIC SEA</text>
+        <text x="253" y="520" fontSize="11">ÅLAND</text>
       </g>
     </svg>
-    <div className="network-foot"><span><span className="foot-square" aria-hidden="true" /> PUBLICLY SOURCED SAMPLE</span><span>ILLUSTRATIVE · NOT A GRID MAP</span></div>
+    <div className="network-foot">
+      <span><span className="foot-square" aria-hidden="true" /> NATURAL EARTH · SIMPLIFIED GEOGRAPHY</span>
+      <span>NETWORK IS ILLUSTRATIVE</span>
+    </div>
   </div>;
 }

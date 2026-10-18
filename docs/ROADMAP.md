@@ -18,7 +18,7 @@
 - [x] Fingrid and ENTSO-E client implementation and offline synthetic tests.
 - [x] Credential setup instructions and honest README.
 
-## Needed to complete the real-data MVP
+## Hosted website and data status (18 October 2026)\n\n- [x] Existing Neon production branch bootstrapped; README records 5 points and 18 source observations.\n- [x] A separate persistent source import of 288 historical national rows was recorded in the repository. **Current public website access to those rows is not established.**\n- [x] Canonical Next.js multi-page site, REST API, historical-capacity snapshot, and original non-flag, geography-based design deployed on Vercel.\n- [x] Public web availability / evidence-mode monitor added; it is explicitly snapshot-tolerant until the reader is configured.\n- [ ] Add Neon `grid_dashboard_reader` SELECT-only pooled URL as Vercel production-only `DATABASE_READ_URL`.\n- [ ] Redeploy Vercel and verify /api/v1/health=200, overview data_mode=neon and national operations populated; audit one interval against the original source.\n- [ ] Connect GitHub Login integration in Vercel to enable automatic source deployments; direct file deployments currently work.\n- [ ] Enable opt-in production source daily refresh only after reviewing a manual persistent run; then turn on EXPECT_LIVE_DB=true for freshness enforcement.\n- [ ] Independently recheck each source-transcribed Grid Scope value, preserving old capture history.\n\nDetailed procedure: [SITE_OPERATIONS.md](SITE_OPERATIONS.md).\n\n## Needed to complete the real-data MVP
 
 - [x] Configure private GitHub Actions secrets for Fingrid and ENTSO-E (keys
       are never committed).
