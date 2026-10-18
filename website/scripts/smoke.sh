@@ -28,10 +28,17 @@ grep -q '"openapi":"3.1.0"' /tmp/grid-smoke-response.json
 check 400 "/api/v1/capacity?direction=INVALID"
 grep -q "INVALID_QUERY" /tmp/grid-smoke-response.json
 check 400 "/api/v1/operations?source=fingrid&dataset_id=A65"
-check 503 "/api/v1/overview"
-grep -q "SOURCE_UNAVAILABLE" /tmp/grid-smoke-response.json
+check 200 "/api/v1/overview"
+grep -q '"data_mode":"compiled_snapshot"' /tmp/grid-smoke-response.json
+check 200 "/api/v1/points"
+grep -q 'FI-FINGRID-ALAPITKA-400' /tmp/grid-smoke-response.json
+check 200 "/api/v1/capacity?direction=production&year=2030"
+grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
+check 200 "/api/v1/coverage"
+grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
+check 200 "/connections"
 check 503 "/api/v1/health"
 grep -q '"status":"degraded"' /tmp/grid-smoke-response.json
 check 200 "/"
-grep -q "temporarily unavailable" /tmp/grid-smoke-response.json
-echo "All no-secret production route smoke checks passed."
+grep -q "public, source-transcribed" /tmp/grid-smoke-response.json
+echo "All no-secret production route and public snapshot smoke checks passed."

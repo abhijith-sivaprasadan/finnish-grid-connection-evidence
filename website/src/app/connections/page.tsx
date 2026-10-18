@@ -43,6 +43,7 @@ export default async function Connections({searchParams}:{searchParams:SP}){
       </select></label><button className="button" type="submit">Apply filters →</button>
     </form>
     {fault&&<p role="alert" className="notice warn">{fault}</p>}
+    {data?.data_mode==="compiled_snapshot"&&<p role="status" className="notice warn">Offline evidence mode: 18 indicative values transcribed from Fingrid Grid Scope on 17 October 2026. Source captures are not independently rechecked or live connection offers. National operations require a database connection.</p>}
     {stats&&<div className="data-strip three">
       <div><strong>{stats.coverage.published}</strong><span>Published source intersections</span></div>
       <div><strong>{stats.coverage.missing_in_compiled_capture}</strong><span>Missing in this compiled capture · not zero</span></div>

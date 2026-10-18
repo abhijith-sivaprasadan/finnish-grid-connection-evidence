@@ -41,6 +41,7 @@ export type Overview = {
   operational_rows_stored: number;
   newest_operational_interval_utc: string | null;
   source_values_independently_verified: false;
+  data_mode?: "neon" | "compiled_snapshot";
 };
 export type Pagination = { total: number; limit: number; offset: number };
-export type Paged<T> = { data: T[]; pagination: Pagination; limitations: string[] };
+export type Paged<T> = { data: T[]; pagination: Pagination; limitations: string[]; data_mode?: "neon" | "compiled_snapshot" };

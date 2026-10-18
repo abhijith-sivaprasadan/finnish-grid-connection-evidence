@@ -76,3 +76,30 @@ test("point list uses hard pagination limits even without data",async()=>{
   assert.equal(r.pagination.limit,100);
   await assert.rejects(()=>points(new URLSearchParams("limit=101"),query),BadInput);
 });
+
+
+test("public source snapshot is available only with no configured database", async () => {
+  const original = process.env.DATABASE_READ_URL;
+  delete process.env.DATABASE_READ_URL;
+  try {
+    const { overview, capacities, coverage, points, point } = await import("../src/lib/repository");
+    const o = await overview();
+    assert.equal(o.data_mode, "compiled_snapshot");
+    assert.equal(o.points, 5);
+    assert.equal(o.capacity_observations, 18);
+    assert.equal(o.newest_operational_interval_utc, null);
+    const catalog = await points();
+    assert.equal(catalog.pagination.total, 5);
+    const grid = await capacities(new URLSearchParams("direction=production&year=2030"));
+    assert.equal(grid.pagination.total, 3);
+    assert.equal(grid.data.find(x=>x.connection_point_id==="FI-FINGRID-ALAPITKA-400")?.capacity_value, 380);
+    const absent = await capacities(new URLSearchParams("point_id=FI-FINGRID-ALAPITKA-400&direction=consumption&year=2035"));
+    assert.equal(absent.pagination.total, 0);
+    assert.equal((await point("FI-FINGRID-ALAPITKA-400"))?.voltage_kv, 400);
+    const cv = await coverage();
+    assert.deepEqual(cv.coverage, {intersections:30, published:18, missing_in_compiled_capture:12, needs_reconciliation:0});
+  } finally {
+    if (original===undefined) delete process.env.DATABASE_READ_URL;
+    else process.env.DATABASE_READ_URL=original;
+  }
+});

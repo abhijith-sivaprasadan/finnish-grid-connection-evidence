@@ -1,4 +1,5 @@
 import { readQuery, type ReadQuery } from "./db";
+import { snapshotPoints, snapshotCapacities } from "./snapshot";
 import { directionParam, operationsParams, pageParams, pointParam, yearParam } from "./params";
 import type { Capacity, Operation, Overview, Paged, Point } from "./types";
 
@@ -10,7 +11,16 @@ export const OPERATIONS_CAUTION =
 const DATA_KEYS = "observation_id, connection_point_id, name, operator, voltage_kv, direction, effective_year, capacity_value, capacity_unit, capacity_status, source_observed_at, source_url, validity_notes, source_published_on";
 const OP_KEYS = "source, dataset_id, metric, value, unit, timestamp_utc, interval_end_utc, retrieved_at, source_url, area";
 
+// Do not silently serve a snapshot if an explicitly configured database fails.
+// Injectable query functions continue to work unmodified in tests and audits.
+const useCompiledSnapshot = (query: ReadQuery) => query === readQuery && !process.env.DATABASE_READ_URL;
+
 export async function overview(query: ReadQuery = readQuery): Promise<Overview> {
+  if (useCompiledSnapshot(query)) return {
+    points:snapshotPoints.length,capacity_observations:snapshotCapacities.length,
+    operational_rows_stored:0,newest_operational_interval_utc:null,
+    source_values_independently_verified:false,data_mode:"compiled_snapshot",
+  };
   const rows = await query<{
     points: string | number; capacity_observations: string | number;
     operational_rows_stored: string | number; newest_operational_interval_utc: string | null;
@@ -19,10 +29,14 @@ export async function overview(query: ReadQuery = readQuery): Promise<Overview> 
   return {points: Number(row?.points || 0), capacity_observations: Number(row?.capacity_observations || 0),
     operational_rows_stored: Number(row?.operational_rows_stored || 0),
     newest_operational_interval_utc: row?.newest_operational_interval_utc ?? null,
-    source_values_independently_verified: false};
+    source_values_independently_verified: false,data_mode:"neon"};
 }
 export async function points(params = new URLSearchParams(), query: ReadQuery = readQuery): Promise<Paged<Point>> {
   const {limit, offset} = pageParams(params, 100);
+  if (useCompiledSnapshot(query)) return {
+    data:snapshotPoints.slice(offset,offset+limit),
+    pagination:{total:snapshotPoints.length,limit,offset},limitations:[CAPACITY_CAUTION],data_mode:"compiled_snapshot",
+  };
   const [count] = await query<{total: string | number}>("SELECT count(*) AS total FROM connection_point");
   const rows = await query<Point & Record<string, unknown>>(
     "SELECT connection_point_id,name,operator,voltage_kv,source_url FROM connection_point ORDER BY name LIMIT $1 OFFSET $2",[limit,offset]);
@@ -30,6 +44,7 @@ export async function points(params = new URLSearchParams(), query: ReadQuery = 
 }
 export async function point(id: string, query: ReadQuery = readQuery): Promise<Point | null> {
   if (!/^FI-FINGRID-[A-Z0-9-]{3,60}$/.test(id)) return null;
+  if (useCompiledSnapshot(query)) return snapshotPoints.find(p=>p.connection_point_id===id)??null;
   const rows = await query<Point & Record<string, unknown>>(
     "SELECT connection_point_id,name,operator,voltage_kv,source_url FROM connection_point WHERE connection_point_id = $1",[id]);
   return rows[0] || null;
@@ -37,6 +52,12 @@ export async function point(id: string, query: ReadQuery = readQuery): Promise<P
 export async function capacities(params = new URLSearchParams(), query: ReadQuery = readQuery): Promise<Paged<Capacity>> {
   const { limit, offset } = pageParams(params, 200);
   const direction = directionParam(params), year = yearParam(params), pt = pointParam(params);
+  if (useCompiledSnapshot(query)) {
+    const match=snapshotCapacities.filter(c=>(!direction||c.direction===direction)&&
+      (year===null||c.effective_year===year)&&(!pt||c.connection_point_id===pt));
+    return {data:match.slice(offset,offset+limit),pagination:{total:match.length,limit,offset},
+      limitations:[CAPACITY_CAUTION],data_mode:"compiled_snapshot"};
+  }
   const predicates: string[] = [], values: unknown[] = [];
   if (direction) { values.push(direction); predicates.push("direction = $" + values.length); }
   if (year) { values.push(year); predicates.push("effective_year = $" + values.length); }
@@ -65,7 +86,8 @@ export async function operations(params = new URLSearchParams(), query: ReadQuer
 export async function coverage(params=new URLSearchParams(), query: ReadQuery=readQuery) {
   const year=yearParam(params);
   const years=year ? [year] : [2026,2030,2035];
-  const [ps, obs] = await Promise.all([
+  const [ps, obs]: [Point[], Capacity[]] = useCompiledSnapshot(query)
+    ? [snapshotPoints, snapshotCapacities] : await Promise.all([
     query<Point & Record<string,unknown>>(
       "SELECT connection_point_id,name,operator,voltage_kv,source_url FROM connection_point ORDER BY name"),
     query<Capacity & Record<string,unknown>>(
@@ -86,5 +108,6 @@ export async function coverage(params=new URLSearchParams(), query: ReadQuery=re
   return {data:rows,limitations:[CAPACITY_CAUTION],coverage:{
     intersections:rows.length,published:rows.filter(r=>r.status==="published_indicative").length,
     missing_in_compiled_capture:rows.filter(r=>r.status==="not_in_compiled_capture").length,
-    needs_reconciliation:rows.filter(r=>r.status==="needs_reconciliation").length}};
+    needs_reconciliation:rows.filter(r=>r.status==="needs_reconciliation").length},
+    data_mode:useCompiledSnapshot(query)?"compiled_snapshot":"neon"};
 }
