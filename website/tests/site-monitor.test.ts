@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+// @ts-expect-error Node ESM script is intentionally plain JavaScript; tested at runtime with tsx.
 import { evaluateEvidence } from "../scripts/check-public-site.mjs";
 
 const snapshot = { points:5, capacity_observations:18, operational_rows_stored:0,
