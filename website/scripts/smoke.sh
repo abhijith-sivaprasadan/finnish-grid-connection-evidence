@@ -37,6 +37,15 @@ grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/coverage"
 grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
 check 200 "/connections"
+grep -q "Download independent audit worksheet" /tmp/grid-smoke-response.json
+check 200 "/api/v1/quality"
+grep -q '"data_mode":"compiled_snapshot"' /tmp/grid-smoke-response.json
+check 200 "/api/v1/export/recheck"
+grep -q "pending_independent_recheck" /tmp/grid-smoke-response.json
+test "$(grep -c 'pending_independent_recheck' /tmp/grid-smoke-response.json)" = 18
+check 200 "/quality"
+grep -q "18 source observations" /tmp/grid-smoke-response.json
+check 200 "/operations?days=2"
 check 503 "/api/v1/health"
 grep -q '"status":"degraded"' /tmp/grid-smoke-response.json
 check 200 "/"

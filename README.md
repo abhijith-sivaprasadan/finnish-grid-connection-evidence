@@ -13,7 +13,14 @@ A **personal, independent grid-data research and screening project**, not a grid
 - **576 persisted historical national operational rows:** two complete UTC days (15 and 16 October), each containing 96 validated 15-minute intervals from Fingrid consumption 124, 96 from Fingrid production 74, and 96 from ENTSO-E actual load A65. This is national context, **not substation telemetry**.
 - A repeatable [hosted Neon bootstrap](.github/workflows/neon-bootstrap.yml) and [source refresh](.github/workflows/cloud-refresh.yml) use private GitHub Actions secrets. The one-time [16 October refresh validation](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39121937364) inserted 288 new rows without altering existing capacity records.
 - **Daily source refresh approved and enabled**: GitHub Actions at **07:17 UTC**, one completed UTC day per run, default conservative three-day lag. Stop future scheduled collection by setting repository variable `ENABLE_PUBLIC_REFRESH=false`; manual dispatch remains separate.
-- A separate [daily strict production monitor](.github/workflows/site-monitor.yml) checks connected Neon mode, freshness, field provenance, and all three feeds without private credentials. The [runbook](docs/SITE_OPERATIONS.md) documents safe operations and failure recovery.
+- Four new [source-evidence workbenches](website/README.md) are now live: an interactive
+connection matrix and bar comparison; three aligned national-operation plots with
+historical CSV export; a 30-day quality/completeness heatmap; and a dedicated
+independent-review register and worksheet. These use the existing database,
+not simulated network topology. The operator's source disclaimer was rechecked
+but **none of the 18 Grid Scope numeric figures could be independently confirmed**.
+
+A separate [daily strict production monitor](.github/workflows/site-monitor.yml) checks connected Neon mode, freshness, field provenance, and all three feeds without private credentials. The [runbook](docs/SITE_OPERATIONS.md) documents safe operations and failure recovery.
 - The site is deployed manually to Vercel; **GitHub-to-Vercel automatic deployment still requires linking GitHub in the Vercel account**. The existing Neon reader is a server-only, sensitive production environment variable, never committed to this repository.
 
 [![Evidence checks](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml)

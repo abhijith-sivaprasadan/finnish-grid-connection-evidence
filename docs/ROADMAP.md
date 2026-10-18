@@ -18,7 +18,25 @@
 - [x] Fingrid and ENTSO-E client implementation and offline synthetic tests.
 - [x] Credential setup instructions and honest README.
 
-## Hosted website and data status (18 October 2026)\n\n- [x] Existing Neon production branch bootstrapped; README records 5 points and 18 source observations.\n- [x] A separate persistent source import of 288 historical national rows was recorded in the repository. **Current public website access to those rows is not established.**\n- [x] Canonical Next.js multi-page site, REST API, historical-capacity snapshot, and original non-flag, geography-based design deployed on Vercel.\n- [x] Public web availability / evidence-mode monitor added; it is explicitly snapshot-tolerant until the reader is configured.\n- [ ] Add Neon `grid_dashboard_reader` SELECT-only pooled URL as Vercel production-only `DATABASE_READ_URL`.\n- [ ] Redeploy Vercel and verify /api/v1/health=200, overview data_mode=neon and national operations populated; audit one interval against the original source.\n- [ ] Connect GitHub Login integration in Vercel to enable automatic source deployments; direct file deployments currently work.\n- [ ] Enable opt-in production source daily refresh only after reviewing a manual persistent run; then turn on EXPECT_LIVE_DB=true for freshness enforcement.\n- [ ] Independently recheck each source-transcribed Grid Scope value, preserving old capture history.\n\nDetailed procedure: [SITE_OPERATIONS.md](SITE_OPERATIONS.md).\n\n## Needed to complete the real-data MVP
+## Hosted website and data status (18 October 2026)
+
+- [x] Dedicated Neon read-only production credential deployed on Vercel. HTTP health returns 200; API reports `data_mode:neon`.
+- [x] 15 and 16 October 2026 completed UTC days ingested from Fingrid 124/74 and ENTSO-E A65. At last audit, Neon contained **576** stored rows, 576 distinct intervals, 0 retrieval revisions and six structurally complete source-days.
+- [x] Daily 07:17 UTC source refresh approved and scheduled with conservative 3-day publication lag, main-only, no push-to-ingest path and `ENABLE_PUBLIC_REFRESH=false` emergency stop.
+- [x] Strict daily public monitor checks database connection, source provenance and freshness.
+- [x] Original non-official abstract network identity (no national maps or flags); production source build deployed by direct Vercel upload.
+- [x] Connection Workbench: exact 5 × 2 × 3 matrix with missing-as-unknown, source selection details, discrete-year comparison bars and 18-row audit CSV export.
+- [x] National Operations Workbench: three UTC-synchronized source charts, 1/2/3/7-day measured windows, original measurement units and interval/provenance CSV export.
+- [x] Data Quality Workbench: 30-day source-day continuity heatmap, raw-versus-distinct row counts, revision statistics and read-only JSON endpoint.
+- [x] Independent audit **access attempt** documented; Fingrid operator scope/disclaimers reconfirmed, but **0/18** original numeric transcriptions could be independently reproduced using the accessible automated viewer. All retain pending status.
+- [ ] A reviewer must inspect all 18 exact figures in Fingrid's interactive Grid Scope viewer, recording year/direction, units, UTC time and current source evidence. Treat a changed current publication as a *new dated snapshot*.
+- [ ] Connect Vercel GitHub Login / repository root `website/` for automatic deployments. Currently direct deployment is manual.
+- [ ] Verify daily **unattended** ingestion after the first scheduled date; manual trial and source persistence already passed.
+- [ ] ENTSO-E A75 generation live-response verification and scoped research extensions remain future work.
+
+See [production operations](SITE_OPERATIONS.md), [18 October audit attempt](GRID_SCOPE_AUDIT_ATTEMPT_2026_10_18.md) and [independent checklist](GRID_SCOPE_RECHECK.md).
+
+## Needed to complete the real-data MVP
 
 - [x] Configure private GitHub Actions secrets for Fingrid and ENTSO-E (keys
       are never committed).

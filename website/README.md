@@ -7,8 +7,9 @@ the Python collector and existing Neon production PostgreSQL schema.
 ## Pages
 
 - `/` — independent blue research homepage with conceptual evidence network
-- `/connections` — filtered point-specific indicative estimates
-- `/operations` — national operational chart and source intervals
+- `/connections` — interactive 5-point × 2-direction × 3-year capacity evidence matrix, discrete comparison bars, individual provenance drawer, filtered raw records and source-audit worksheet
+- `/operations` — three synchronized source-separated charts, 1/2/3/7 observed UTC-day windows anchored to the latest stored interval, provenance-preserving CSV export
+- `/quality` — observed source-day continuity heatmap, distinct intervals versus retrieval revisions, and the 18-row pending-audit register
 - `/method` — scientific method and validation limits
 - `/api` — readable REST API documentation
 - `/api/openapi.json` — machine-readable OpenAPI 3.1
@@ -17,6 +18,8 @@ the Python collector and existing Neon production PostgreSQL schema.
 - `/api/v1/points` and `/api/v1/points/{id}`
 - `/api/v1/capacity` with optional year, direction, point_id
 - `/api/v1/coverage` with observed vs missing compiled intersections
+- `/api/v1/quality` with 30-day bounded source integrity and revision counts
+- `/api/v1/export/recheck` with 18-row CSV reviewer worksheet (no fabricated confirmations)
 - `/api/v1/operations` with source/dataset, UTC interval filters and pagination
 
 All public endpoints are **read-only**. Missing numerical Grid Scope cells
