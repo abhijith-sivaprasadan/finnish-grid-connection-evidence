@@ -2,8 +2,8 @@
 /**
  * Black-box production availability and evidence-integrity check.
  * Uses public endpoints only. Never needs database URLs or API keys.
- * To enforce live DB and interval freshness after Neon is configured, set
- * EXPECT_LIVE_DB=true in GitHub Actions repository variables.
+ * Production workflow enforces live Neon now that its reader has been verified.
+ * Local runs without EXPECT_LIVE_DB=true still accept an explicit snapshot.
  */
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
@@ -56,8 +56,29 @@ export async function checkPublicSite() {
   if (requireLive) assert.equal(healthPayload.status, "ok", "Read-only database is not healthy");
   if (!requireLive && health.status === 503) console.log("Database not configured: recorded as snapshot-only, not a healthy live DB.");
   if (requireLive) {
-    const ops = await (await get("/api/v1/operations?source=fingrid&dataset_id=124&limit=1")).json();
-    assert.ok(Array.isArray(ops.data) && ops.data.length > 0, "No consumption intervals in live dataset");
+    for (const feed of [
+      { source: "fingrid", id: "124", metric: "electricity_consumption", unit: "MWh/h" },
+      { source: "fingrid", id: "74", metric: "electricity_production", unit: "MWh/h" },
+      { source: "entsoe", id: "A65", metric: "electricity_consumption", unit: "MW" },
+    ]) {
+      const qs = new URLSearchParams({ source: feed.source, dataset_id: feed.id, limit: "1" });
+      const payload = await (await get("/api/v1/operations?" + qs)).json();
+      assert.ok(Array.isArray(payload.data) && payload.data.length > 0,
+        "No operational rows for " + feed.source + " " + feed.id);
+      const row = payload.data[0];
+      assert.equal(row.source, feed.source, "Wrong source for " + feed.id);
+      assert.equal(row.dataset_id, feed.id, "Wrong dataset for " + feed.id);
+      assert.equal(row.metric, feed.metric, "Wrong metric for " + feed.id);
+      assert.equal(row.unit, feed.unit, "Unexpected unit for " + feed.id);
+      assert.ok(Number.isFinite(row.value), "Non-numeric value for " + feed.id);
+      assert.ok(/^https:\/\//.test(row.source_url), "Missing HTTPS source for " + feed.id);
+      const latest = Date.parse(row.interval_end_utc);
+      assert.ok(Number.isFinite(latest), "Missing interval end for " + feed.id);
+      const age = (Date.now() - latest) / 3_600_000;
+      assert.ok(age >= -1 && age <= maxAgeHours,
+        "Dataset " + feed.id + " is stale: " + age.toFixed(1) + " h");
+      console.log("OK " + feed.source + " " + feed.id + ": source-linked, unit checked, " + age.toFixed(1) + " h old");
+    }
   }
   console.log("Public site monitoring completed.");
 }
