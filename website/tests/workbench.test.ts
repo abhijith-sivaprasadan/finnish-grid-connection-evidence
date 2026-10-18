@@ -41,7 +41,7 @@ test("quality evaluates interval coverage, discontinuities and revisions without
  const valid=assessQuality(sample);
  assert.equal(valid[0].complete,true);
  assert.equal(valid[0].revisions,4);
- assert.equal(assessQuality([{...sample,gaps:"1"}])[0].complete,false);
- assert.equal(assessQuality([{...sample,intervals:"95"}])[0].complete,false);
- assert.equal(assessQuality([{...sample,first_start:"2026-10-16T00:15:00Z"}])[0].complete,false);
+ assert.equal(assessQuality([{...sample[0],gaps:"1"}])[0].complete,false);
+ assert.equal(assessQuality([{...sample[0],intervals:"95"}])[0].complete,false);
+ assert.equal(assessQuality([{...sample[0],first_start:"2026-10-16T00:15:00Z"}])[0].complete,false);
 });
