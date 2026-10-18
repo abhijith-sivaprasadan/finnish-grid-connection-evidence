@@ -33,3 +33,27 @@ jobs:
       - run: python -m src.cli import-manual
       - run: python -m src.cli quality
       - run: python -m src.audit_integrity
+
+  web:
+    name: Next.js site and REST API
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install website dependencies
+        run: npm install --no-audit --no-fund
+      - name: Test API query security and research semantics
+        run: npm test
+      - name: Verify type safety
+        run: npm run typecheck
+      - name: Build deployable website
+        run: npm run build
