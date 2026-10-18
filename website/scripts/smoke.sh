@@ -51,5 +51,5 @@ grep -q '"status":"degraded"' /tmp/grid-smoke-response.json
 check 200 "/"
 grep -q "Compiled source snapshot" /tmp/grid-smoke-response.json
 grep -q "Electricity grid" /tmp/grid-smoke-response.json
-grep -q "Research workspace" /tmp/grid-smoke-response.json
+grep -q "RESEARCH WORKSPACE" /tmp/grid-smoke-response.json
 echo "All no-secret production route and public snapshot smoke checks passed."
