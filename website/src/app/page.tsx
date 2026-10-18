@@ -31,10 +31,11 @@ export default async function Home() {
 
     <section className="section compact"><div className="wrap">
       {!summary&&<div className="notice warn" role="status">Live evidence store is temporarily unavailable. Counts are not replaced with invented values.</div>}
+      {summary?.data_mode==="compiled_snapshot"&&<div className="notice warn" role="status">Displaying the public, source-transcribed 17 October 2026 capacity snapshot. These estimates are not independently operator-rechecked; operational data require the live database. This is not a live Grid Scope feed.</div>}
       <div className="data-strip" aria-label="Evidence stored">
         <div><strong>{summary?.points??"—"}</strong><span>Named 400 kV connection points</span></div>
         <div><strong>{summary?.capacity_observations??"—"}</strong><span>Source-transcribed indicative estimates</span></div>
-        <div><strong>{summary?.operational_rows_stored??"—"}</strong><span>Historical operational records retained</span></div>
+        <div><strong>{summary?.data_mode==="compiled_snapshot"?"—":summary?.operational_rows_stored??"—"}</strong><span>Historical operational records in connected database</span></div>
         <div><strong>{age===null?"—":Math.max(age,0)+" h"}</strong><span>Age of newest national interval · UTC</span></div>
       </div>
       {age!==null&&age>120&&<p className="notice warn">Operational observations are more than five days old; these are not current live measurements.</p>}
