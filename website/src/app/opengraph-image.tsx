@@ -40,12 +40,13 @@ export default function OpenGraphImage() {
         <path d={atlasRegions.finland} fill="url(#finFill)" stroke="#e8f6ff" strokeWidth="3.5" strokeLinejoin="round"/>
         {atlasEdges.map(([a,b],i)=><path key={i} d={`M${atlasNodes[a].x} ${atlasNodes[a].y} L${atlasNodes[b].x} ${atlasNodes[b].y}`} stroke="#1269c7" strokeWidth="3.3" strokeLinecap="round" opacity=".85"/>)}
         {atlasNodes.map((n,i)=><g key={i}><circle cx={n.x} cy={n.y} r="11" fill="#fff" opacity=".92"/><circle cx={n.x} cy={n.y} r="7" fill="#0d5cae"/></g>)}
-        <g fontFamily="Arial,sans-serif" fontSize="17" fill="#acd0f5" fontWeight="700" letterSpacing="2">
-          <text x="158" y="395">SWEDEN</text><text x="560" y="348">RUSSIA</text>
-          <text x="195" y="590" fontSize="14">BALTIC SEA</text><text x="242" y="525" fontSize="13">ÅLAND</text>
-        </g>
+
         <circle cx="273.8" cy="529" r="4" fill="#d4edff" stroke="#529cea" strokeWidth="2"/>
       </svg>
+      <div style={{position:"absolute",left:736,top:290,display:"flex",fontSize:13,fontWeight:700,letterSpacing:2,color:"#a4d0fa"}}>SWEDEN</div>
+      <div style={{position:"absolute",left:1094,top:240,display:"flex",fontSize:12,fontWeight:700,letterSpacing:1.5,color:"#a4d0fa"}}>RUSSIA</div>
+      <div style={{position:"absolute",left:763,top:492,display:"flex",fontSize:12,fontWeight:700,letterSpacing:1.5,color:"#a4d0fa"}}>BALTIC SEA</div>
+      <div style={{position:"absolute",left:814,top:407,display:"flex",fontSize:11,fontWeight:700,color:"#a4d0fa"}}>ÅLAND</div>
       <div style={{position:"absolute",bottom:19,right:32,color:"#bed7f0",fontSize:10,display:"flex"}}>
         GEOGRAPHY: NATURAL EARTH 1:110M · NETWORK DECORATIVE, NOT ACTUAL TOPOLOGY
       </div>
