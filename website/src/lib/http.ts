@@ -4,7 +4,6 @@ export function response(data: unknown, status=200) {
   return Response.json(data,{status,headers:{
     "Cache-Control":status===200?"public, s-maxage=120, stale-while-revalidate=300":"no-store",
     "X-Content-Type-Options":"nosniff",
-    "Access-Control-Allow-Origin":"same-origin",
   }});
 }
 export async function handleApi<T>(fn:()=>Promise<T>) {
