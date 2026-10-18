@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://finnish-grid-atlas.vercel.app"),
   title: {
     default: "Finnish Grid Atlas — Evidence-based electricity grid research",
     template: "%s | Finnish Grid Atlas",
