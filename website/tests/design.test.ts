@@ -31,6 +31,8 @@ test("Shell navigates, supports mobile and keyboard search, and reports status h
  assert.match(shell,/role="dialog"/);
  assert.match(shell,/event.key.toLowerCase\(\)==="k"/);
  assert.match(shell,/aria-label="Open navigation"/);
+ assert.match(shell,/aria-expanded=\{menu\}/);
+ assert.match(shell,/\{menu&&<aside/);
  assert.match(shell,/Latest historical interval/);
  assert.match(shell,/compiled_snapshot/);
  assert.match(shell,/No verified current interval available/);
