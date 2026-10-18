@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { GridMark } from "@/components/grid-mark";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,10 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <header className="site-header">
       <div className="wrap header-inner">
         <Link href="/" className="brand" aria-label="Finnish Grid Atlas home">
-          <span className="brand-mark" aria-hidden="true"><svg viewBox="0 0 42 42" width="34" height="34">
-<path d="M9 28 18 9 34 17 27 34 9 28 34 17 M18 9 27 34" fill="none" stroke="white" strokeWidth="2.1" strokeLinecap="round" opacity=".82"/>
-<g fill="#fff"><circle cx="9" cy="28" r="3.4"/><circle cx="18" cy="9" r="3.4"/><circle cx="34" cy="17" r="3.4"/><circle cx="27" cy="34" r="3.4"/></g>
-</svg></span>
+          <span className="brand-mark" aria-hidden="true"><GridMark size={42}/></span>
           <span className="brand-type"><strong>FINNISH GRID</strong><span>ATLAS <b>•</b> OPEN EVIDENCE</span></span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
@@ -59,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <div className="wrap">
         <div className="footer-top">
           <div>
-            <div className="footer-brand"><span className="footer-network" aria-hidden="true">◇</span> FINNISH GRID ATLAS</div>
+            <div className="footer-brand"><GridMark size={28}/> FINNISH GRID ATLAS</div>
             <h2>Clear data.<br />Careful conclusions.</h2>
             <p>Independent research into published Finnish electricity-grid evidence. Not affiliated with a transmission system operator and not an offer of grid connection.</p>
           </div>
