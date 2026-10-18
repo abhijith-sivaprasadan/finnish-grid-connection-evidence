@@ -119,9 +119,9 @@ automatic silent fallback to the compiled historical source snapshot.
 
 A public-monitor workflow checks production pages and the API once daily
 without provider or database secrets: `node website/scripts/check-public-site.mjs`.
-By default it accepts an **explicitly declared snapshot** and allows the
-database health route to return 503, without claiming live connectivity.
-Once the live integration and scheduled ingestion are verified, set GitHub
-Actions repository variable `EXPECT_LIVE_DB=true`; the monitor then requires
-Neon mode, nonempty observations, and operational interval freshness. See
+The scheduled production workflow now requires a connected Neon database,
+valid source-linked operational rows for all three feeds and recent timestamps
+within the configured `MAX_OPERATIONAL_AGE_HOURS` (default 168). Standalone
+local execution without `EXPECT_LIVE_DB=true` still supports an explicitly
+declared historical snapshot. This monitor does not itself ingest new records. See
 [the production runbook](../docs/SITE_OPERATIONS.md).
