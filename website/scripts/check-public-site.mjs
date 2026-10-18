@@ -6,6 +6,8 @@
  * EXPECT_LIVE_DB=true in GitHub Actions repository variables.
  */
 import assert from "node:assert/strict";
+import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 
 const base = (process.env.ATLAS_PUBLIC_URL || "https://finnish-grid-atlas.vercel.app").replace(/\/$/, "");
 const requireLive = process.env.EXPECT_LIVE_DB === "true";
@@ -60,6 +62,6 @@ export async function checkPublicSite() {
   console.log("Public site monitoring completed.");
 }
 
-if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) {
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
   checkPublicSite().catch(error => { console.error("SITE_MONITOR_FAILURE:", error.message); process.exitCode = 1; });
 }
