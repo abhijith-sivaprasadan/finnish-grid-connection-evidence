@@ -13,7 +13,7 @@ def test_manual_import_and_daily_refresh_keep_independent_controls():
     assert "(github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && vars.ENABLE_PUBLIC_REFRESH != 'false'))" in contents
     # A one-time push trial has completed; a new workflow-code push must not
     # implicitly write new observations to the production database.
-    assert "\\n  push:" not in contents
+    assert "  push:" not in contents.splitlines()
     assert '17 7 * * *' in contents
     assert "NEON_BRANCH_NAME: ${{ vars.NEON_BRANCH_NAME || 'production' }}" in contents
 
