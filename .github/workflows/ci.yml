@@ -57,3 +57,5 @@ jobs:
         run: npm run typecheck
       - name: Build deployable website
         run: npm run build
+      - name: Production server HTTP smoke tests (no Neon secrets)
+        run: bash scripts/smoke.sh
