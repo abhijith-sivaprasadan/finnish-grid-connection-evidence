@@ -13,7 +13,9 @@ available for future rechecks.
 [https://finnish-grid-atlas.streamlit.app/](https://finnish-grid-atlas.streamlit.app/).
 The owner also reports the separate read-only Neon database connection is
 configured. Public readback has not been independently checked in this guide.
-Source API operational observations and automatic refresh remain pending.
+Source API import has been verified for 15 and 16 October 2026: 576 historical
+operational rows were visible via the live Vercel read-only database on
+18 October. Daily source refresh was subsequently approved by the owner.
 No new Neon project, paid service or recurring job was created by the bootstrap.
 
 The application runs on [Streamlit Community Cloud](https://share.streamlit.io/)
@@ -30,7 +32,7 @@ the backend collector. Existing local SQLite and tests continue to work.
 | Neon | Free, $0/month | 1 GB/project (2 Oct 2026 announcement), 100 CU-hours/month/project and 5 GB egress/month; compute scales to zero |
 | GitHub Actions | Standard runners in the **public** repository | Free; 1 run/day after owner explicitly enables it |
 | Domain | No custom domain | Public `*.streamlit.app` subdomain, no domain purchase |
-| Scheduler | `.github/workflows/cloud-refresh.yml` | **Disabled** until `ENABLE_PUBLIC_REFRESH=true`; opt-in, does not run on PRs |
+| Scheduler | `.github/workflows/cloud-refresh.yml` | **Approved/enabled 18 October 2026**; 07:17 UTC daily on `main`, no PR or push-to-ingest trigger; opt out with `ENABLE_PUBLIC_REFRESH=false` |
 | Database retention | Append-only | Monitor space; historical revision rows use storage; collector stops writes above 750 MiB, before the 1 GB quota |
 
 The app is a **regularly refreshed evidence dashboard**, *not* a real-time
@@ -94,7 +96,7 @@ do **not** need to run them again to import the 18-row capacity sample.
    `ENTSOE_API_TOKEN` GitHub secrets (regenerate any previously exposed
    keys) and review source reuse terms. Existing authenticated smoke tests
    for Fingrid 124/74 and ENTSO-E A65 passed earlier in temporary runners.
-6. Open **Actions → Hosted Finland evidence refresh (opt-in, free tier) →
+6. Open **Actions → Hosted Finland evidence refresh (daily, free-tier guarded) →
    Run workflow** on GitHub `main` with `backfill_days=1` and an empty
    `day` to retrieve the last conservative completed UTC day. **A manual
    workflow dispatch now works without enabling automatic daily updates.**
@@ -104,10 +106,16 @@ do **not** need to run them again to import the 18-row capacity sample.
    `validated_interval_counts` for two Fingrid datasets and ENTSO-E A65.
    Reload Streamlit after its 10-minute cache expires; confirm the
    operational-record count and freshness timestamp are now nonzero.
-8. Once a manual run works and you approve continuing daily API requests,
-   set GitHub Actions repository variable `ENABLE_PUBLIC_REFRESH=true`.
-   Scheduled refresh remains **off until this explicit opt-in**; to disable
-   it again set the variable to `false`.
+8. **Completed 18 October 2026:** after a successful previous-day import,
+   the one-time 16 October 2026 refresh verified 96 continuous intervals
+   from each of Fingrid 124, Fingrid 74 and ENTSO-E A65, wrote 288 rows
+   to Neon, and the public Vercel API reported 576 historical operational rows.
+   The owner approved ongoing daily collection. The schedule now runs at
+   07:17 UTC for a completed day at least three days old (publication lag).
+   To suspend future *scheduled* runs immediately, set the repository Actions
+   variable `ENABLE_PUBLIC_REFRESH=false`, or disable this GitHub workflow.
+   A missing variable means **enabled** following owner approval; the
+   same explicit `false` flag is the stop control. Manual runs are separate.
 
 Bootstrap does not use Fingrid or ENTSO-E credentials and does not publish a
 public dashboard. Only the separately enabled collector retrieves national
@@ -203,7 +211,7 @@ can only query the SELECT-only database role's authorized objects.
 
 ## Failure modes and boundaries
 
-- **Refresh variable disabled:** daily collection is skipped; one-time manual
+- **Refresh variable set to `false`:** daily collection is skipped; one-time manual
   bootstrap remains available, but there is no automatically updated time series.
 - **Provider does not publish a full day:** the strict coverage check fails.
   It will not publish partial data as a complete day.
