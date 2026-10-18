@@ -40,5 +40,5 @@ check 200 "/connections"
 check 503 "/api/v1/health"
 grep -q '"status":"degraded"' /tmp/grid-smoke-response.json
 check 200 "/"
-grep -q "public, source-transcribed" /tmp/grid-smoke-response.json
+grep -q "Public snapshot mode" /tmp/grid-smoke-response.json
 echo "All no-secret production route and public snapshot smoke checks passed."
