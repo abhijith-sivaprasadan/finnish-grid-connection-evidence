@@ -14,13 +14,13 @@ No borrowed trademarks, brand marks, photographs, protected illustrations or age
 
 ## Identity
 
-- Finnish-flag-inspired blue: `#003580`; white: `#ffffff`
+- Research blue: `#003580`; white: `#ffffff`
 - Midnight research ink: `#071f43`; readable gray-blue `#506782`
 - Pale blue data surfaces: `#eaf4ff`; border: `#dbe5f0`
 - Manrope headlines and DM Sans body (system-font fallback)
 - Square-ish soft corners (9–18px), compact blue evidence labels and deliberate tabular spacing
-- Abstract cross-and-node mark references the geometry of the Finnish flag without recreating any agency logo
-- Schematic is **not** a geographic map, topology, or source of capacity numbers
+- Independent network-node mark with no flag cross or institutional symbolism
+- Geographic context is based on simplified, traceable Natural Earth 1:110m country boundaries; superimposed network is **decorative**, not real Fingrid topology or source of capacity numbers
 
 ## Information architecture
 
@@ -52,3 +52,27 @@ bash scripts/smoke.sh
 ```
 
 Keep the source-data tests and no-secret smoke tests as release gates. Vercel `website/` root must remain authoritative; the older `web/` proof-of-concept is not the deployment source. Full operational-series access requires a separate server-only, SELECT-only Neon credential.
+
+## Geographic and identity revision (18 October 2026)
+
+The previous white-cross logo was removed because it could be mistaken for
+Finnish-government affiliation. The live app uses an original abstract
+network-node header mark and map-derived favicon.
+
+The country shapes in `src/lib/atlas-geography.ts` are sourced from
+[Natural Earth admin-0 country boundaries](https://www.naturalearthdata.com/about/terms-of-use/)
+(public-domain geographic boundaries, resolution 1:110m), then cropped and
+simplified. Sweden, Norway, Russia, Estonia, Finland and the surrounding Baltic
+context are represented geographically. Åland is indicated with an approximate
+point marker because 1:110m linework is too coarse for full archipelago detail.
+This is **not** a high-resolution official boundary survey.
+
+The homepage network overlay, social thumbnail and favicon are decorative
+illustrations based on that geometry. Decorative node positions and connecting
+lines are not georeferenced electrical substations, actual power lines or
+grid-planning estimates. Precise cartographic and engineering representations
+would require a higher-resolution coastline and authoritative transmission
+geometry, separate from the present public-data MVP.
+
+The website's `/opengraph-image` route renders a branded PNG dynamically
+using the same sourced shapes; no model-invented country outline is used.
