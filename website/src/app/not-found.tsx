@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function NotFound(){return <section className="page-hero"><div className="wrap"><p className="eyebrow">404 · Unknown route</p><h1>This evidence page <em>does not exist.</em></h1><p className="lede">Nothing can be inferred from a missing page. Return to the research overview or API reference.</p><div className="action-row"><Link href="/" className="button">Return to overview</Link><Link href="/api" className="button secondary">Browse API endpoints</Link></div></div></section>;}
