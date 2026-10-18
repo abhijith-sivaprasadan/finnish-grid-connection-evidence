@@ -38,9 +38,14 @@ npm run build
 npm run typecheck
 ~~~
 
-When `DATABASE_READ_URL` is missing or invalid, pages show clear
-availability warnings rather than fake data; API routes return safe
-HTTP 503 errors. The secret is only available on the server.
+When `DATABASE_READ_URL` is absent, the homepage and connection-capacity
+endpoints display a **clearly labelled compilation** of the 5 points and 18
+indicative values captured in `data/manual/` on 17 October 2026. The public
+snapshot is not operator-reconfirmed, not live, and excludes operational
+series. The `/api/v1/health` route correctly remains HTTP 503 in this mode.
+When a read URL is configured but invalid or the database fails, queries return
+safe HTTP 503 errors instead of silently falling back to historical values.
+Never set a privileged database credential. The secret is server-side only.
 
 ## No-cost deployment option
 
@@ -59,9 +64,12 @@ Never expose the DB URL as `NEXT_PUBLIC_*`. Do not use `neondb_owner`,
 `NEON_API_KEY`, writer DB credentials or provider API tokens in the
 web deployment. Python GitHub Actions remain the sole data collector.
 
-This is currently **source code and CI only**, not an already deployed
-Vercel site. Vercel account connection, secret configuration and a real
-production API + browser smoke check still require separate setup.
+Deployment: **https://finnish-grid-atlas.vercel.app** on Vercel (project
+`finnish-grid-atlas`). The first production deploy was made from source files
+because the Vercel account lacks a GitHub Login Connection. Automatic Git
+releases require connecting GitHub within Vercel. A dedicated Neon reader
+credential still needs to be configured in the Vercel project environment.
+Until then, public connection observations come from the labelled Git snapshot.
 
 ## Robustness
 
