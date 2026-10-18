@@ -328,3 +328,6 @@ code { border-radius: 3px; background: #e8f1fb; padding: 2px 5px; color: #0d407c
   .button,.directory-row,.point-card { transition: none; }
   .button:hover,.point-card:hover { transform: none; }
 }
+
+.results-actions { display: flex; justify-content: flex-end; margin: -8px 0 18px; }
+.results-actions .button { min-height: 42px; font-size: 11px; }
