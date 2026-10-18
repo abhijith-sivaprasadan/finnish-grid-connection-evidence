@@ -1,0 +1,35 @@
+import { response } from "@/lib/http";
+export async function GET() {
+  const q = (name:string,desc:string) => ({name,in:"query",required:false,description:desc,schema:{type:"string"}});
+  const paging=[
+    {name:"limit",in:"query",schema:{type:"integer",minimum:1,maximum:500},required:false},
+    {name:"offset",in:"query",schema:{type:"integer",minimum:0,maximum:100000},required:false}
+  ];
+  const success={description:"Source-backed JSON; see limitations and pagination in response."};
+  const errors={400:{description:"Invalid filter"},503:{description:"Evidence database unavailable"}};
+  return response({
+    openapi:"3.1.0",info:{title:"Finnish Grid Atlas Read-only API",version:"1.0.0",
+      description:"Public read-only research evidence. Indicative source transcriptions are NOT operator-verified headroom. No additive capacity or network-studies claim."},
+    servers:[{url:"/"}],
+    paths:{
+      "/api/v1/overview":{get:{summary:"Evidence counts and freshness",responses:{200:success,503:errors[503]}}},
+      "/api/v1/health":{get:{summary:"Database availability",responses:{200:success,503:errors[503]}}},
+      "/api/v1/points":{get:{summary:"Connection points",parameters:paging,responses:{200:success,...errors}}},
+      "/api/v1/points/{id}":{get:{summary:"One named point",parameters:[{name:"id",in:"path",required:true,schema:{type:"string"}}],responses:{200:success,404:{description:"Unknown point"},503:errors[503]}}},
+      "/api/v1/capacity":{get:{summary:"Published indicative estimates; no interpolation",
+        parameters:[...paging,q("direction","production or consumption"),
+          q("point_id","One supported connection point ID"),q("year","Published effective year")],
+        responses:{200:success,...errors}}},
+      "/api/v1/coverage":{get:{summary:"Compiled snapshot coverage: missing does not mean zero",
+        parameters:[q("year","An optional year, default the three explicitly compared source years")],
+        responses:{200:success,...errors}}},
+      "/api/v1/operations":{get:{summary:"Latest revisions of national operational intervals",
+        parameters:[...paging,q("source","fingrid or entsoe"),q("dataset_id","124, 74 or A65"),
+          q("from","ISO timestamp with timezone; maximum 31-day window"),
+          q("to","ISO timestamp with timezone")],
+        responses:{200:success,...errors}}}
+    },
+    components:{schemas:{Error:{type:"object",properties:{error:{type:"object",
+      properties:{code:{type:"string"},message:{type:"string"}}}}}}},
+  });
+}
