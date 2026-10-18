@@ -1,6 +1,11 @@
 name: Public Finnish Grid Atlas monitor
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/site-monitor.yml"
+      - "website/scripts/check-public-site.mjs"
   schedule:
     # Monitor public read-only endpoints daily; no provider API keys used.
     - cron: "41 8 * * *"
