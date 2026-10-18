@@ -19,9 +19,12 @@ is explicitly enabled. **Neon production bootstrapped successfully on 18 October
 created the cloud tables and read back **5 connection points and 18 indicative
 source-transcribed capacity observations**. There are **0 cloud national
 operational records** so far; source API refresh remains opt-in and disabled.
-The public Streamlit app is **not yet deployed** and no public URL is claimed.
-The separate SELECT-only database role and Streamlit secrets still require
-owner setup. See [Free hosting setup and cost controls](docs/FREE_HOSTING.md).
+**Hosted app URL:** [Finnish Grid Atlas](https://finnish-grid-atlas.streamlit.app/).
+The account owner confirmed the Streamlit deployment and database connection
+on 18 October 2026. The Neon bootstrap had imported 5 points and 18 source-
+transcribed capacity observations; real operational data import and independent
+Grid Scope value verification remain pending. The site may sleep on the free
+hosting tier. See [Free hosting setup and cost controls](docs/FREE_HOSTING.md).
 
 **Current status:** the capacity-data path runs end to end with **18 source-transcribed
 indicative observations at five 400 kV points**, captured on **17 October 2026**.

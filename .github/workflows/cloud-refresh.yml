@@ -29,9 +29,10 @@ concurrency:
 
 jobs:
   refresh:
-    # An account owner must explicitly opt in to enable real-source fetching
-    # and public mirror updates. Default: SKIPPED, $0 infrastructure usage.
-    if: github.ref == 'refs/heads/main' && vars.ENABLE_PUBLIC_REFRESH == 'true'
+    # A manual Run workflow click authorizes a single fetch. The separately
+    # enabled scheduled job requires ENABLE_PUBLIC_REFRESH=true. Publishing
+    # the workflow cannot silently start recurring ingestion.
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.ENABLE_PUBLIC_REFRESH == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
