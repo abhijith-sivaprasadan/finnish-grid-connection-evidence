@@ -64,12 +64,17 @@ Never expose the DB URL as `NEXT_PUBLIC_*`. Do not use `neondb_owner`,
 `NEON_API_KEY`, writer DB credentials or provider API tokens in the
 web deployment. Python GitHub Actions remain the sole data collector.
 
-Deployment: **https://finnish-grid-atlas.vercel.app** on Vercel (project
-`finnish-grid-atlas`). Production releases are currently uploaded from source files
-because the Vercel account lacks a GitHub Login Connection. Automatic Git
-releases require connecting GitHub within Vercel. A dedicated Neon reader
-credential still needs to be configured in the Vercel project environment.
-Until then, public connection observations come from the labelled Git snapshot.
+Deployment: **https://finnish-grid-atlas.vercel.app** on Vercel. Live Neon
+read connectivity was verified on **18 October 2026**, using a Sensitive,
+Production-scoped `DATABASE_READ_URL` for the restricted reader. The public
+API returned 5 connection points, 18 source-transcribed capacity records,
+and 288 historical national operational intervals; Fingrid 124, Fingrid 74,
+and ENTSO-E A65 each returned 96 intervals. These are persisted, historical
+measurements, not a claim of real-time feeds or verified substation headroom.
+
+Production source builds are still manually uploaded because Vercel lacks a
+GitHub Login Connection. Automatic Git-based releases require linking the
+existing repository in Vercel with root directory `website`.
 
 ## Robustness
 
@@ -114,9 +119,9 @@ automatic silent fallback to the compiled historical source snapshot.
 
 A public-monitor workflow checks production pages and the API once daily
 without provider or database secrets: `node website/scripts/check-public-site.mjs`.
-By default it accepts an **explicitly declared snapshot** and allows the
-database health route to return 503, without claiming live connectivity.
-Once the live integration and scheduled ingestion are verified, set GitHub
-Actions repository variable `EXPECT_LIVE_DB=true`; the monitor then requires
-Neon mode, nonempty observations, and operational interval freshness. See
+The scheduled production workflow now requires a connected Neon database,
+valid source-linked operational rows for all three feeds and recent timestamps
+within the configured `MAX_OPERATIONAL_AGE_HOURS` (default 168). Standalone
+local execution without `EXPECT_LIVE_DB=true` still supports an explicitly
+declared historical snapshot. This monitor does not itself ingest new records. See
 [the production runbook](../docs/SITE_OPERATIONS.md).

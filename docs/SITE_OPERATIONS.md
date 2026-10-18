@@ -10,12 +10,12 @@ GitHub Actions, and current Vercel project configuration (not a deployment guess
 - REST endpoints: `/api/v1/overview`, `/points`, `/capacity`, `/coverage`, `/operations`, `/health`, and `/api/openapi.json`.
 - Production routes publicly served. The static capacity fallback is explicit.
 - 5 public connection points, 18 transcribed indicative observations, 12 absent combinations in the compiled 2026/2030/2035 matrix. **None of the 18 have a completed independent source-value audit.**
-- GitHub repository records a Neon production bootstrap and one persistent import of 288 operational records; this does not prove that Vercel can read them.
+- **Verified 18 October 2026:** Sensitive, production-only `DATABASE_READ_URL` exists in Vercel; the deployed health route returns HTTP 200 with connected store; the overview reports `data_mode:neon`, 5 points, 18 unverified capacity transcriptions, and 288 operational rows. Successful read connectivity is not an audit of PostgreSQL grants or Fingrid source values.
 - Public monitor checks deployed pages daily. It cannot use secrets and is not a substitute for independent grid verification.
 
-## P0: Connect the restricted Neon database reader to Vercel
+## Completed: Connect the restricted Neon database reader to Vercel
 
-Observed blocker: Vercel project `finnish-grid-atlas` had **no environment variables** when checked on 18 October 2026. Public `/api/v1/health` returned HTTP 503 and `/api/v1/overview` reported `data_mode:"compiled_snapshot"` and null latest operational interval.
+Completed 18 October 2026; all three operational data feeds have returned nonempty, source-linked rows. The instructions below are retained for rotation and recovery.
 
 1. In **Neon**, open the existing project/branch `production`. Prefer the existing
    `neondb` database and the previously provisioned SELECT-only role
@@ -62,15 +62,7 @@ edit of the original October 17 2026 source snapshot.
   repository variable `ENABLE_PUBLIC_REFRESH=true`. Leave that setting off
   until a **manual** complete-day run is rechecked for completeness and source
   consistency; setting it on makes real daily API requests.
-- A separate `.github/workflows/site-monitor.yml` runs every day, querying
-  public endpoints without private credentials. By default it validates the
-  snapshot-versus-live mode honestly but does **not** assert Neon is connected.
-- After confirming the reader + working operational persistence, set
-  GitHub Actions repository variable `EXPECT_LIVE_DB=true`. This makes
-  the monitor require Neon mode, nonempty operations, and an interval not older
-  than `MAX_OPERATIONAL_AGE_HOURS` (default 168 hours). GitHub Actions
-  will mark runs failed when those constraints fail; repository notification
-  delivery depends on GitHub account settings.
+- The scheduled `.github/workflows/site-monitor.yml` checks the public site daily with **no secrets**. Since production Neon was verified, the scheduled job now requires a connected database, nonempty stored observations and valid, nonstale operational rows from Fingrid 124, Fingrid 74 and ENTSO-E A65. Source URLs, units and timestamps are checked. Default freshness ceiling is `MAX_OPERATIONAL_AGE_HOURS=168`; the GitHub repository variable can tune that ceiling. A failing run should trigger workflow notifications according to the owner's GitHub preferences. This does **not** perform source ingestion.
 - Test one intentional invalid-filter HTTP 400 and one real source link in each
   direction. Do not claim a 200 website health response validates the physical
   transmission system.
