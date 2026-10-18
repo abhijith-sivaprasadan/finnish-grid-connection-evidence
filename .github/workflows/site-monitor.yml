@@ -1,0 +1,30 @@
+name: Public Finnish Grid Atlas monitor
+on:
+  workflow_dispatch:
+  schedule:
+    # Monitor public read-only endpoints daily; no provider API keys used.
+    - cron: "41 8 * * *"
+permissions:
+  contents: read
+concurrency:
+  group: finnish-grid-atlas-public-monitor
+  cancel-in-progress: true
+jobs:
+  public-monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      ATLAS_PUBLIC_URL: https://finnish-grid-atlas.vercel.app
+      # The monitor can run in snapshot mode without Neon. Set this to 'true'
+      # only AFTER verifying the production reader and completed source import.
+      EXPECT_LIVE_DB: ${{ vars.EXPECT_LIVE_DB || 'false' }}
+      MAX_OPERATIONAL_AGE_HOURS: ${{ vars.MAX_OPERATIONAL_AGE_HOURS || '168' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check public routes, source mode and freshness
+        run: node website/scripts/check-public-site.mjs
