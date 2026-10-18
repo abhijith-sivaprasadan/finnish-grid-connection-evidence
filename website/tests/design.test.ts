@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 
 const read = (path:string) => readFileSync(path, "utf8");
 
-test("Finnish-flag blue and modern sans identity replace Kerala2040 visual treatment", () => {
+test("Blue independent atlas and modern sans identity replace Kerala2040 visual treatment", () => {
   const css = read("src/app/globals.css");
   assert.match(css, /--blue:\s*#003580/i);
   assert.match(css, /--surface:\s*#ffffff/i);
@@ -21,9 +21,9 @@ test("original research homepage and schematic distinguish concept from live top
   assert.match(home, /Grid evidence/);
   assert.match(home, /NetworkVisual/);
   assert.match(home, /Public snapshot mode/);
-  assert.match(network, /NOT geographic coordinates, transmission topology, or available capacity/);
-  assert.match(network, /not a true map|not a grid map|does not represent actual grid geography or topology/i);
-  assert.match(layout, /Independent research platform/);
+  assert.match(network, /Natural Earth boundaries/);
+  assert.match(network, /NOT transmission topology or actual substations/);\n  assert.doesNotMatch(layout, /brand-cross|footer-cross/);\n  assert.match(read("src/app/opengraph-image.tsx"), /atlasRegions/);
+  assert.match(layout, /Independent research platform/);\n  assert.match(read("src/lib/atlas-geography.ts"), /Natural Earth/);
   assert.match(layout, /Not affiliated with a transmission system operator/);
 });
 
