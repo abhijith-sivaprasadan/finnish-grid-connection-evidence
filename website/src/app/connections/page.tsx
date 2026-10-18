@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { capacities, coverage, points } from "@/lib/repository";
 import { BadInput } from "@/lib/params";
+import Link from "next/link";
 export const dynamic="force-dynamic";
 export const metadata:Metadata={title:"Connection outlook"};
 type SP=Promise<Record<string,string|string[]|undefined>>;
@@ -50,7 +51,8 @@ export default async function Connections({searchParams}:{searchParams:SP}){
       <div><strong>{stats.coverage.needs_reconciliation}</strong><span>Records needing source reconciliation</span></div>
     </div>}
     <p className="source-note">An empty table cell means the selected snapshot has no recorded value—not that the operator reports zero megawatts. Connection points and years cannot be summed or interpolated.</p>
-    <div className="section-intro table-heading"><p className="eyebrow">Source records</p><h2>Numbers with their caveats attached.</h2></div>
+    <div className="section-intro table-heading"><p className="eyebrow">Source records</p><h2>Figures, with the original context.</h2><p>Filtered {data?.pagination.total ?? "—"} records. Each row retains a source link and capture timestamp.</p></div>
+    {data&&<p className="results-actions"><Link href={"/api/v1/capacity?" + q.toString()} className="button secondary">Open filtered API JSON ↗</Link></p>}
     {data&&<div className="table-wrap"><table><thead><tr><th>Substation</th><th>Direction</th><th>Year</th><th>Indicative value</th><th>Source capture (UTC)</th><th>Evidence</th></tr></thead>
     <tbody>{data.data.map(o=><tr key={o.observation_id}><td><strong>{o.name}</strong></td><td>{o.direction}</td><td>{o.effective_year??"—"}</td>
       <td className="value-cell">{o.capacity_value} {o.capacity_unit}</td><td>{new Date(o.source_observed_at).toISOString().slice(0,16).replace("T"," ")}</td>
