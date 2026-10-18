@@ -79,13 +79,13 @@ export function DashboardShell({children,status}:{children:React.ReactNode;statu
     </div>
   </aside>
   {menu&&<button className="shell-mobile-backdrop" type="button" aria-label="Close menu" onClick={()=>setMenu(false)}/>}
-  <aside className={"shell-mobile-sidebar"+(menu?" open":"")} aria-label="Mobile workspace navigation">
+  {menu&&<aside id="mobile-atlas-nav" className="shell-mobile-sidebar open" aria-label="Mobile workspace navigation">
     <div className="shell-mobile-header"><span>EXPLORE ATLAS</span><button type="button" onClick={()=>setMenu(false)} aria-label="Close navigation">×</button></div><Navigation close={()=>setMenu(false)}/>
-  </aside>
+  </aside>}
   <div className="shell-main">
     <header className="shell-topbar">
       <div className="shell-topbar-left">
-        <button className="shell-menu-button" type="button" aria-label="Open navigation" onClick={()=>setMenu(true)}>☰</button>
+        <button className="shell-menu-button" type="button" aria-label="Open navigation" aria-controls="mobile-atlas-nav" aria-expanded={menu} onClick={()=>setMenu(true)}>☰</button>
         <span className="shell-breadcrumb-root">ATLAS</span><span className="shell-breadcrumb-slash">/</span>
         <strong>{current?.label??"Research workspace"}</strong>
       </div>
