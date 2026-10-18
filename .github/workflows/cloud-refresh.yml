@@ -36,7 +36,7 @@ jobs:
   refresh:
     # A one-time push to main validates the next UTC day, then this trigger
     # is removed. Scheduled refresh remains gated by ENABLE_PUBLIC_REFRESH.
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || vars.ENABLE_PUBLIC_REFRESH == 'true')
+    if: github.ref == 'refs/heads/main' && ((github.event_name == 'workflow_dispatch' || vars.ENABLE_PUBLIC_REFRESH == 'true') || github.event_name == 'push')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
