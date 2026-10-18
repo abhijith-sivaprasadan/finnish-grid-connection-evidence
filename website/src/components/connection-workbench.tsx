@@ -6,8 +6,9 @@ import { YEARS } from "@/lib/workbench-shared";
 
 type Slot = {point:Point; year:number; direction:"consumption"|"production"; value:Capacity|null};
 const order:["production","consumption"]=["production","consumption"];
-export function ConnectionWorkbench({points,observations}:{points:Point[];observations:Capacity[]}) {
+export function ConnectionWorkbench({points,observations,initialPointId}:{points:Point[];observations:Capacity[];initialPointId?:string}) {
   const [year,setYear]=useState<number>(2026);
+  const [search,setSearch]=useState(points.find(p=>p.connection_point_id===initialPointId)?.name.replace(" 400 kV","")??"");
   const [direction,setDirection]=useState<"both"|"production"|"consumption">("both");
   const [selected,setSelected]=useState<Slot|null>(null);
   const [sort,setSort]=useState<"name"|"observed">("name");
@@ -27,7 +28,8 @@ export function ConnectionWorkbench({points,observations}:{points:Point[];observ
     a.name.localeCompare(b.name):
     observations.filter(o=>o.connection_point_id===b.connection_point_id).length-
     observations.filter(o=>o.connection_point_id===a.connection_point_id).length||a.name.localeCompare(b.name)),[points,observations,sort]);
-  const bars=ordered.map(p=>({
+  const filtered=ordered.filter(p=>p.name.toLocaleLowerCase().includes(search.toLocaleLowerCase().trim()));
+  const bars=filtered.map(p=>({
     name:p.name.replace(" 400 kV",""),
     production:lookup(p,"production",year)?.capacity_value??null,
     consumption:lookup(p,"consumption",year)?.capacity_value??null
@@ -41,6 +43,9 @@ export function ConnectionWorkbench({points,observations}:{points:Point[];observ
       <a className="button secondary" href="/api/v1/export/recheck">Download independent audit worksheet ↓</a>
     </div>
     <div className="wb-controls">
+      <label className="wb-search-label">Find a point
+        <input type="search" value={search} onChange={e=>{setSearch(e.target.value);setSelected(null);}} placeholder="Search substation name…" aria-label="Filter substations by name"/>
+      </label>
       <label>Matrix view
         <select value={direction} onChange={e=>{setDirection(e.target.value as typeof direction);setSelected(null);}}>
           <option value="both">Both directions</option><option value="production">Production only</option><option value="consumption">Consumption only</option>
@@ -53,10 +58,11 @@ export function ConnectionWorkbench({points,observations}:{points:Point[];observ
       </label>
       <div className="wb-key"><span className="wb-key-dot" />Source-transcribed MW <span className="wb-key-blank" />Unrecorded</div>
     </div>
+    <div className="matrix-count">{filtered.length} of {points.length} selected substations <span>· Cell selection reveals its recorded evidence</span></div>
     <div className="matrix-scroll"><table className="capacity-matrix">
       <thead><tr><th scope="col">Fingrid 400 kV point</th>
       {fields.map(f=><th key={f.year+f.direction} scope="col">{f.year}<small>{f.direction}</small></th>)}</tr></thead>
-      <tbody>{ordered.map(p=><tr key={p.connection_point_id}><th scope="row">{p.name.replace(" 400 kV","")}<small>400 kV · {p.operator}</small></th>
+      <tbody>{filtered.map(p=><tr key={p.connection_point_id}><th scope="row">{p.name.replace(" 400 kV","")}<small>400 kV · {p.operator}</small></th>
         {fields.map(({year:y,direction:d})=>{
           const key=p.connection_point_id+y+d;
           const matches=byKey.get([p.connection_point_id,d,y].join("|"))||[];
@@ -71,6 +77,7 @@ export function ConnectionWorkbench({points,observations}:{points:Point[];observ
           </td>;
         })}</tr>)}</tbody>
     </table></div>
+    {filtered.length===0&&<p className="notice">No matching substations. Clear the search to restore the original sample.</p>}
     <p className="chart-caption">The 2026, 2030 and 2035 columns are discrete published effective years. Do not interpolate across years or add point values. Multiple observations for one intersection require reconciliation.</p>
     {selected&&<div className="evidence-drawer" role="region" aria-label="Selected evidence details">
       <div className="wb-heading">
