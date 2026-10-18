@@ -1,7 +1,7 @@
 name: Next.js website and REST API checks
 on:
   push:
-    paths: ["web/**", ".github/workflows/web-ci.yml"]
+    paths: ["web/**", "website/**", ".github/workflows/web-ci.yml"]
   pull_request:
     paths: ["web/**", ".github/workflows/web-ci.yml"]
 permissions:
@@ -21,3 +21,21 @@ jobs:
       - run: npm run lint
       - run: npm run test
       - run: npm run build
+
+  website:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build
+      - run: bash scripts/smoke.sh
