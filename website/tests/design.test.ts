@@ -37,7 +37,7 @@ test("original research brand uses a conceptual grid, not a map or a flag", () =
 test("navigable route and source links survive visual migration", () => {
   const layout = read("src/app/layout.tsx");
   const connections = read("src/app/connections/page.tsx");
-  for (const path of ["/connections", "/operations", "/method", "/api"]) assert.ok(layout.includes(path), path);
+  for (const path of ["/connections", "/operations", "/quality", "/method", "/api"]) assert.ok(layout.includes(path), path);
   assert.match(connections, /Open filtered API JSON/);
   assert.match(connections, /Unknown|not imply zero capacity|not independently/i);
 });

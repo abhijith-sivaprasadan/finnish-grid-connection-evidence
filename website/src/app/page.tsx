@@ -99,10 +99,10 @@ export default async function Home() {
       <div className="section-topline"><p className="eyebrow">RESEARCH BY DESIGN</p><span className="section-index">03 / 03</span></div>
       <div className="conclusion-band">
         <div><span className="conclusion-kicker">TRANSPARENT BY DEFAULT</span>
-          <h2>A useful atlas knows<br />the limits of its map.</h2></div>
+          <h2>A useful atlas knows<br />the limits of its evidence.</h2></div>
         <div className="conclusion-side">
           <p>Numbers are conditional. Sources have capture dates. Missing entries are unknown. We never add substation estimates together or pass national load figures off as available megawatts.</p>
-          <div className="action-row"><Link href="/method" className="button light">Understand the methodology ↗</Link><Link href="/api" className="button ghost">Explore the API →</Link></div>
+          <div className="action-row"><Link href="/quality" className="button light">Inspect source quality ↗</Link><Link href="/method" className="button ghost">Understand the methodology →</Link></div>
         </div>
       </div>
     </div></section>

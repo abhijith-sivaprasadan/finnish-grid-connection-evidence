@@ -328,3 +328,75 @@ code { border-radius: 3px; background: #e8f1fb; padding: 2px 5px; color: #0d407c
 
 .results-actions { display: flex; justify-content: flex-end; margin: -8px 0 18px; }
 .results-actions .button { min-height: 42px; font-size: 11px; }
+
+
+/* Evidence workbenches: Finnish Grid Atlas' own analytical design system */
+.workbench { margin: 34px 0 42px; padding: clamp(18px,3vw,32px); border: 1px solid #d4e3f4; background:#fff; border-radius:18px; box-shadow:0 12px 32px rgba(8,47,95,.045); min-width:0; }
+.wb-heading,.wb-chart-title {display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap}
+.wb-heading h2 {font-size:clamp(25px,3vw,38px); margin:6px 0 10px;max-width:720px}
+.wb-heading h3,.wb-chart-title h3 {font-size:clamp(18px,2vw,25px);margin:5px 0 10px;}
+.wb-heading p:not(.eyebrow){margin:0 0 15px;max-width:770px;line-height:1.75;color:#5b7290;font-size:13px}
+.wb-heading > .button {align-self:center;white-space:normal}
+.wb-controls,.wb-topnav,.wb-period {display:flex;gap:15px;flex-wrap:wrap;justify-content:space-between;align-items:end;margin:16px 0 20px}
+.wb-controls label,.wb-chart-title label{display:flex;flex-direction:column;gap:7px;color:#335f8a;font-weight:800;font-size:11px}
+.wb-controls select,.wb-chart-title select {border:1px solid #ccdbed;background:#f7fbff;border-radius:9px;padding:11px 12px;color:#0a366c;font:600 12px var(--body);}
+.wb-key,.wb-pill {color:#607c9c;font-size:11px;font-weight:700}
+.wb-key-dot,.wb-key-blank {display:inline-block;height:12px;width:12px;border:1px solid #abc9eb;border-radius:3px;margin:0 6px 0 9px;vertical-align:middle;background:#d9ebff}
+.wb-key-blank {background:#f1f5f9}
+.matrix-scroll {overflow:auto; max-width:100%; border:1px solid #dce8f5;border-radius:13px}
+.capacity-matrix {width:100%;border-collapse:separate;border-spacing:0;min-width:840px}
+.capacity-matrix thead th {background:#f0f6ff;color:#1d4d81;white-space:nowrap;position:sticky;top:0}
+.capacity-matrix th {font-size:12px;text-align:left}
+.capacity-matrix th:first-child{position:sticky;left:0;background:#f6faff;z-index:1;min-width:165px}
+.capacity-matrix thead th:first-child {z-index:2;background:#e7f2ff}
+.capacity-matrix th small,.capacity-matrix thead th small {display:block;text-transform:capitalize;font-size:10px;font-weight:600;color:#6985a2;margin-top:5px}
+.capacity-matrix td {padding:7px;border-bottom:1px solid #e7edf4;text-align:center}
+.matrix-cell {display:flex;min-width:83px;min-height:59px;width:100%;justify-content:center;align-items:center;gap:3px;flex-direction:column;border:1px solid transparent;border-radius:8px;cursor:pointer;font:700 14px var(--display);background:#f0f5fa;color:#7890a9}
+.matrix-cell.recorded {background:#e2f0ff;color:#064b9e;border-color:#c4e0ff}
+.matrix-cell.ambiguous {background:#fff4dc;color:#8a5b1b}
+.matrix-cell strong {font-size:16px}
+.matrix-cell small {font:600 10px var(--body)}
+.matrix-cell:hover,.matrix-cell:focus-visible {outline:2px solid #247bd2;outline-offset:1px}
+.evidence-drawer {margin-top:17px;padding:24px;background:#f4f9ff;border:1px solid #bdd9fa;border-radius:13px}
+.evidence-drawer p {font-size:13px;color:#375a7c;line-height:1.7}
+.evidence-meta {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:17px}
+.evidence-meta span,.evidence-meta a {display:flex;gap:8px;flex-direction:column;background:#fff;padding:15px;border:1px solid #dceaf8;border-radius:9px;font-size:12px;min-width:0;overflow-wrap:anywhere}
+.evidence-meta b {font-size:10px;text-transform:uppercase;color:#5b7794}
+.evidence-meta a {color:#0559b1;font-weight:700;text-decoration:none}
+.text-close {background:transparent;border:none;cursor:pointer;color:#0559b1;font-weight:700}
+.small-note {font-size:11px!important}
+.wb-chart-row {padding:24px 0;border-top:1px solid #dfebf8;margin-top:21px}
+.wb-chart {width:100%;min-width:0;margin-top:14px;}
+.audit-summary,.wb-summary-row {display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:12px;margin:23px 0 0;padding:17px 20px;background:#f0f6fe;border:1px solid #d5e5f7;border-radius:12px;font-size:12px;color:#3a5e83}
+.audit-summary strong {font-size:14px;color:#0c4179}
+.audit-summary a,.wb-summary-row a {font-weight:800;color:#075cbb;text-decoration:none}
+.wb-range {display:flex;flex-wrap:wrap;gap:8px}
+.wb-range a {padding:10px 16px;border-radius:8px;border:1px solid #c9def3;text-decoration:none;color:#1c568e;font-weight:800;font-size:12px}
+.wb-range a.active {background:#074b98;color:#fff;border-color:#074b98}
+.wb-period {background:#f2f8ff;padding:17px 20px;border:1px solid #d8e7f7;border-radius:12px}
+.wb-period strong {font-size:13px;color:#064d97}
+.wb-period span {font-size:11px;color:#68819c}
+.wb-series-meta {display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:#6b7f98;font-size:11px;margin:8px 0}
+.wb-series-meta a {color:#075cbb;text-decoration:none;font-weight:700}
+.quality-strip {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:26px 0;border:1px solid #dce8f5;border-radius:12px;overflow:hidden}
+.quality-strip>div {padding:20px;display:flex;flex-direction:column;gap:7px;border-right:1px solid #dce8f5}
+.quality-strip>div:last-child {border-right:0}
+.quality-strip strong {font:800 31px/1 var(--display);color:#064f9e}
+.quality-strip span {font-size:11px;color:#637e99;line-height:1.4}
+.heatmap-wrap {display:grid;grid-template-columns:125px minmax(0,1fr);gap:16px;width:100%;overflow:auto;padding:18px 0}
+.heatmap-labels {display:flex;flex-direction:column;justify-content:space-around;gap:11px;padding-top:24px;font-size:11px;font-weight:800;color:#486b90}
+.heatmap-labels span {min-height:24px;display:flex;align-items:center}
+.heatmap-body{min-width:570px;display:flex;flex-direction:column;gap:11px}
+.heatmap-dates,.heatmap-row {display:grid;grid-template-columns:repeat(30,minmax(14px,1fr));gap:3px}
+.heatmap-dates span {text-align:center;font-size:9px;color:#6d85a0;white-space:nowrap}
+.heatmap-cell {padding:0;height:24px;min-width:13px;border-radius:4px;border:1px solid #d5e0ec;background:#f3f6f9;cursor:pointer}
+.heatmap-cell.complete {background:#156cba;border-color:#156cba}
+.heatmap-cell.partial {background:#efb951;border-color:#dba43a}
+.heatmap-cell:hover,.heatmap-cell:focus-visible {outline:2px solid #003580;outline-offset:2px}
+.heatmap-legend {display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:11px;color:#577593;margin:5px 0 18px}
+.heatmap-legend span{display:flex;align-items:center;gap:7px}
+.heatmap-legend i{width:13px;height:13px;border-radius:3px;display:inline-block}
+.legend-complete{background:#156cba}.legend-partial{background:#efb951}.legend-empty{background:#f3f6f9;border:1px solid #d5e0ec}
+.audit-section {margin-top:55px;padding-top:30px;border-top:1px solid #dce8f5}
+@media(max-width:780px){.evidence-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.wb-controls{justify-content:flex-start}.audit-summary{align-items:flex-start}}
+@media(max-width:600px){.evidence-meta,.quality-strip{grid-template-columns:1fr}.quality-strip>div{border-right:0;border-bottom:1px solid #dce8f5}.wb-heading>.button{width:100%}.workbench{padding:16px}.heatmap-wrap{grid-template-columns:110px minmax(0,1fr)}.wb-period{align-items:flex-start;flex-direction:column}}
