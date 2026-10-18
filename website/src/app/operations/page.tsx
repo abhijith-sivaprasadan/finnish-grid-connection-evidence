@@ -42,7 +42,7 @@ export default async function Operations({searchParams}:{searchParams:SP}){
         <td><a target="_blank" rel="noreferrer" href={r.source_url}>View source ↗</a></td></tr>)}</tbody></table></div>
         <p className="footnote">Showing up to 80 table rows and 500 chart intervals for performance. For paginated records and other date windows use the <a href="/api">REST API</a>.</p>
       </> : <p className="notice">No source observations found in the most recent 14-day window. No synthetic or filler data are displayed.</p>}
-   </>:<p role="alert" className="notice warn">The read-only source database is unavailable. Please retry later.</p>}
+   </>:<p role="alert" className="notice warn">National operations are not available from the public capacity snapshot. The read-only Neon evidence store must be configured before time-series measurements can be shown.</p>}
    <div className="limit-box"><span className="kicker">Data-use boundary</span><p>
      Fingrid Open Data and ENTSO-E are national/bidding-zone context sources; none
      of their totals can validate physical connection capacity at an individual Fingrid substation.</p></div>
