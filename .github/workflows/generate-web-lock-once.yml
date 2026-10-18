@@ -19,6 +19,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      # Updated security baseline: Next 15.5.28 and React 19.2.9.
       - name: Generate deterministic dependency lock
         working-directory: website
         run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
