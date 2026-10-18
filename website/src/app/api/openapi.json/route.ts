@@ -23,6 +23,8 @@ export async function GET() {
       "/api/v1/coverage":{get:{summary:"Compiled snapshot coverage: missing does not mean zero",
         parameters:[q("year","An optional year, default the three explicitly compared source years")],
         responses:{200:success,...errors}}},
+      "/api/v1/quality":{get:{summary:"Source-day continuity, distinct intervals and retrieval revision counts; 30-day bounded read",responses:{200:success,503:errors[503]}}},
+      "/api/v1/export/recheck":{get:{summary:"18-row CSV reviewer worksheet; all observations pending independent recheck",responses:{200:{description:"Provenance-preserving CSV download"},503:errors[503]}}},
       "/api/v1/operations":{get:{summary:"Latest revisions of national operational intervals",
         parameters:[...paging,q("source","fingrid or entsoe"),q("dataset_id","124, 74 or A65"),
           q("from","ISO timestamp with timezone; maximum 31-day window"),

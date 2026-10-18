@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { capacities, coverage, points } from "@/lib/repository";
 import { BadInput } from "@/lib/params";
 import Link from "next/link";
+import { ConnectionWorkbench } from "@/components/connection-workbench";
+import type { Capacity } from "@/lib/types";
 export const dynamic="force-dynamic";
 export const metadata:Metadata={title:"Connection outlook"};
 type SP=Promise<Record<string,string|string[]|undefined>>;
@@ -17,9 +19,10 @@ export default async function Connections({searchParams}:{searchParams:SP}){
   let data:Awaited<ReturnType<typeof capacities>>|null=null;
   let stats:Awaited<ReturnType<typeof coverage>>|null=null;
   let catalog:Awaited<ReturnType<typeof points>>["data"]=[];
+  let allObservations:Capacity[]=[];
   try {
-    const [d,s,p]=await Promise.all([capacities(q),coverage(),points(new URLSearchParams("limit=100"))]);
-    data=d;stats=s;catalog=p.data;
+    const [d,s,p,all]=await Promise.all([capacities(q),coverage(),points(new URLSearchParams("limit=100")),capacities(new URLSearchParams("limit=200"))]);
+    data=d;stats=s;catalog=p.data;allObservations=all.data;
   } catch(error) {
     fault=error instanceof BadInput ? "A query filter is invalid; use the form below." :
       "The read-only database is temporarily unavailable. No values have been substituted.";
@@ -30,6 +33,8 @@ export default async function Connections({searchParams}:{searchParams:SP}){
     Fingrid Grid Scope was recorded as publishing for this small sample. Not a feasibility determination.</p>
   </div></section>
   <section className="section compact"><div className="wrap">
+    {catalog.length>0&&<ConnectionWorkbench points={catalog} observations={allObservations}/>}
+    <div className="section-intro table-heading" style={{marginTop:48}}><p className="eyebrow">RAW EVIDENCE LEDGER</p><h2>Filter individual source records.</h2><p>Keep every observation traceable to its published source and original capture time.</p></div>
     <form method="get" action="/connections" className="filters" aria-label="Capacity filters">
       <label>Substation<select name="point_id" defaultValue={typeof inputs.point_id==="string"?inputs.point_id:""}>
         <option value="">All five points</option>

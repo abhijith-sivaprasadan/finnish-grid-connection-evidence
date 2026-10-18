@@ -19,6 +19,7 @@ const navigation = [
   { href: "/", label: "Overview" },
   { href: "/connections", label: "Connection outlook" },
   { href: "/operations", label: "System data" },
+  { href: "/quality", label: "Data quality" },
   { href: "/method", label: "Methodology" },
   { href: "/api", label: "API" },
 ];
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <strong>EXPLORE</strong>
               <Link href="/connections">Connection outlook</Link>
               <Link href="/operations">National operations</Link>
+              <Link href="/quality">Data quality & audit</Link>
               <Link href="/method">Research methodology</Link>
               <Link href="/api">Developer API</Link>
             </div>

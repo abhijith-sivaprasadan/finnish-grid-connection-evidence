@@ -1,9 +1,16 @@
 # Independently recheck the 18 Grid Scope observations
 
-**Status as of 17 October 2026: independent numerical recheck NOT performed.**
+**Status as of 18 October 2026: independent numerical recheck NOT performed.**
 This is a source-audit protocol and a prepared worksheet, not a verification
 certificate. The shipped numbers remain *source-transcribed published
 indicative estimates* (see [capture log](CAPTURE_LOG.md)).
+
+A new [18 October source-access audit](GRID_SCOPE_AUDIT_ATTEMPT_2026_10_18.md)
+confirmed the official operator's scope and disclaimer but could not reliably
+retrieve the interactive point-detail values. The 18 source numbers are still
+pending. The Next.js [Data Quality page](https://finnish-grid-atlas.vercel.app/quality#audit)
+now offers an 18-row reviewer worksheet directly from the read-only source
+evidence database.
 
 ## Why the extra check matters
 
