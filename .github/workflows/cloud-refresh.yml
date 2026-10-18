@@ -1,4 +1,4 @@
-name: Hosted Finland evidence refresh (opt-in, free tier)
+name: Hosted Finland evidence refresh (daily, free-tier guarded)
 
 on:
   workflow_dispatch:
@@ -16,11 +16,6 @@ on:
           - "1"
           - "3"
           - "7"
-  push:
-    # One-shot verification when this modified workflow is merged into main.
-    # Remove this trigger before enabling the recurring schedule.
-    branches: [main]
-    paths: [".github/workflows/cloud-refresh.yml"]
   schedule:
     # Once daily. Avoid high-frequency jobs and Neon free-tier usage.
     - cron: "17 7 * * *"
@@ -34,9 +29,11 @@ concurrency:
 
 jobs:
   refresh:
-    # A one-time push to main validates the next UTC day, then this trigger
-    # is removed. Scheduled refresh remains gated by ENABLE_PUBLIC_REFRESH.
-    if: github.ref == 'refs/heads/main' && ((github.event_name == 'workflow_dispatch' || vars.ENABLE_PUBLIC_REFRESH == 'true') || github.event_name == 'push')
+    # Daily refresh approved after the 2026-10-16 complete-day trial passed
+    # (288 new rows, all three streams, verified via production Neon readback).
+    # Repository variable ENABLE_PUBLIC_REFRESH=false is an immediate kill switch.
+    # Manual dispatch stays available regardless of the variable.
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && vars.ENABLE_PUBLIC_REFRESH != 'false'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -46,9 +43,8 @@ jobs:
       NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
       NEON_BRANCH_NAME: ${{ vars.NEON_BRANCH_NAME || 'production' }}
       NEON_DATABASE_NAME: ${{ vars.NEON_DATABASE_NAME || '' }}
-      # Only the one-shot push probes 2026-10-16; normal manual/scheduled
-      # runs retain the existing conservative three-day publication lag.
-      TARGET_DAY: ${{ github.event_name == 'push' && '2026-10-16' || inputs.day }}
+      # Scheduled runs keep the conservative three-day publication lag.
+      TARGET_DAY: ${{ inputs.day }}
       BACKFILL: ${{ inputs.backfill_days || '1' }}
     steps:
       - uses: actions/checkout@v4

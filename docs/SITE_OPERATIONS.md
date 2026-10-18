@@ -57,11 +57,23 @@ edit of the original October 17 2026 source snapshot.
 
 ## P1: Live ingestion and freshness
 
-- The repository has `.github/workflows/cloud-refresh.yml`; it supports
-  authenticated source-to-Neon persistence. Its daily schedule is guarded by
-  repository variable `ENABLE_PUBLIC_REFRESH=true`. Leave that setting off
-  until a **manual** complete-day run is rechecked for completeness and source
-  consistency; setting it on makes real daily API requests.
+- **Daily source ingestion approved and enabled 18 October 2026.**
+  The one-shot trial for 2026-10-16 passed 96 continuous intervals each from
+  Fingrid 124, Fingrid 74 and ENTSO-E A65; inserted 288 new observations
+  atomically into Neon. Public production readback verified **576** total
+  operational rows, latest UTC interval ending 2026-10-17 00:00.
+  The original 18 indicative Grid Scope transcriptions remain unverified.
+- `.github/workflows/cloud-refresh.yml` now runs at **07:17 UTC daily** with
+  a conservative **three-day publication lag** and one completed UTC day per
+  run. It remains confined to `main` and standard runners; upstream API
+  credentials and the database writer are restricted to private Actions.
+  There is no unguarded push-to-ingest trigger.
+- **Emergency stop:** set GitHub Actions repository variable
+  `ENABLE_PUBLIC_REFRESH=false` (exact lowercase string), or disable the
+  workflow from GitHub Actions. Setting it to `true` or leaving it unset
+  permits approved scheduled runs. Manual workflow dispatch remains available
+  while scheduled runs are disabled. To avoid the next run, stop it before
+  07:17 UTC. A daily successful collection is not real-time telemetry.
 - The scheduled `.github/workflows/site-monitor.yml` checks the public site daily with **no secrets**. Since production Neon was verified, the scheduled job now requires a connected database, nonempty stored observations and valid, nonstale operational rows from Fingrid 124, Fingrid 74 and ENTSO-E A65. Source URLs, units and timestamps are checked. Default freshness ceiling is `MAX_OPERATIONAL_AGE_HOURS=168`; the GitHub repository variable can tune that ceiling. A failing run should trigger workflow notifications according to the owner's GitHub preferences. This does **not** perform source ingestion.
 - Test one intentional invalid-filter HTTP 400 and one real source link in each
   direction. Do not claim a 200 website health response validates the physical
