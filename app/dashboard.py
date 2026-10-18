@@ -14,12 +14,13 @@ from src.views import published, filter_capacity, coverage_matrix
 from src.availability import comparison_grid, coverage_summary
 from src.audit_capacity import audit_rows
 from src.cloud_store import engine_for, read_snapshot
+from app.atlas_present import (
+    PALETTE, render_masthead, render_evidence_explainer,
+    render_section, render_footer, style_plot,
+)
 
-st.set_page_config(page_title="Finnish Grid Evidence", page_icon="⚡", layout="wide")
-st.caption("FINLAND  /  CONNECTION EVIDENCE")
-st.title("Where capacity is published.")
-st.markdown("Explore Fingrid's indicative connection estimates, with a traceable source for every observation.")
-st.info("Personal portfolio proof of concept. Published estimates are not connection rights, reservations, or operator confirmation. Screening is not a validated grid planning study.")
+st.set_page_config(page_title="Finnish Grid Atlas · Connection Evidence", page_icon="⚡", layout="wide")
+render_masthead(st)
 
 # Hosted deployment must be explicitly enabled; otherwise keep the existing
 # local SQLite behavior. Public visitors NEVER receive database/API credentials.
@@ -82,6 +83,11 @@ else:
         quality = report(conn)
         audit_checklist = audit_rows(conn)
 
+render_section(
+    st, "Current evidence base", "A transparent starting point, not a connection offer.",
+    "These counters describe what's stored in this evidence collection. Published "
+    "Grid Scope figures remain indicative and independently unverified.",
+)
 a, b, c = st.columns(3)
 a.metric("Connection points", len(points))
 b.metric("Published observations", len(capacity))
@@ -95,10 +101,22 @@ else:
     if lag > 120:
         st.warning("National operational data is older than five days. It must not be presented as live current measurements.")
 
+render_evidence_explainer(st)
+render_section(
+    st, "Explore the evidence", "Follow the source, then the uncertainty.",
+    "Filter the recorded capacity estimates, compare their published years, "
+    "and inspect national operating conditions without conflating the datasets.",
+    anchor="atlas-workbench",
+)
 estimate_tab, comparison_tab, context_tab, project_tab, evidence_tab = st.tabs(
     ["Published estimates", "Power availability outlook", "National context", "Planned projects", "Evidence & quality"])
 
 with estimate_tab:
+    render_section(st, "Grid Scope · observations",
+                   "Point-by-point published estimates.",
+                   "Source-defined connection directions and publication years. "
+                   "Every numeric marker corresponds to a recorded estimate, "
+                   "not a continuous availability forecast.")
     if capacity.empty:
         st.info("No published observations loaded. Run python -m src.cli import-manual from the repo root.")
     else:
@@ -114,7 +132,7 @@ with estimate_tab:
             st.caption("Snapshot = capture time. Publication date stays blank unless the operator states it.")
             st.button("Reload database", help="Reruns the app to read the current database.")
         selected_frame = filter_capacity(capacity, selected, direction, years, snapshot, source)
-        st.subheader(f"{direction.capitalize()} connection estimates")
+        st.markdown(f"### {direction.capitalize()} connection estimates")
         st.caption("Discrete published values only. Estimates at different points are not additive; connecting one project can affect others. No interpolation between years.")
         chart = selected_frame.dropna(subset=["capacity_value", "effective_year"])
         if chart.empty:
@@ -125,11 +143,10 @@ with estimate_tab:
                 fig = px.scatter(group, x="effective_year", y="capacity_value", color="name",
                     hover_data=["direction", "source_observed_at", "capacity_status", "validity_notes", "source_url"],
                     labels={"effective_year": "Published effective year", "capacity_value": f"Indicative capacity ({unit})", "name": "Point"},
-                    color_discrete_sequence=["#087F8C", "#F49D37", "#6F5EAD", "#207A52", "#B54658"])
+                    color_discrete_sequence=PALETTE)
                 fig.update_traces(marker={"size": 12, "line": {"width": 1, "color": "white"}})
                 fig.update_xaxes(tickmode="array", tickvals=years, tickformat="d")
-                fig.update_layout(height=400, margin={"t": 10, "l": 10, "r": 10, "b": 10}, legend={"orientation": "h", "y": -0.2})
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(style_plot(fig, height=420), width="stretch")
         pairs = [(p, labels[p]) for p in selected]
         matrix = coverage_matrix(selected_frame, pairs, direction, years)
         if not matrix.empty:
@@ -147,8 +164,13 @@ with estimate_tab:
             st.dataframe(current, hide_index=True)
 
 with comparison_tab:
-    st.subheader("Power Availability Curve · indicative source evidence")
-    st.write("Compare Fingrid Grid Scope's source-transcribed connection-capacity estimates by point, direction and published year. Each marker is a discrete source observation, not a continuous forecast or confirmed connection offer.")
+    render_section(
+        st, "Comparison · conditionally published years",
+        "Capacity evidence in discrete time.",
+        "Compare Fingrid Grid Scope's source-transcribed estimates by point, "
+        "connection direction and published year. Each marker is a discrete "
+        "source observation, not a forecast or confirmed offer.",
+    )
     st.caption("Only one capture session is compared at a time. Missing entries are not zero MW, and points must not be summed. Forecast years are conditional.")
     if capacity.empty or points.empty:
         st.info("No published capacity source observations available. Run the manual source importer first.")
@@ -191,11 +213,10 @@ with comparison_tab:
                         category_orders={"Published year": [str(y) for y in outlook_years]},
                         hover_data=["Observation ID", "Source capture UTC", "Source URL"],
                         labels={"Value": f"Published indicative capacity ({unit})"},
+                        color_discrete_sequence=PALETTE,
                     )
                     fig.update_traces(marker={"size": 11, "line": {"width": 1, "color": "white"}})
-                    fig.update_layout(height=375, margin={"t": 15, "l": 10, "r": 10, "b": 10},
-                                      legend={"orientation": "h", "y": -0.25})
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(style_plot(fig, height=385), width="stretch")
                     st.caption(f"{outlook_direction.capitalize()} · {unit}. Markers are not connected or interpolated.")
             with st.expander("Point-year evidence and source links"):
                 st.dataframe(outlook, hide_index=True, width="stretch",
@@ -215,8 +236,13 @@ with comparison_tab:
         st.caption("To recheck values, independently reopen the source viewer, confirm the direction/year/unit and record a new check time plus evidence. A changed live value need not mean the historical transcription was wrong.")
 
 with context_tab:
-    st.subheader("Finland-wide operational context")
-    st.write("These are national or bidding-zone time series. They are not measurements at the selected substations and are not estimates of connection capacity.")
+    render_section(
+        st, "Finland-wide context · authenticated sources",
+        "What the national system was doing.",
+        "Fingrid and ENTSO-E report national/bidding-zone operational series. "
+        "These measurements are not observations at the selected substations "
+        "and cannot be converted into available connection headroom.",
+    )
     if context.empty:
         st.info("Fingrid and ENTSO-E load authenticated API smoke checks have passed, but this local database has no retained operational rows. Configure both secrets privately and run the persistent importer in docs/LIVE_CONTEXT_IMPORT.md.")
         st.code("python -m src.sync_context --day 2026-10-14")
@@ -235,19 +261,35 @@ with context_tab:
         for field, value in zip(["source", "dataset_id", "metric", "unit"], chosen):
             frame = frame[frame[field] == value]
         st.caption(f"Latest retrieval: {frame.retrieved_at.max()} · UTC intervals · latest retrieved revision per interval")
-        st.plotly_chart(px.scatter(frame, x="timestamp_utc", y="value", labels={"value": chosen[3]},
-                                  hover_data=["interval_end_utc", "source_url"]), width="stretch")
+        fig = px.scatter(
+            frame, x="timestamp_utc", y="value",
+            labels={"value": chosen[3], "timestamp_utc": "Source interval (UTC)"},
+            hover_data=["interval_end_utc", "source_url"],
+            color_discrete_sequence=[PALETTE[0]],
+        )
+        fig.update_traces(marker={"size": 7, "opacity": 0.85})
+        st.plotly_chart(style_plot(fig, height=435, legend=False), width="stretch")
         st.dataframe(frame, hide_index=True)
 
 with project_tab:
-    st.subheader("Planned reinforcements")
-    st.write("A planned commissioning date is uncertain and does not establish a guaranteed MW release.")
+    render_section(
+        st, "Evidence not yet compiled",
+        "Planned reinforcements require their own sources.",
+        "A planned commissioning date is uncertain and cannot establish "
+        "a guaranteed MW release. This is a documentation gap, not a value of zero.",
+    )
     if projects.empty:
         st.info("No project-to-substation relationships have been source-verified in this release.")
     else:
         st.dataframe(projects, hide_index=True)
 
 with evidence_tab:
+    render_section(
+        st, "Provenance · verification · method",
+        "What each record can, and cannot, establish.",
+        "Separate published source estimates, observed operations, scenario "
+        "outputs and documentary operator confirmations.",
+    )
     st.subheader("Evidence categories")
     st.dataframe(pd.DataFrame([
         ["Published indicative", "Operator-published estimate", "Default capacity view"],
@@ -271,3 +313,5 @@ with evidence_tab:
         else:
             st.warning("Assumption-dependent model output; never a published connection estimate.")
             st.dataframe(scenarios, hide_index=True)
+
+render_footer(st)

@@ -1,5 +1,15 @@
 # Finnish Grid Connection Evidence Screener
 
+**Public Streamlit Atlas:** [finnish-grid-atlas.streamlit.app](https://finnish-grid-atlas.streamlit.app/) ·
+[Editorial design specification](docs/ATLAS_DESIGN.md)
+
+The presentation adopts the editorial visual language of
+[Kerala2040](https://kerala2040.github.io/) (paper/forest palette, serif
+headings, restrained gold/rust accents), while keeping all capacity evidence,
+source-qualified caveats, real API time series and CSV exports separate.
+It is a visual redesign, not new validation of Grid Scope operator estimates.
+
+
 [![Evidence checks](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml)
 
 A personal portfolio proof of concept for screening **published Finnish grid
