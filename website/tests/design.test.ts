@@ -22,8 +22,11 @@ test("original research homepage and schematic distinguish concept from live top
   assert.match(home, /NetworkVisual/);
   assert.match(home, /Public snapshot mode/);
   assert.match(network, /Natural Earth boundaries/);
-  assert.match(network, /NOT transmission topology or actual substations/);\n  assert.doesNotMatch(layout, /brand-cross|footer-cross/);\n  assert.match(read("src/app/opengraph-image.tsx"), /atlasRegions/);
-  assert.match(layout, /Independent research platform/);\n  assert.match(read("src/lib/atlas-geography.ts"), /Natural Earth/);
+  assert.match(network, /NOT transmission topology or actual substations/); 
+  assert.doesNotMatch(layout, /brand-cross|footer-cross/); 
+  assert.match(read("src/app/opengraph-image.tsx"), /atlasRegions/);
+  assert.match(layout, /Independent research platform/); 
+  assert.match(read("src/lib/atlas-geography.ts"), /Natural Earth/);
   assert.match(layout, /Not affiliated with a transmission system operator/);
 });
 
