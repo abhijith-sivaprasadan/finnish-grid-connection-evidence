@@ -1,12 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="260 82 315 495">
-<title>Finnish Grid Atlas — geographic network illustration</title>
-<defs><linearGradient id="sea" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#093a7c"/><stop offset="1" stop-color="#071e43"/></linearGradient><linearGradient id="land" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#d7eaff"/></linearGradient></defs>
-<rect x="250" y="70" width="360" height="535" rx="34" fill="url(#sea)"/>
-<path d="M529.5,135.8L472.1,156.4L481.8,127.1L452.5,110.4L417.0,124.6L405.8,155.3L384.0,173.8L359.4,163.7L329.5,165.8L304.1,143.6L290.4,154.7L276.2,156.4L272.9,184.0L229.8,177.3L223.7,200.6L201.8,200.5L163.8,276.7L128.3,335.6L136.6,349.9L128.6,366.5L106.0,365.8L91.1,405.1L92.5,460.7L107.1,481.9L99.6,531.2L80.5,559.9L69.8,583.0L69.8,333.2L155.8,209.0L257.0,124.9L307.2,106.6L344.8,108.8L379.6,74.1L421.3,76.0L462.4,67.6L533.9,98.3L504.5,109.5L529.5,135.8Z" fill="#184b8e" opacity=".7" stroke="#71baf6" stroke-width="1.4"/>
-<path d="M80.5,559.9L99.6,531.2L107.1,481.9L92.5,460.7L91.1,405.1L106.0,365.8L128.6,366.5L136.6,349.9L128.3,335.6L163.8,276.7L201.8,200.5L223.7,200.6L229.8,177.3L272.9,184.0L276.2,156.4L290.4,154.7L356.6,203.7L357.2,268.2L364.9,284.5L325.6,296.4L303.4,325.6L307.0,351.3L226.4,421.0L209.8,480.0L226.1,509.5L247.9,532.7L226.9,579.9L203.1,589.7L194.4,660.1L181.4,699.3L153.7,695.3L140.7,728.5L114.3,730.4L107.0,690.8L87.9,643.3L70.5,584.0L80.5,559.9Z" fill="#16477f" opacity=".7" stroke="#71baf6" stroke-width="1.4"/>
-<path d="M543.9,796.1L545.3,788.5L536.0,780.9L521.7,753.4L526.6,742.1L524.3,722.5L502.0,712.5L490.0,717.5L486.7,707.1L462.6,696.6L455.3,671.9L453.3,651.5L442.3,641.9L452.1,628.6L445.3,589.5L461.6,565.4L458.2,558.1L484.2,535.0L460.2,515.0L530.4,437.4L539.0,416.0L505.2,387.3L514.5,360.0L493.9,328.9L509.3,292.9L482.7,245.3L503.8,213.7L468.8,185.8L472.1,156.4L529.5,135.8L553.1,121.2L590.7,146.5L653.3,156.5L710.2,187.7L710.2,280.6L696.1,284.8L594.0,253.0L577.2,258.3L614.5,289.0L617.4,351.2L664.7,374.9L667.7,354.6L653.9,336.6L668.5,320.7L710.2,340.4L710.2,800.0L552.2,800.0L543.9,796.1ZM296.1,774.3L267.9,769.6L273.1,751.2L304.7,737.6L338.7,751.6L336.3,763.0L338.1,773.7L296.1,774.3Z" fill="#163c71" opacity=".55" stroke="#71baf6" stroke-width="1.4"/>
-<path d="M468.8,185.8L503.8,213.7L482.7,245.3L509.3,292.9L493.9,328.9L514.5,360.0L505.2,387.3L539.0,416.0L530.4,437.4L460.2,515.0L418.7,518.4L341.3,542.6L328.0,519.7L305.9,506.0L311.0,464.7L299.9,426.9L310.8,402.5L331.5,376.2L383.8,330.8L399.1,322.0L396.7,304.3L364.9,284.5L357.2,268.2L356.6,203.7L290.4,154.7L304.1,143.6L329.5,165.8L359.4,163.7L384.0,173.8L405.8,155.3L417.0,124.6L452.5,110.4L481.8,127.1L472.1,156.4L468.8,185.8Z" fill="url(#land)" stroke="#f6fbff" stroke-width="4" stroke-linejoin="round"/>
-<g stroke="#1169c1" stroke-width="5.5" stroke-linecap="round" fill="none"><path d="M433 170 388 242 414 312 356 366 401 426 365 487 M433 170 414 312 M388 242 356 366 M414 312 401 426 M414 312 456 458 M401 426 456 458"/></g>
-<g fill="#0e5ab0" stroke="#dceeff" stroke-width="4"><circle cx="433" cy="170" r="9"/><circle cx="388" cy="242" r="9"/><circle cx="414" cy="312" r="11"/><circle cx="356" cy="366" r="9"/><circle cx="401" cy="426" r="12"/><circle cx="365" cy="487" r="10"/><circle cx="456" cy="458" r="9"/></g>
-<circle cx="274" cy="529" r="5" fill="#e5f3ff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title id="title">Finnish Grid Atlas — independent network evidence</title>
+<defs>
+  <linearGradient id="shell" x1="0" x2="1" y1="1" y2="0"><stop stop-color="#061e4b"/><stop offset="1" stop-color="#006deb"/></linearGradient>
+  <linearGradient id="line" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#81ddff"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#1098ff"/></linearGradient>
+</defs>
+<rect x="3" y="3" width="122" height="122" rx="27" fill="url(#shell)"/>
+<circle cx="64" cy="64" r="49" fill="none" stroke="#76c6ff" stroke-opacity=".31" stroke-width="1.5" stroke-dasharray="17 9"/>
+<path d="M64 24 97 44 97 84 64 104 31 84 31 44Z" fill="none" stroke="#8fd8ff" stroke-opacity=".7" stroke-width="3" stroke-linejoin="round"/>
+<path d="M64 64V24 M64 64 97 44 M64 64 97 84 M64 64 64 104 M64 64 31 84 M64 64 31 44" fill="none" stroke="url(#line)" stroke-width="5" stroke-linecap="round"/>
+<path d="M31 44 64 24 97 44 M31 84 64 104 97 84" fill="none" stroke="#b9eaff" stroke-width="1.5" stroke-opacity=".65"/>
+<g fill="#fff" stroke="#0b82f5" stroke-width="5">
+  <circle cx="64" cy="24" r="7"/><circle cx="97" cy="44" r="7"/>
+  <circle cx="97" cy="84" r="7"/><circle cx="64" cy="104" r="7"/>
+  <circle cx="31" cy="84" r="7"/><circle cx="31" cy="44" r="7"/>
+</g>
+<circle cx="64" cy="64" r="15" fill="#fff" stroke="#80caff" stroke-width="2"/>
+<circle cx="64" cy="64" r="9" fill="#0066d9"/>
 </svg>
