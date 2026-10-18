@@ -92,10 +92,9 @@ proof-of-concept out of production.
 - Dutch congestion ingestion and illustrative CIGRE pandapower feeder require
   separate data terms, validation and representation caveats.
 
-## No false-official visual symbols
+## Non-official branding
 
-The cross/flag mark was removed. New branding uses an independent network
-symbol, with public-domain, simplified Natural Earth regional geography.
-The geographic background is real low-resolution boundary geometry; the grid
-lines/nodes in the graphic are **illustrative**. Never market them as Fingrid's
-actual circuit routes or connection-point coordinates.
+The independent six-node network symbol, home illustration and Open Graph
+thumbnail now contain **no geographic or flag imagery**. They depict an
+abstract research pipeline and should never be described as a real
+transmission-grid map, actual substations or operator topology.

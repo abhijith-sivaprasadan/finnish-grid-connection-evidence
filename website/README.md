@@ -6,7 +6,7 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
-- `/` — independent blue research homepage with sourced regional cartography
+- `/` — independent blue research homepage with conceptual evidence network
 - `/connections` — filtered point-specific indicative estimates
 - `/operations` — national operational chart and source intervals
 - `/method` — scientific method and validation limits
@@ -81,30 +81,42 @@ Until then, public connection observations come from the labelled Git snapshot.
 - No writes, user accounts, synthetic numerical observations or API keys.
 - The original Streamlit app stays online as a fallback.
 
-## Website artwork, source integrity and uptime
+## Website artwork and live-DB operations
 
-The flag-like white cross has been removed from the icon and brand mark. The
-favicon, homepage geographic context and dynamically rendered social thumbnail
-are based on **Natural Earth 1:110m simplified country boundaries**, with Sweden,
-Russia, Norway, Estonia, the Baltic and an approximate Åland marker. Geographic
-shapes are not generated or estimated by an image model. The network nodes and
-links overlaid on the map are **decorative**: not actual transmission routes,
-site coordinates, queue allocations or source-provided topology. The icon's
-graphical direction was developed from commissioned concept artwork; the final
-SVG and thumbnail use source-based geography for cartographic correctness.
+Brand assets use a six-node abstract grid icon and a conceptual network visual.
+There are **no national boundaries, country maps, flags or official-looking insignia**
+anywhere in the current website branding. The abstract lines and nodes are **not**
+actual Fingrid transmission topology or locations of substations. The social
+thumbnail is served at `/opengraph-image`.
 
-Run `npm run build` to generate the `/opengraph-image` PNG route. The new
-social thumbnail is accessible on the deployed website and is supplied via
-standard Open Graph metadata, along with the non-official map favicon.
+The public Vercel project is currently accessible, but the production
+environment is NOT connected to Neon until a separate restricted reader
+connection URL is configured. The original Streamlit instance already has
+a read-only Neon connection; Vercel secrets are a different environment.
 
-A dedicated public-monitor workflow checks production pages and the API once
-daily with no private credentials:
-`node website/scripts/check-public-site.mjs`.
-By default the check accepts an **explicitly declared snapshot** and permits
-`/api/v1/health` to be HTTP 503; this is NOT a live-data success claim.
-Only after confirming a working database reader, stored operations and the
-ingestion schedule should the owner set `EXPECT_LIVE_DB=true` in repository
-Actions variables. Then the monitor enforces Neon, operational coverage and
-`MAX_OPERATIONAL_AGE_HOURS` (default 168 h), and fails on broken/old data.
+To complete the live integration, use the existing dedicated Neon
+`grid_dashboard_reader` user on branch `production`, database `neondb`.
+From Vercel Project → Settings → Environment Variables, set
+`DATABASE_READ_URL` as **Sensitive**, scope **Production**, and keep it
+server-only (never `NEXT_PUBLIC_*`). The URI must have a `.neon.tech`
+hostname and `sslmode=require`, and should preferably be pooled.
 
-See [site operations and secure Neon setup](../docs/SITE_OPERATIONS.md).
+**Do not paste the connection string into a chat or GitHub commit**, and do
+not substitute the Neon database owner, backend collector writer, or
+`NEON_API_KEY`. After setting the secret, redeploy production, then require:
+- `/api/v1/health` → 200, database connected.
+- `/api/v1/overview` → `data_mode:"neon"`, nonzero operational rows.
+- `/operations` → nonempty, source-linked observations with UTC timestamps.
+- `/api/v1/operations?source=fingrid&dataset_id=124&limit=1` → one authenticated historical record.
+
+A configured but inaccessible database produces safe HTTP 503; there is no
+automatic silent fallback to the compiled historical source snapshot.
+
+A public-monitor workflow checks production pages and the API once daily
+without provider or database secrets: `node website/scripts/check-public-site.mjs`.
+By default it accepts an **explicitly declared snapshot** and allows the
+database health route to return 503, without claiming live connectivity.
+Once the live integration and scheduled ingestion are verified, set GitHub
+Actions repository variable `EXPECT_LIVE_DB=true`; the monitor then requires
+Neon mode, nonempty observations, and operational interval freshness. See
+[the production runbook](../docs/SITE_OPERATIONS.md).

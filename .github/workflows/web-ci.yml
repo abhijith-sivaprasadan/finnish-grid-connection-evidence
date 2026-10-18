@@ -3,7 +3,7 @@ on:
   push:
     paths: ["web/**", "website/**", ".github/workflows/web-ci.yml"]
   pull_request:
-    paths: ["web/**", ".github/workflows/web-ci.yml"]
+    paths: ["web/**", "website/**", ".github/workflows/web-ci.yml"]
 permissions:
   contents: read
 jobs:

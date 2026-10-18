@@ -3,11 +3,10 @@
 **Public Streamlit Atlas:** [finnish-grid-atlas.streamlit.app](https://finnish-grid-atlas.streamlit.app/) ·
 [Editorial design specification](docs/ATLAS_DESIGN.md)
 
-The presentation adopts the editorial visual language of
-[Kerala2040](https://kerala2040.github.io/) (paper/forest palette, serif
-headings, restrained gold/rust accents), while keeping all capacity evidence,
-source-qualified caveats, real API time series and CSV exports separate.
-It is a visual redesign, not new validation of Grid Scope operator estimates.
+The original Streamlit app and newer Next.js website are distinct views over
+source-qualified evidence. The Next.js site's blue-and-white design uses an
+independent abstract grid/network identity, not an official national flag or a
+geographic map. No presentation changes validate Grid Scope capacity estimates.
 
 
 **New: full-stack website + REST API** — [Next.js site source](website/README.md)
@@ -18,8 +17,9 @@ existing source-evidence PostgreSQL database with the restricted
 `grid_dashboard_reader` role and keeps the Python collector unchanged.
 Node 22 CI runs locked dependency installation, a high-severity dependency
 audit, API regression tests, type checking, a production build and HTTP
-smoke tests. **The Next.js website has not yet been deployed**; it requires
-a personal-use-compatible hosting account and a private read-only URL.
+smoke tests. **The Next.js website is live** at https://finnish-grid-atlas.vercel.app/.
+Its public connection estimates currently use a labelled historical snapshot
+until the separate read-only Neon connection URL is configured in Vercel.
 The existing Streamlit site stays live.
 
 [![Evidence checks](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml)

@@ -14,19 +14,23 @@ test("Blue independent atlas and modern sans identity replace Kerala2040 visual 
   assert.match(css, /prefers-reduced-motion/);
 });
 
-test("original research homepage and schematic distinguish concept from live topology", () => {
+test("original research brand uses a conceptual grid, not a map or a flag", () => {
   const home = read("src/app/page.tsx");
   const network = read("src/components/network-visual.tsx");
+  const icon = read("src/app/icon.svg");
   const layout = read("src/app/layout.tsx");
+  const og = read("src/app/opengraph-image.tsx");
+  const mark = read("src/components/grid-mark.tsx");
   assert.match(home, /Grid evidence/);
   assert.match(home, /NetworkVisual/);
   assert.match(home, /Public snapshot mode/);
-  assert.match(network, /Natural Earth boundaries/);
-  assert.match(network, /NOT transmission topology or actual substations/); 
-  assert.doesNotMatch(layout, /brand-cross|footer-cross/); 
-  assert.match(read("src/app/opengraph-image.tsx"), /atlasRegions/);
-  assert.match(layout, /Independent research platform/); 
-  assert.match(read("src/lib/atlas-geography.ts"), /Natural Earth/);
+  assert.match(network, /NOT a map or electricity-network topology/);
+  assert.match(network, /SOURCES → VALIDATION → SCREENING/);
+  assert.match(icon, /independent network evidence/i);
+  assert.match(mark, /network mark/i);
+  assert.match(og, /ABSTRACT DATA NETWORK/);
+  assert.doesNotMatch(layout + icon + network + og, /atlasRegions|Natural Earth|geographic boundaries|brand-cross|footer-cross|flag-like white cross/i);
+  assert.match(layout, /Independent research platform/);
   assert.match(layout, /Not affiliated with a transmission system operator/);
 });
 
