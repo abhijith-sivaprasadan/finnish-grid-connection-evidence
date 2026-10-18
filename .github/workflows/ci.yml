@@ -48,9 +48,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Install website dependencies
-        run: npm install --no-audit --no-fund
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Install locked website dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Audit production dependency advisories
+        run: npm audit --omit=dev --audit-level=high
       - name: Test API query security and research semantics
         run: npm test
       - name: Verify type safety
