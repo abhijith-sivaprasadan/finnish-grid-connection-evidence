@@ -1,43 +1,66 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+const read=(path:string)=>readFileSync(path,"utf8");
 
-const read = (path:string) => readFileSync(path, "utf8");
-
-test("Blue independent atlas and modern sans identity replace Kerala2040 visual treatment", () => {
-  const css = read("src/app/globals.css");
-  assert.match(css, /--blue:\s*#003580/i);
-  assert.match(css, /--surface:\s*#ffffff/i);
-  assert.match(css, /Manrope/);
-  assert.doesNotMatch(css, /Playfair Display|#f7f2e4|#b18843|#9e4e35/i);
-  assert.match(css, /@media\(max-width:600px\)/);
-  assert.match(css, /prefers-reduced-motion/);
+test("Atlas Control Room has an original non-official research identity",()=>{
+ const css=read("src/app/globals.css");
+ const shell=read("src/components/dashboard-shell.tsx");
+ const icon=read("src/app/icon.svg");
+ const og=read("src/app/opengraph-image.tsx");
+ assert.match(css,/--blue:\s*#003580/i);
+ assert.match(css,/--sidebar:#0a1528/);
+ assert.match(css,/Manrope/);
+ assert.match(css,/@media\(max-width:600px\)/);
+ assert.match(css,/prefers-reduced-motion/);
+ assert.match(shell,/Independent research/);
+ assert.match(shell,/not affiliated with Fingrid or a TSO/);
+ assert.match(icon,/independent network evidence/i);
+ assert.match(og,/ABSTRACT DATA NETWORK/);
+ assert.doesNotMatch(shell+icon+og,/Natural Earth|Finnish flag|national boundary|atlasRegions|flag-like white cross/);
+ assert.doesNotMatch(css,/Playfair Display|#f7f2e4|#b18843|#9e4e35/i);
 });
-
-test("original research brand uses a conceptual grid, not a map or a flag", () => {
-  const home = read("src/app/page.tsx");
-  const network = read("src/components/network-visual.tsx");
-  const icon = read("src/app/icon.svg");
-  const layout = read("src/app/layout.tsx");
-  const og = read("src/app/opengraph-image.tsx");
-  const mark = read("src/components/grid-mark.tsx");
-  assert.match(home, /Grid evidence/);
-  assert.match(home, /NetworkVisual/);
-  assert.match(home, /Public snapshot mode/);
-  assert.match(network, /NOT a map or electricity-network topology/);
-  assert.match(network, /SOURCES → VALIDATION → SCREENING/);
-  assert.match(icon, /independent network evidence/i);
-  assert.match(mark, /network mark/i);
-  assert.match(og, /ABSTRACT DATA NETWORK/);
-  assert.doesNotMatch(layout + icon + network + og, /atlasRegions|Natural Earth|geographic boundaries|brand-cross|footer-cross|flag-like white cross/i);
-  assert.match(layout, /Independent research platform/);
-  assert.match(layout, /Not affiliated with a transmission system operator/);
+test("Shell navigates, supports mobile and keyboard search, and reports status honestly",()=>{
+ const layout=read("src/app/layout.tsx");
+ const shell=read("src/components/dashboard-shell.tsx");
+ assert.match(layout,/DashboardShell/);
+ assert.match(layout,/overview\(\)/);
+ for(const path of ["/connections","/operations","/quality","/method","/api"]) assert.ok(shell.includes(path),path);
+ assert.match(shell,/aria-current/);
+ assert.match(shell,/Skip to main content/);
+ assert.match(shell,/role="dialog"/);
+ assert.match(shell,/event.key.toLowerCase\(\)==="k"/);
+ assert.match(shell,/aria-label="Open navigation"/);
+ assert.match(shell,/Latest historical interval/);
+ assert.match(shell,/compiled_snapshot/);
+ assert.match(shell,/No verified current interval available/);
 });
-
-test("navigable route and source links survive visual migration", () => {
-  const layout = read("src/app/layout.tsx");
-  const connections = read("src/app/connections/page.tsx");
-  for (const path of ["/connections", "/operations", "/quality", "/method", "/api"]) assert.ok(layout.includes(path), path);
-  assert.match(connections, /Open filtered API JSON/);
-  assert.match(connections, /Unknown|not imply zero capacity|not independently/i);
+test("Research overview surfaces trustworthy source counts, trends and audit gaps",()=>{
+ const home=read("src/app/page.tsx");
+ const trends=read("src/components/overview-trends.tsx");
+ const connections=read("src/app/connections/page.tsx");
+ assert.match(home,/Electricity grid/);
+ assert.match(home,/compiled_snapshot/);
+ assert.match(home,/source integrity|source-linked|connection outlooks/i);
+ assert.match(home,/operationalWindow\(latest,1\)/);
+ assert.match(home,/ratio/);
+ assert.match(home,/Numeric rechecks completed/);
+ assert.match(trends,/No stored observations/);
+ assert.match(trends,/historical intervals/i);
+ assert.match(connections,/Open filtered API JSON/);
+ assert.match(connections,/initialPointId/);
+ assert.match(connections,/not imply zero capacity/);
+});
+test("Matrix, quality and operations preserve source links, nulls and interaction",()=>{
+ const matrix=read("src/components/connection-workbench.tsx");
+ const quality=read("src/components/quality-workbench.tsx");
+ const operations=read("src/components/operations-workbench.tsx");
+ assert.match(matrix,/Filter substations by name/);
+ assert.match(matrix,/not recorded|not zero/i);
+ assert.match(matrix,/Independent recheck/);
+ assert.match(quality,/No stored intervals/);
+ assert.match(quality,/Incomplete coverage|Complete day/);
+ assert.match(operations,/finnish-atlas-utc/);
+ assert.match(operations,/Export/);
+ assert.match(operations,/source_url/);
 });

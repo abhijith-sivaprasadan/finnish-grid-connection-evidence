@@ -1,110 +1,89 @@
 import Link from "next/link";
-import { NetworkVisual } from "@/components/network-visual";
-import { overview, points } from "@/lib/repository";
+import { overview, points, coverage } from "@/lib/repository";
+import { operationalWindow } from "@/lib/workbench";
+import { OverviewTrends } from "@/components/overview-trends";
+import type { Operation } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
-
-export default async function Home() {
-  const result = await Promise.allSettled([overview(), points(new URLSearchParams("limit=5"))]);
-  const summary = result[0].status === "fulfilled" ? result[0].value : null;
-  const nodes = result[1].status === "fulfilled" ? result[1].value.data : [];
-  const latest = summary?.newest_operational_interval_utc;
-  const age = latest ? Math.max(0, Math.floor((Date.now() - Date.parse(latest)) / 3600000)) : null;
-
-  return <>
-    <section className="hero">
-      <div className="wrap hero-grid">
-        <div className="hero-copy">
-          <p className="eyebrow"><span className="eyebrow-dash" aria-hidden="true" /> FINLAND'S ELECTRICITY SYSTEM / INDEPENDENT RESEARCH</p>
-          <h1>Grid evidence.<br /><span>Without the guesswork.</span></h1>
-          <p className="lede">A clearer view of Finland's transmission connection outlook and national electricity data. Explore what has actually been published, where the gaps remain and what the numbers <strong>cannot</strong> tell you.</p>
-          <div className="action-row">
-            <Link href="/connections" className="button">Explore connection evidence <span aria-hidden="true">↗</span></Link>
-            <Link href="/method" className="button secondary">How the evidence works <span aria-hidden="true">→</span></Link>
-          </div>
-          <div className="hero-trust" aria-label="Platform characteristics">
-            <span><span className="check-symbol" aria-hidden="true">✓</span> Original source links</span>
-            <span><span className="check-symbol" aria-hidden="true">✓</span> Clearly stated limits</span>
-            <span><span className="check-symbol" aria-hidden="true">✓</span> Public REST API</span>
-          </div>
-        </div>
-        <NetworkVisual />
+export const dynamic="force-dynamic";
+const cleanPoint=(s:string)=>s.replace(/ 400 kV$/,"");
+export default async function Home(){
+ const result=await Promise.allSettled([
+  overview(),points(new URLSearchParams("limit=20")),coverage()
+ ]);
+ const summary=result[0].status==="fulfilled"?result[0].value:null;
+ const nodes=result[1].status==="fulfilled"?result[1].value.data:[];
+ const grid=result[2].status==="fulfilled"?result[2].value:null;
+ const latest=summary?.newest_operational_interval_utc??null;
+ const age=latest?Math.max(0,Math.floor((Date.now()-Date.parse(latest))/3600000)):null;
+ let rows:Operation[]=[];
+ if(latest&&summary?.data_mode==="neon"){
+  try{ rows=(await operationalWindow(latest,1)).data; }catch{ /* No invented chart observations. */ }
+ }
+ const counts=grid?.coverage;
+ const published=counts?.published??null, intersections=counts?.intersections??null;
+ const missing=counts?.missing_in_compiled_capture??null;
+ const ratio=published!==null&&intersections?Math.round(100*published/intersections):null;
+ return <>
+  <section className="dashboard-heading">
+   <div className="dashboard-kicker"><span className="live-signal-dot"/> WORKSPACE OVERVIEW <span className="kicker-divider">/</span> FINLAND · PUBLIC EVIDENCE</div>
+   <div className="dashboard-title-row">
+    <div><h1>Electricity grid, <span>understood.</span></h1><p>One research workspace for connection outlooks, national system history and evidence quality. Explore published observations—and exactly where the evidence stops.</p></div>
+    <div className="dashboard-header-actions">
+     <Link className="button" href="/connections">Explore connections <span aria-hidden="true">↗</span></Link>
+     <Link className="button secondary" href="/quality">View data quality</Link>
+    </div>
+   </div>
+  </section>
+  <section className="dashboard-info-line" aria-label="Data interpretation and current status">
+   <div className="info-main">
+    <span className={"info-status-dot"+(summary?.data_mode==="neon"?" good":"")}/>
+    <div><strong>{summary?.data_mode==="neon"?"Database connected · read-only":summary?.data_mode==="compiled_snapshot"?"Compiled source snapshot":"Evidence store unavailable"}</strong>
+    <span>{latest?"Latest stored historical interval ends "+latest.slice(0,16).replace("T"," ")+" UTC"+(age!==null?" · "+age+" hours old":""):
+      "National operational history unavailable; capacity sample may still be shown"}</span></div>
+   </div>
+   <Link href="/method">Understand the source hierarchy <span aria-hidden="true">→</span></Link>
+  </section>
+  <section className="dashboard-metrics" aria-label="Coverage of current research sample">
+    <div className="dash-metric"><span className="metric-dot blue"/> <p>CONNECTION POINTS</p><strong>{summary?.points??"—"}</strong><small>Selected 400 kV stations</small></div>
+    <div className="dash-metric"><span className="metric-dot cyan"/><p>INDICATIVE RECORDS</p><strong>{summary?.capacity_observations??"—"}</strong><small>Await independent numeric audit</small></div>
+    <div className="dash-metric"><span className="metric-dot violet"/><p>STORED OPERATIONS</p><strong>{summary?.data_mode==="neon"?summary.operational_rows_stored.toLocaleString("en-US"):"—"}</strong><small>Includes retrieval revisions</small></div>
+    <div className="dash-metric"><span className="metric-dot amber"/><p>SOURCE FRESHNESS</p><strong>{age!==null?age>=24?Math.floor(age/24)+"d":age+"h":"—"}</strong><small>{latest?"Since latest historical interval":"No interval timestamp"}</small></div>
+  </section>
+  <div className="dashboard-section-label"><span>ANALYTICAL MODULES</span><span>01 — 03</span></div>
+  <div className="dashboard-primary-grid">
+   <OverviewTrends rows={rows}/>
+   <section className="coverage-panel">
+    <div className="panel-heading"><div><span className="module-tag">GRID SCOPE SAMPLE</span><h2>Evidence coverage</h2><p>Recorded year × direction × point combinations</p></div><Link href="/connections" className="panel-action">Details ↗</Link></div>
+    <div className="coverage-meter-wrap">
+      <div className="coverage-meter" style={{"--coverage":(ratio??0)+"%"} as React.CSSProperties}
+         aria-label={ratio===null?"Coverage unavailable":ratio+" percent of selected sample intersections recorded"}>
+        <span><strong>{ratio===null?"—":ratio+"%"}</strong><small>RECORDING</small></span>
       </div>
-    </section>
-
-    <section className="metrics-section">
-      <div className="wrap">
-        {!summary && <p className="notice warn" role="status">The evidence store could not be read. No invented counts are shown.</p>}
-        {summary?.data_mode === "compiled_snapshot" && <div className="data-status" role="status">
-          <span className="data-status-icon" aria-hidden="true">i</span>
-          <div><strong>Public snapshot mode</strong><span>Connection figures are the source-transcribed 17 October 2026 compilation, not live Fingrid results. Independent numeric recheck is pending. Operational data need the database connection.</span></div>
-          <Link href="/method">About this dataset ↗</Link>
-        </div>}
-        <div className="metrics-heading"><span className="eyebrow">AT A GLANCE</span><span className="metrics-caption">Coverage of the current research sample · not the full Finnish grid</span></div>
-        <div className="data-strip" aria-label="Available evidence counts">
-          <div><span className="metric-icon" aria-hidden="true">01</span><strong>{summary?.points ?? "—"}</strong><span>Named 400 kV connection points</span></div>
-          <div><span className="metric-icon" aria-hidden="true">02</span><strong>{summary?.capacity_observations ?? "—"}</strong><span>Indicative source observations</span></div>
-          <div><span className="metric-icon" aria-hidden="true">03</span><strong>{summary?.data_mode === "compiled_snapshot" ? "—" : summary?.operational_rows_stored ?? "—"}</strong><span>Stored national operational records</span></div>
-          <div><span className="metric-icon" aria-hidden="true">04</span><strong>{age === null ? "—" : age + "h"}</strong><span>Age of latest national interval · UTC</span></div>
-        </div>
-        {age !== null && age > 120 && <p className="notice warn" role="status">Newest operational record is over five days old. National measurements should not be described as live.</p>}
+      <div className="coverage-legend">
+       <div><i className="legend-dot recorded"/><span>Recorded intersections</span><strong>{published??"—"}</strong></div>
+       <div><i className="legend-dot unrecorded"/><span>Not in this capture</span><strong>{missing??"—"}</strong></div>
+       <div><i className="legend-dot unaudited"/><span>Numeric rechecks completed</span><strong>0</strong></div>
       </div>
-    </section>
-
-    <section className="section research-section"><div className="wrap">
-      <div className="section-topline"><p className="eyebrow">EXPLORE THE EVIDENCE</p><span className="section-index">01 / 03</span></div>
-      <div className="section-intro split-heading">
-        <h2>One grid.<br /><span>Different kinds of evidence.</span></h2>
-        <p>Connection estimates and national system measurements answer different questions. We keep them separate—so the interpretation stays useful.</p>
-      </div>
-      <div className="grid-2">
-        <article className="research-card track-card">
-          <div className="track-icon" aria-hidden="true"><span className="line-icon line-icon-nodes" /></div>
-          <span className="kicker">CONNECTION OUTLOOK · GRID SCOPE</span>
-          <h3>Where might new connections be possible?</h3>
-          <p>Browse published, conditional estimates by 400 kV point, production or consumption direction and effective year. Every reported value links to its source.</p>
-          <div className="track-bottom"><span className="pill note">Independent recheck pending</span><Link href="/connections" className="text-link">Explore points <span aria-hidden="true">↗</span></Link></div>
-        </article>
-        <article className="research-card track-card track-card-soft">
-          <div className="track-icon" aria-hidden="true"><span className="line-icon line-icon-chart" /></div>
-          <span className="kicker">SYSTEM DATA · FINGRID + ENTSO-E</span>
-          <h3>How does the national grid operate over time?</h3>
-          <p>Examine timestamped consumption, production and actual-load records, where the connected source store is available. These are not measurements of local connection headroom.</p>
-          <div className="track-bottom"><span className="pill good">National context only</span><Link href="/operations" className="text-link">View system data <span aria-hidden="true">↗</span></Link></div>
-        </article>
-      </div>
-    </div></section>
-
-    <section className="section directory-section"><div className="wrap">
-      <div className="section-topline"><p className="eyebrow">THE POINT INDEX</p><span className="section-index">02 / 03</span></div>
-      <div className="section-intro split-heading">
-        <h2>A focused sample.<br /><span>Every source accounted for.</span></h2>
-        <p>Five named transmission points currently form the published sample. This is an auditable starting point—not an inventory of all substations or their remaining capacity.</p>
-      </div>
-      <div className="point-directory">
-        {nodes.map((n, i) => <Link key={n.connection_point_id}
-          href={"/connections?point_id=" + encodeURIComponent(n.connection_point_id)}
-          className="directory-row">
-          <span className="directory-number">{String(i + 1).padStart(2, "0")}</span>
-          <span className="directory-name">{n.name.replace(" 400 kV", "")}<small>Fingrid · published source sample</small></span>
-          <span className="directory-voltage">{n.voltage_kv ?? "—"} kV</span>
-          <span className="directory-arrow" aria-hidden="true">↗</span>
-        </Link>)}
-      </div>
-      {nodes.length === 0 && <p className="notice">The connection-point catalogue is currently unavailable. No replacement sample is shown.</p>}
-      <p className="directory-foot">Unlisted points and absent year/direction values must not be interpreted as zero capacity. <Link href="/method">Read the limitations →</Link></p>
-    </div></section>
-
-    <section className="section conclusion-section"><div className="wrap">
-      <div className="section-topline"><p className="eyebrow">RESEARCH BY DESIGN</p><span className="section-index">03 / 03</span></div>
-      <div className="conclusion-band">
-        <div><span className="conclusion-kicker">TRANSPARENT BY DEFAULT</span>
-          <h2>A useful atlas knows<br />the limits of its evidence.</h2></div>
-        <div className="conclusion-side">
-          <p>Numbers are conditional. Sources have capture dates. Missing entries are unknown. We never add substation estimates together or pass national load figures off as available megawatts.</p>
-          <div className="action-row"><Link href="/quality" className="button light">Inspect source quality ↗</Link><Link href="/method" className="button ghost">Understand the methodology →</Link></div>
-        </div>
-      </div>
-    </div></section>
-  </>;
+    </div>
+    <div className="panel-footnote">This is <strong>sample recording completeness</strong>, not 60% of Finland's connection capacity. Blank intersections are unknown, not zero.</div>
+    <Link href="/quality#audit" className="coverage-audit-link">Review the 18-row verification backlog <span aria-hidden="true">↗</span></Link>
+   </section>
+  </div>
+  <div className="dashboard-secondary-grid">
+   <section className="point-panel">
+    <div className="panel-heading"><div><span className="module-tag">CONNECTION EVIDENCE</span><h2>Explore the point index</h2><p>Selected Fingrid 400 kV connection points</p></div><Link href="/connections" className="panel-action">Open matrix ↗</Link></div>
+    {nodes.length? <div className="dash-point-list">{nodes.map((point,i)=><Link key={point.connection_point_id} href={"/connections?point_id="+encodeURIComponent(point.connection_point_id)}>
+     <span className="point-index">{String(i+1).padStart(2,"0")}</span><span className="point-label"><strong>{cleanPoint(point.name)}</strong><small>Fingrid · {point.voltage_kv??"?"} kV</small></span><span className="point-forward" aria-hidden="true">↗</span>
+    </Link>)}</div>:<p className="notice warn">No connection-point catalogue currently available.</p>}
+   </section>
+   <section className="audit-panel">
+    <div className="panel-heading"><div><span className="module-tag">EVIDENCE INTEGRITY</span><h2>What still needs work</h2><p>Visible limitations—not hidden assumptions</p></div></div>
+    <div className="audit-step"><span className="audit-step-icon pending">!</span><div><strong>18 indicative numbers</strong><p>Independent Grid Scope value-by-value confirmation is pending.</p></div><Link href="/quality#audit" aria-label="Open source audit">↗</Link></div>
+    <div className="audit-step"><span className="audit-step-icon pass">✓</span><div><strong>National historical records</strong><p>Authenticated observations stay separate from point-specific capacity.</p></div><Link href="/operations" aria-label="Open national operations">↗</Link></div>
+    <div className="audit-step"><span className="audit-step-icon info">i</span><div><strong>Modelled outcomes</strong><p>No operator-confirmed headroom or reconstructed transmission topology.</p></div><Link href="/method" aria-label="Open evidence method">↗</Link></div>
+    <Link href="/quality" className="panel-action audit-panel-footer">Explore quality and provenance <span aria-hidden="true">↗</span></Link>
+   </section>
+  </div>
+  <div className="dashboard-bottom-note"><div><strong>Built for scrutiny, not certainty.</strong><span>Source-linked · missing is not zero · conditional estimates cannot be added.</span></div><Link href="/method">Read the evidence rules <span aria-hidden="true">→</span></Link></div>
+ </>;
 }

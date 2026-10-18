@@ -33,7 +33,7 @@ export default async function Connections({searchParams}:{searchParams:SP}){
     Fingrid Grid Scope was recorded as publishing for this small sample. Not a feasibility determination.</p>
   </div></section>
   <section className="section compact"><div className="wrap">
-    {catalog.length>0&&<ConnectionWorkbench points={catalog} observations={allObservations}/>}
+    {catalog.length>0&&<ConnectionWorkbench points={catalog} observations={allObservations} initialPointId={typeof inputs.point_id==="string"?inputs.point_id:undefined}/>}
     <div className="section-intro table-heading" style={{marginTop:48}}><p className="eyebrow">RAW EVIDENCE LEDGER</p><h2>Filter individual source records.</h2><p>Keep every observation traceable to its published source and original capture time.</p></div>
     <form method="get" action="/connections" className="filters" aria-label="Capacity filters">
       <label>Substation<select name="point_id" defaultValue={typeof inputs.point_id==="string"?inputs.point_id:""}>

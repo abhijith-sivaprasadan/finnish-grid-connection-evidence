@@ -1,78 +1,55 @@
-# Finnish Grid Atlas — visual system
+# Finnish Grid Atlas — Atlas Control Room design system
 
-## Design intent
+Current implementation: October 2026.
 
-An original, technical Finnish-grid research platform with the clarity and confidence of contemporary Finnish digital services. This is **not** a replica of Kerala2040 or an official Finnish agency or grid-operator website.
+## Design objective
 
-Visual research references (structural inspiration only):
-- [Helen](https://www.helen.fi/sv): energy-facing information hierarchy, confident conversion routes and clear cards
-- [Migri](https://migri.fi/etusivu): restrained public-service interface, accessible navigation and explicit information sections
-- [Study in Finland](https://www.studyinfinland.fi/): welcoming white-space and plain-language navigation
-- [Work in Finland](https://www.workinfinland.com/en/): strong sans-serif headlines, clear actions and purposeful sections
+The former editorial homepage is now a functional independent research workspace.
+The interface is intentionally distinct from Kerala2040, Finnish-government
+portals, and Fingrid's official tools. No flags, national map silhouettes,
+official-agency insignia, or implied transmission topology are used.
 
-No borrowed trademarks, brand marks, photographs, protected illustrations or agency-affiliation cues. Design patterns have been substantially reinterpreted for engineering evidence and APIs.
+## Original visual identity
 
-## Identity
-
-- Research blue: `#003580`; white: `#ffffff`
-- Midnight research ink: `#071f43`; readable gray-blue `#506782`
-- Pale blue data surfaces: `#eaf4ff`; border: `#dbe5f0`
-- Manrope headlines and DM Sans body (system-font fallback)
-- Square-ish soft corners (9–18px), compact blue evidence labels and deliberate tabular spacing
-- Independent network-node mark with no flag cross or institutional symbolism
-- Geographic context is based on simplified, traceable Natural Earth 1:110m country boundaries; superimposed network is **decorative**, not real Fingrid topology or source of capacity numbers
+- Deep midnight (#0a1528) navigation; cool research canvas (#f3f6fb).
+- White analytical modules with restrained electric blue, cyan and violet
+  accent colors. Markings distinguish data feeds; not confidence or approval.
+- Manrope for headlines, DM Sans for body text, mono for evidence identifiers.
+- Source status is explicit: Neon connected only after a real read, otherwise
+  compiled snapshot or unavailable. All intervals are historical measurements.
+- Independent six-node abstract network mark, not a geographic network model.
 
 ## Information architecture
 
-Five primary paths: Overview, Connection outlook, System data, Methodology, API.
+1. Overview: latest historical-interval age, five-point sample coverage,
+   raw stored records, three national operational sparklines and audit gaps.
+2. Connections: 5 × 2 × 3 source-evidence matrix with search, direction and
+   year filters, click-to-inspect source, capture time and audit worksheet.
+3. Operations: three UTC-synchronized Fingrid/ENTSO-E time series; complete-day
+   time windows and source-preserving CSV exports.
+4. Data quality: thirty-day completeness heatmap, distinct versus revision
+   counts, and pending independent Grid Scope numeric review.
+5. Methodology and Developer API: explicit limits and read-only endpoints.
 
-Home: compact original identity header → research premise → abstract public-sample schematic → explicit data state → numeric coverage → side-by-side evidence categories → indexed five-point directory → method/REST actions.
+## Navigation and accessibility
 
-Every data view retains original links, UTC timestamps, limits, filtering, availability/error states, and empty-value semantics. Empty Grid Scope intersections remain unknown, never zero. National operating intervals must not be represented as local headroom.
+- Persistent desktop side rail with active-page highlighting.
+- Responsive mobile navigation with close and backdrop actions.
+- Quick page search using Control/Command+K or slash, with keyboard entry.
+- Skip-to-main navigation, visible focus, descriptive chart and table labels,
+  reduced-motion compliance and scrollable dense data views.
+- Missing cells are unknown, not zero; no cross-point capacity summing.
+- No live SCADA status is claimed merely because Neon is reachable.
 
-## Responsive & accessibility checks
+## Checks
 
-- Navigation uses native keyboard-accessible links and mobile `details/summary`
-- Skip-to-main link, visible focus ring, semantic headings, informative alt text for the illustrative network
-- No essential information encoded only by color; labels accompany snapshot and source status
-- Tabular content scrolls at small widths; reduced-motion setting respected
-- 960px and 600px layouts reviewed by stylesheet and verified with route smoke test
-- No JavaScript animation required for core data navigation
+Run npm ci, npm test, npm run typecheck, npm run build, and
+bash scripts/smoke.sh from website/.
 
-## Release checks
+Read-only Neon database credentials remain server-only.
+Source records, source terms and independent review status are not altered
+by this visual release.
 
-Run from `website/`:
-
-```bash
-npm ci
-npm test
-npm run typecheck
-npm run build
-bash scripts/smoke.sh
-```
-
-Keep the source-data tests and no-secret smoke tests as release gates. Vercel `website/` root must remain authoritative; the older `web/` proof-of-concept is not the deployment source. Full operational-series access requires a separate server-only, SELECT-only Neon credential.
-
-## Geographic and identity revision (18 October 2026)
-
-The previous white-cross logo was removed because it could be mistaken for
-Finnish-government affiliation. The live app uses an original abstract
-network-node header mark and map-derived favicon.
-
-The country shapes in `src/lib/atlas-geography.ts` are sourced from
-[Natural Earth admin-0 country boundaries](https://www.naturalearthdata.com/about/terms-of-use/)
-(public-domain geographic boundaries, resolution 1:110m), then cropped and
-simplified. Sweden, Norway, Russia, Estonia, Finland and the surrounding Baltic
-context are represented geographically. Åland is indicated with an approximate
-point marker because 1:110m linework is too coarse for full archipelago detail.
-This is **not** a high-resolution official boundary survey.
-
-The homepage network overlay, social thumbnail and favicon are decorative
-illustrations based on that geometry. Decorative node positions and connecting
-lines are not georeferenced electrical substations, actual power lines or
-grid-planning estimates. Precise cartographic and engineering representations
-would require a higher-resolution coastline and authoritative transmission
-geometry, separate from the present public-data MVP.
-
-The website's `/opengraph-image` route renders a branded PNG dynamically
-using the same sourced shapes; no model-invented country outline is used.
+The old Natural Earth map outline and geographic artwork were retired.
+The current icon and diagrams are intentional, decorative abstract networks;
+they do not claim operator affiliation or georeferenced system topology.
