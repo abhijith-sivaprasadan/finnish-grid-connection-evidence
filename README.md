@@ -10,6 +10,18 @@ source-qualified caveats, real API time series and CSV exports separate.
 It is a visual redesign, not new validation of Grid Scope operator estimates.
 
 
+**New: full-stack website + REST API** — [Next.js site source](website/README.md)
+in `website/` provides separate editorial pages for overview, connections,
+national operations, methods and documented versioned
+[`/api/v1` read-only endpoints](website/src/app/api/v1). It reuses the
+existing source-evidence PostgreSQL database with the restricted
+`grid_dashboard_reader` role and keeps the Python collector unchanged.
+Node 22 CI runs locked dependency installation, a high-severity dependency
+audit, API regression tests, type checking, a production build and HTTP
+smoke tests. **The Next.js website has not yet been deployed**; it requires
+a personal-use-compatible hosting account and a private read-only URL.
+The existing Streamlit site stays live.
+
 [![Evidence checks](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml)
 
 A personal portfolio proof of concept for screening **published Finnish grid
@@ -27,13 +39,14 @@ before the [scheduled refresh workflow](.github/workflows/cloud-refresh.yml)
 is explicitly enabled. **Neon production bootstrapped successfully on 18 October 2026:**
 [one-time GitHub Actions run](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39079398497)
 created the cloud tables and read back **5 connection points and 18 indicative
-source-transcribed capacity observations**. There are **0 cloud national
-operational records** so far; source API refresh remains opt-in and disabled.
+source-transcribed capacity observations**. A later authenticated persistent import stored **288 historical national
+operational records** (Fingrid consumption/production and ENTSO-E load,
+15 October 2026 UTC). Automated scheduled refresh remains opt-in.
 **Hosted app URL:** [Finnish Grid Atlas](https://finnish-grid-atlas.streamlit.app/).
 The account owner confirmed the Streamlit deployment and database connection
 on 18 October 2026. The Neon bootstrap had imported 5 points and 18 source-
-transcribed capacity observations; real operational data import and independent
-Grid Scope value verification remain pending. The site may sleep on the free
+transcribed capacity observations; the initial operational import succeeded, but independent
+Grid Scope value verification remains pending. The site may sleep on the free
 hosting tier. See [Free hosting setup and cost controls](docs/FREE_HOSTING.md).
 
 **Current status:** the capacity-data path runs end to end with **18 source-transcribed
