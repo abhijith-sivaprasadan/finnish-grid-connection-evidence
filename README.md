@@ -11,7 +11,7 @@ It is a visual redesign, not new validation of Grid Scope operator estimates.
 
 
 **New: full-stack website + REST API** — [Next.js site source](website/README.md)
-in `website/` provides separate editorial pages for overview, connections,
+in `website/` provides separate research pages for overview, connections,
 national operations, methods and documented versioned
 [`/api/v1` read-only endpoints](website/src/app/api/v1). It reuses the
 existing source-evidence PostgreSQL database with the restricted
@@ -29,7 +29,7 @@ connection evidence**. It combines a small, source-transcribed Fingrid Grid Scop
 sample, an append-only SQLite evidence store, and a Streamlit dashboard. National
 operational data has its own schema and view; it never becomes substation capacity.
 
-**Free hosted option (not deployed yet):** The Streamlit read-only PostgreSQL
+**Original Streamlit hosted option:** The Streamlit read-only PostgreSQL
 backend and opt-in scheduled collector are implemented. The user linked the
 repository to an existing Neon project; its GitHub integration installed
 `NEON_API_KEY` (secret) and `NEON_PROJECT_ID` (variable). The repository
@@ -49,7 +49,7 @@ transcribed capacity observations; the initial operational import succeeded, but
 Grid Scope value verification remains pending. The site may sleep on the free
 hosting tier. See [Free hosting setup and cost controls](docs/FREE_HOSTING.md).
 
-**Current status:** the capacity-data path runs end to end with **18 source-transcribed
+**October 18 website note:** The production Vercel version is live but has no Neon reader environment variable. See [site operations](docs/SITE_OPERATIONS.md) for current blockers, daily monitoring and source verification. The hosted ingestion history below refers to Neon/Streamlit, not the still-disconnected Vercel build.\n\n**Current status:** the capacity-data path runs end to end with **18 source-transcribed
 indicative observations at five 400 kV points**, captured on **17 October 2026**.
 The original capture log describes same-source transcription checks, **not independent
 reconfirmation of all 18 numeric estimates**. Do not present these as validated
@@ -95,7 +95,7 @@ entitlement.
 | Evidence | This release | Meaning |
 |---|---|---|
 | Published indicative capacity | 18 source-transcribed readings; five points; selected 2026/2030/2035 entries | Reported Fingrid indicative estimates, awaiting independent source cross-check |
-| Operational context | Fingrid 124/74 and ENTSO-E A65 authenticated smoke tests passed; live local database not yet populated | National Finnish load/production, not a substation measurement |
+| Operational context | Fingrid 124/74 and ENTSO-E A65 authenticated smoke tests passed; repo records a 288-row hosted Neon import, but Vercel remains disconnected | National Finnish load/production, not a substation measurement |
 | Operator confirmation | Zero rows | Would require separate documentary evidence; public map values do not qualify |
 | Model scenarios | Separate schema, zero rows | PyPSA/pandapower are optional future studies |
 | Reinforcement projects | Separate schema and CSV template, zero rows | No source-verified project-to-point links in this release |
