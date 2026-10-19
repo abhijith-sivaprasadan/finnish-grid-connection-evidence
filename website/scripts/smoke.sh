@@ -40,11 +40,16 @@ check 200 "/connections"
 grep -q "Download independent audit worksheet" /tmp/grid-smoke-response.json
 check 200 "/api/v1/quality"
 grep -q '"data_mode":"compiled_snapshot"' /tmp/grid-smoke-response.json
+check 200 "/api/v1/source-review"
+grep -q '"screenshot_matches":18' /tmp/grid-smoke-response.json
+grep -q '"exact_tooltips":17' /tmp/grid-smoke-response.json
+grep -q '"explicit_panel_numbers":1' /tmp/grid-smoke-response.json
+grep -q '"physically_validated_connection_capacity":false' /tmp/grid-smoke-response.json
 check 200 "/api/v1/export/recheck"
 grep -q "pending_independent_recheck" /tmp/grid-smoke-response.json
 test "$(grep -c 'pending_independent_recheck' /tmp/grid-smoke-response.json)" = 18
 check 200 "/quality"
-grep -q "18 source observations" /tmp/grid-smoke-response.json
+grep -q "18 original source observations" /tmp/grid-smoke-response.json
 check 200 "/operations?days=2"
 check 503 "/api/v1/health"
 grep -q '"status":"degraded"' /tmp/grid-smoke-response.json
