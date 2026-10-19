@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import official from "@/lib/main-grid-designation.json";
-export const dynamic="force-static";
+export const dynamic="force-dynamic";
 export function GET(req:NextRequest){
  const raw=new URL(req.url).searchParams.get("voltage");
  if(raw!==null&&!["400","220","110"].includes(raw))return NextResponse.json({error:"INVALID_QUERY",message:"voltage must be 400, 220 or 110 kV"},{status:400});
