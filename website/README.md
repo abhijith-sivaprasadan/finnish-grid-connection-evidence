@@ -6,7 +6,12 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/screening` — evidence-qualified screening by demand/year and recorded voltage; never a feasibility conclusion
+- `/api/v1/screening` — read-only screening and source-review evidence; 100 MW 2030 pilot returns two indicative threshold matches and three unknowns
+
 - `/` — independent blue research homepage with conceptual evidence network
+- `/stations` — historical operator-designation archive: 128 source-listed name+voltage rows (printed source total 127); table label 1.1.2020, not current MW or geography
+- `/api/v1/stations` — read-only historical enumeration; optional `voltage` filter 400/220/110; separate from live Neon capacity evidence
 - `/connections` — interactive 5-point × 2-direction × 3-year capacity evidence matrix, discrete comparison bars, individual provenance drawer, filtered raw records and source-audit worksheet
 - `/operations` — three synchronized source-separated charts, 1/2/3/7 observed UTC-day windows anchored to the latest stored interval, provenance-preserving CSV export
 - `/quality` — observed source-day continuity heatmap, distinct intervals versus retrieval revisions, and the original 18-row screenshot-comparison register
@@ -75,9 +80,7 @@ and 288 historical national operational intervals; Fingrid 124, Fingrid 74,
 and ENTSO-E A65 each returned 96 intervals. These are persisted, historical
 measurements, not a claim of real-time feeds or verified substation headroom.
 
-Production source builds are still manually uploaded because Vercel lacks a
-GitHub Login Connection. Automatic Git-based releases require linking the
-existing repository in Vercel with root directory `website`.
+GitHub authentication was connected to Vercel on 19 October 2026 and PR #31 was deployed to production. Subsequent draft PR previews must still be reviewed, merged and verified separately; a preview is not a production release.
 
 ## Robustness
 

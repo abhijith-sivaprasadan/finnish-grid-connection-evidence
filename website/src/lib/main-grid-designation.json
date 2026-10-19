@@ -1,0 +1,921 @@
+{
+  "dataset_id": "fingrid_main_grid_designation_annex_2024",
+  "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+  "source_parent": "https://www.fingrid.fi/kantaverkko/kehittaminen/kantaverkon-laajuus/nimeamispaatos-1.1.2024/",
+  "document_publication_context": "2024 designation decision (annex linked by Fingrid)",
+  "source_table_caption": "Kantaverkko 1.1.2020",
+  "verification": "Operator-published table transcription, NOT current station certification or geolocation",
+  "parsed_rows": 128,
+  "source_printed_total": 127,
+  "source_printed_voltage_totals": {
+    "110": 65,
+    "220": 13,
+    "400": 49
+  },
+  "transcribed_voltage_totals": {
+    "110": 66,
+    "220": 13,
+    "400": 49
+  },
+  "count_discrepancy_unresolved": true,
+  "operator_ownership_caveat": "Some station or transformer components are customer-owned/shared per source notes; list membership does not establish exclusive Fingrid ownership of every asset.",
+  "capacity_observations_added": 0,
+  "rows": [
+    {
+      "id": "FI-ANNEX2024-ALAJARVI-400",
+      "name": "ALAJÄRVI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ALAPITKA-400",
+      "name": "ALAPITKÄ",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ANTTILA-400",
+      "name": "ANTTILA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ARKKUKALLIO-400",
+      "name": "ARKKUKALLIO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ASMUNTI-400",
+      "name": "ASMUNTI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; series-compensation station"
+    },
+    {
+      "id": "FI-ANNEX2024-ESPOO-400",
+      "name": "ESPOO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-FORSSA-400",
+      "name": "FORSSA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HIKIA-400",
+      "name": "HIKIÄ",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HIRVISUO-400",
+      "name": "HIRVISUO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HOIKANSALMI-400",
+      "name": "HOIKANSALMI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; series-compensation station"
+    },
+    {
+      "id": "FI-ANNEX2024-HUITTINEN-400",
+      "name": "HUITTINEN",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HUUTOKOSKI-400",
+      "name": "HUUTOKOSKI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-INKOO-400",
+      "name": "INKOO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ISOKANGAS-400",
+      "name": "ISOKANGAS",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-JYLKKA-400",
+      "name": "JYLKKÄ",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KANGASALA-400",
+      "name": "KANGASALA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KEMINMAA-400",
+      "name": "KEMINMAA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KOPULA-400",
+      "name": "KOPULA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KORIA-400",
+      "name": "KORIA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KRISTINESTAD-400",
+      "name": "KRISTINESTAD",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KYMI-400",
+      "name": "KYMI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KARPPIO-400",
+      "name": "KÄRPPIÖ",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; spelling normalized from extraction against original PDF text"
+    },
+    {
+      "id": "FI-ANNEX2024-LAVIANVUORI-400",
+      "name": "LAVIANVUORI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-LIETO-400",
+      "name": "LIETO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-LOVIISA-400",
+      "name": "LOVIISA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-LANSISALMI-400",
+      "name": "LÄNSISALMI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-NURMIJARVI-400",
+      "name": "NURMIJÄRVI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-OLKILUOTO-400",
+      "name": "OLKILUOTO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PETAJASKOSKI-400",
+      "name": "PETÄJÄSKOSKI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PETAJAVESI-400",
+      "name": "PETÄJÄVESI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PIHLAJARANTA-400",
+      "name": "PIHLAJARANTA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; series-compensation station"
+    },
+    {
+      "id": "FI-ANNEX2024-PIKKARALA-400",
+      "name": "PIKKARALA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PIRTTIKOSKI-400",
+      "name": "PIRTTIKOSKI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PYHANSELKA-400",
+      "name": "PYHÄNSELKÄ",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PYSAYSPERA-400",
+      "name": "PYSÄYSPERÄ",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-RAUMA-400",
+      "name": "RAUMA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SALO-400",
+      "name": "SALO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SEINAJOKI-400",
+      "name": "SEINÄJOKI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-TAMMISTO-400",
+      "name": "TAMMISTO",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-TOIVILA-400",
+      "name": "TOIVILA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-TUOMELA-400",
+      "name": "TUOMELA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; series-compensation station"
+    },
+    {
+      "id": "FI-ANNEX2024-TUOVILA-400",
+      "name": "TUOVILA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ULVILA-400",
+      "name": "ULVILA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-UUSNIVALA-400",
+      "name": "UUSNIVALA",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VALKEUS-400",
+      "name": "VALKEUS",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VIHTAVUORI-400",
+      "name": "VIHTAVUORI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VISULAHTI-400",
+      "name": "VISULAHTI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VUOLIJOKI-400",
+      "name": "VUOLIJOKI",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-YLLIKKALA-400",
+      "name": "YLLIKKÄLÄ",
+      "voltage_kv": 400,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HAAPAVEDEN-VL-220",
+      "name": "HAAPAVEDEN VL",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ISONIEMI-220",
+      "name": "ISONIEMI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-IVALO-220",
+      "name": "IVALO",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KELLARIJANKA-220",
+      "name": "KELLARIJÄNKÄ",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KOKKOSNIVA-220",
+      "name": "KOKKOSNIVA",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; source notes Caruna-owned 220/110 kV transformer"
+    },
+    {
+      "id": "FI-ANNEX2024-KUOLAJARVI-220",
+      "name": "KUOLAJÄRVI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-OSSAUSKOSKI-220",
+      "name": "OSSAUSKOSKI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PYHAKOSKI-220",
+      "name": "PYHÄKOSKI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SEITENOIKEA-220",
+      "name": "SEITENOIKEA",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-TAIVALKOSKI-220",
+      "name": "TAIVALKOSKI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-UTSJOKI-220",
+      "name": "UTSJOKI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VAJUKOSKI-220",
+      "name": "VAJUKOSKI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VALAJASKOSKI-220",
+      "name": "VALAJASKOSKI",
+      "voltage_kv": 220,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-AHVENKOSKI-110",
+      "name": "AHVENKOSKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HAPPOLA-110",
+      "name": "HAPPOLA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HEINOLA-110",
+      "name": "HEINOLA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-HOVINPAIKKA-110",
+      "name": "HOVINPAIKKA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-IHALANMAKI-110",
+      "name": "IHALANMÄKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-IISALMI-110",
+      "name": "IISALMI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ILOHARJU-110",
+      "name": "ILOHARJU",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-IMATRA-110",
+      "name": "IMATRA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ISOHAARA-110",
+      "name": "ISOHAARA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-JOKISIVU-110",
+      "name": "JOKISIVU",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; source notes longitudinal disconnect at customer station"
+    },
+    {
+      "id": "FI-ANNEX2024-JULMALA-110",
+      "name": "JULMALA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-JYVASKYLA-110",
+      "name": "JYVÄSKYLÄ",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KALTIMO-110",
+      "name": "KALTIMO",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KANKAANPAA-110",
+      "name": "KANKAANPÄÄ",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KARJAA-110",
+      "name": "KARJAA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KAUPPILA-110",
+      "name": "KAUPPILA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KEMIO-110",
+      "name": "KEMIÖ",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KIIKANLAHTI-110",
+      "name": "KIIKANLAHTI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KOIVISTO-110",
+      "name": "KOIVISTO",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KONKAPELTO-110",
+      "name": "KONKAPELTO",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KONTIOLAHTI-110",
+      "name": "KONTIOLAHTI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-KYMINLINNA-110",
+      "name": "KYMINLINNA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-LEPPIKOSKI-110",
+      "name": "LEPPIKOSKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-LEVASUO-110",
+      "name": "LEVÄSUO",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-LIEKSA-110",
+      "name": "LIEKSA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-LUUKKALA-110",
+      "name": "LUUKKALA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-MELO-110",
+      "name": "MELO",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-MELTAUS-110",
+      "name": "MELTAUS",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-METSAMAA-110",
+      "name": "METSÄMAA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-MULTISILTA-110",
+      "name": "MULTISILTA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-MANTTA-110",
+      "name": "MÄNTTÄ",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; spelling normalized from extraction against original PDF text"
+    },
+    {
+      "id": "FI-ANNEX2024-NAANTALINSALMI-110",
+      "name": "NAANTALINSALMI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-NUOJUANKANGAS-110",
+      "name": "NUOJUANKANGAS",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ONTOJOKI-110",
+      "name": "ONTOJOKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ORIMATTILA-110",
+      "name": "ORIMATTILA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-ORIVESI-110",
+      "name": "ORIVESI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; source notes longitudinal disconnect at customer station"
+    },
+    {
+      "id": "FI-ANNEX2024-PALOJARVI-110",
+      "name": "PALOJÄRVI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; spelling normalized from extraction against original PDF text"
+    },
+    {
+      "id": "FI-ANNEX2024-PERNOONKOSKI-110",
+      "name": "PERNOONKOSKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PERTTULA-110",
+      "name": "PERTTULA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; source notes longitudinal disconnect at customer station"
+    },
+    {
+      "id": "FI-ANNEX2024-PORVOO-110",
+      "name": "PORVOO",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PUUMALA-110",
+      "name": "PUUMALA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-PYHAVESI-110",
+      "name": "PYHÄVESI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; spelling normalized from extraction against original PDF text"
+    },
+    {
+      "id": "FI-ANNEX2024-RAAHE-110",
+      "name": "RAAHE",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-RAASAKKA-110",
+      "name": "RAASAKKA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-RAUHALAHTI-110",
+      "name": "RAUHALAHTI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-RUOTSINKYLA-110",
+      "name": "RUOTSINKYLÄ",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-RANNARI-110",
+      "name": "RÄNNÄRI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SAARIKKO-110",
+      "name": "SAARIKKO",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SAVONLINNA-110",
+      "name": "SAVONLINNA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SIIKAJOKI-110",
+      "name": "SIIKAJOKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SIMOJOKI-110",
+      "name": "SIMOJOKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-SARKIVAARA-110",
+      "name": "SÄRKIVAARA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-TAINIONKOSKI-110",
+      "name": "TAINIONKOSKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-TEHTAANMAKI-110",
+      "name": "TEHTAANMÄKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-TIHISENNIEMI-110",
+      "name": "TIHISENNIEMI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-UIMAHARJU-110",
+      "name": "UIMAHARJU",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-UTANEN-110",
+      "name": "UTANEN",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-UUSIKAUPUNKI-110",
+      "name": "UUSIKAUPUNKI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VANAJA-110",
+      "name": "VANAJA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VARKAUS-110",
+      "name": "VARKAUS",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VENTUSNEVA-110",
+      "name": "VENTUSNEVA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VIHANTI-110",
+      "name": "VIHANTI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified; source notes joint station ownership with Elenia"
+    },
+    {
+      "id": "FI-ANNEX2024-VIRKKALA-110",
+      "name": "VIRKKALA",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VUOKSI-110",
+      "name": "VUOKSI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-WISAFOREST-110",
+      "name": "WISAFOREST",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    },
+    {
+      "id": "FI-ANNEX2024-VAHANUMMI-110",
+      "name": "VÄHÄNUMMI",
+      "voltage_kv": 110,
+      "source_url": "https://www.fingrid.fi/globalassets/dokumentit/fi/kantaverkko/kantaverkon-kehittaminen/kantaverkon-nimeaminen-johdot-ja-asemat-1.1-2024.pdf",
+      "notes": "Listed in Fingrid designation annex (published with 2024 decision), source table caption says Kantaverkko 1.1.2020; current operating state unverified"
+    }
+  ]
+}
