@@ -36,6 +36,15 @@ check 200 "/api/v1/capacity?direction=production&year=2030"
 grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/coverage"
 grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
+check 200 "/screening"
+grep -q "Connection" /tmp/grid-smoke-response.json
+check 200 "/api/v1/screening?demand_mw=100&year=2030&direction=consumption&voltage=all"
+grep -q '"indicative_threshold_met":2' /tmp/grid-smoke-response.json
+grep -q '"unknown_not_captured":3' /tmp/grid-smoke-response.json
+grep -q '"operator_confirmed_feasible":0' /tmp/grid-smoke-response.json
+check 400 "/api/v1/screening?demand_mw=0"
+grep -q "INVALID_QUERY" /tmp/grid-smoke-response.json
+check 400 "/api/v1/screening?demand_mw=100&direction=production"
 check 200 "/stations"
 grep -q "Station inventory" /tmp/grid-smoke-response.json
 check 200 "/api/v1/stations?voltage=220"

@@ -20,6 +20,7 @@ export async function GET() {
         parameters:[...paging,q("direction","production or consumption"),
           q("point_id","One supported connection point ID"),q("year","Published effective year")],
         responses:{200:success,...errors}}},
+      "/api/v1/screening":{get:{summary:"Source-evidence screening; not confirmed connectability",parameters:[q("demand_mw","Positive requested consumption in MW, up to 10000; default 100"),q("year","Exact effective year, default 2030"),q("direction","consumption only in v1"),q("voltage","all, 110, 220 or 400; sample filter, not national coverage")],responses:{200:success,...errors}}},
       "/api/v1/coverage":{get:{summary:"Compiled snapshot coverage: missing does not mean zero",
         parameters:[q("year","An optional year, default the three explicitly compared source years")],
         responses:{200:success,...errors}}},

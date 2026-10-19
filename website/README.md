@@ -6,6 +6,9 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/screening` — evidence-qualified screening by demand/year and recorded voltage; never a feasibility conclusion
+- `/api/v1/screening` — read-only screening and source-review evidence; 100 MW 2030 pilot returns two indicative threshold matches and three unknowns
+
 - `/` — independent blue research homepage with conceptual evidence network
 - `/stations` — historical operator-designation archive: 128 source-listed name+voltage rows (printed source total 127); table label 1.1.2020, not current MW or geography
 - `/api/v1/stations` — read-only historical enumeration; optional `voltage` filter 400/220/110; separate from live Neon capacity evidence
