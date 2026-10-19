@@ -1,122 +1,137 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import type { Capacity,Point } from "@/lib/types";
-import { YEARS } from "@/lib/workbench-shared";
+import type { Capacity, Direction, Point } from "@/lib/types";
 import { sourceReviewStatus } from "@/lib/verification";
 
-type Slot = {point:Point; year:number; direction:"consumption"|"production"; value:Capacity|null};
-const order:["production","consumption"]=["production","consumption"];
-export function ConnectionWorkbench({points,observations,initialPointId}:{points:Point[];observations:Capacity[];initialPointId?:string}) {
-  const [year,setYear]=useState<number>(2026);
-  const [search,setSearch]=useState(points.find(p=>p.connection_point_id===initialPointId)?.name.replace(" 400 kV","")??"");
-  const [direction,setDirection]=useState<"both"|"production"|"consumption">("both");
-  const [selected,setSelected]=useState<Slot|null>(null);
-  const [sort,setSort]=useState<"name"|"observed">("name");
-  const byKey=useMemo(()=>{
-    const map=new Map<string,Capacity[]>();
-    for(const observation of observations) {
-      const key=[observation.connection_point_id,observation.direction,observation.effective_year].join("|");
-      map.set(key,[...(map.get(key)||[]),observation]);
-    }
-    return map;
-  },[observations]);
-  const lookup=(p:Point,d:"consumption"|"production",y:number) => {
-    const r=byKey.get([p.connection_point_id,d,y].join("|"))||[];
-    return r.length===1?r[0]:null; // duplicates require reconciliation, not arbitrary latest
-  };
-  const ordered=useMemo(()=>[...points].sort((a,b)=>sort==="name"?
-    a.name.localeCompare(b.name):
-    observations.filter(o=>o.connection_point_id===b.connection_point_id).length-
-    observations.filter(o=>o.connection_point_id===a.connection_point_id).length||a.name.localeCompare(b.name)),[points,observations,sort]);
-  const filtered=ordered.filter(p=>p.name.toLocaleLowerCase().includes(search.toLocaleLowerCase().trim()));
-  const bars=filtered.map(p=>({
-    name:p.name.replace(" 400 kV",""),
-    production:lookup(p,"production",year)?.capacity_value??null,
-    consumption:lookup(p,"consumption",year)?.capacity_value??null
-  }));
-  const fields=YEARS.flatMap(y=>order.map(d=>({year:y,direction:d}))).filter(x=>direction==="both"||x.direction===direction);
-  const activeStatus=selected?.value?"Published indicative transcription":"Not recorded in this capture";
-  return <section className="workbench" aria-label="Connection evidence workbench">
-    <div className="wb-heading"><div><p className="eyebrow">EVIDENCE WORKBENCH / 01</p>
-      <h2>Every point. Every direction. Every recorded year.</h2>
-      <p>Compare the <strong>presence of source evidence</strong>, not connection offers. A blank cell is not zero.</p></div>
-      <a className="button secondary" href="/api/v1/export/recheck">Download independent audit worksheet ↓</a>
-    </div>
-    <div className="wb-controls">
-      <label className="wb-search-label">Find a point
-        <input type="search" value={search} onChange={e=>{setSearch(e.target.value);setSelected(null);}} placeholder="Search substation name…" aria-label="Filter substations by name"/>
-      </label>
-      <label>Matrix view
-        <select value={direction} onChange={e=>{setDirection(e.target.value as typeof direction);setSelected(null);}}>
-          <option value="both">Both directions</option><option value="production">Production only</option><option value="consumption">Consumption only</option>
-        </select>
-      </label>
-      <label>Order points
-        <select value={sort} onChange={e=>setSort(e.target.value as typeof sort)}>
-          <option value="name">Alphabetical</option><option value="observed">Most recorded intersections</option>
-        </select>
-      </label>
-      <div className="wb-key"><span className="wb-key-dot" />Source-transcribed MW <span className="wb-key-blank" />Unrecorded</div>
-    </div>
-    <div className="matrix-count">{filtered.length} of {points.length} selected substations <span>· Cell selection reveals its recorded evidence</span></div>
-    <div className="matrix-scroll"><table className="capacity-matrix">
-      <thead><tr><th scope="col">Fingrid 400 kV point</th>
-      {fields.map(f=><th key={f.year+f.direction} scope="col">{f.year}<small>{f.direction}</small></th>)}</tr></thead>
-      <tbody>{filtered.map(p=><tr key={p.connection_point_id}><th scope="row">{p.name.replace(" 400 kV","")}<small>400 kV · {p.operator}</small></th>
-        {fields.map(({year:y,direction:d})=>{
-          const key=p.connection_point_id+y+d;
-          const matches=byKey.get([p.connection_point_id,d,y].join("|"))||[];
-          const value=matches.length===1?matches[0]:null;
-          const ambiguous=matches.length>1;
-          return <td key={key}>
-            <button type="button" className={"matrix-cell "+(value?"recorded":ambiguous?"ambiguous":"absent")}
-              onClick={()=>setSelected({point:p,year:y,direction:d,value})}
-              aria-label={p.name+" "+y+" "+d+": "+(value?value.capacity_value+" "+value.capacity_unit:ambiguous?"multiple captures need reconciliation":"not recorded in capture")}>
-              {value?<><strong>{value.capacity_value}</strong><small>{value.capacity_unit}</small></>:ambiguous?"Review":"—"}
-            </button>
-          </td>;
-        })}</tr>)}</tbody>
-    </table></div>
-    {filtered.length===0&&<p className="notice">No matching substations. Clear the search to restore the original sample.</p>}
-    <p className="chart-caption">The 2026, 2030 and 2035 columns are discrete published effective years. Do not interpolate across years or add point values. Multiple observations for one intersection require reconciliation.</p>
-    {selected&&<div className="evidence-drawer" role="region" aria-label="Selected evidence details">
-      <div className="wb-heading">
-        <div><span className="eyebrow">SELECTED EVIDENCE</span><h3>{selected.point.name} · {selected.year} · {selected.direction}</h3></div>
-        <button className="text-close" onClick={()=>setSelected(null)} type="button">Close ×</button>
-      </div>
-      <p><strong>{activeStatus}.</strong> {selected.value?selected.value.capacity_value+" "+selected.value.capacity_unit+" was transcribed from Grid Scope.": "No value was recorded for this intersection in the published project sample."}</p>
-      {selected.value&&<div className="evidence-meta">
-        <span><b>Capture (UTC)</b>{selected.value.source_observed_at.replace("T"," ").slice(0,16)}</span>
-        <span><b>Screenshot recheck</b>{sourceReviewStatus(selected.value).status==="screenshot_match"?(sourceReviewStatus(selected.value).grade==="exact_tooltip"?"Exact tooltip matched":"Panel MW matched"):"Not audited in original sample"}</span>
-        <span><b>Evidence status</b>Published indicative only</span>
-        <a href={selected.value.source_url} target="_blank" rel="noreferrer">Open operator viewer ↗</a>
-      </div>}
-      <p className="small-note">Checking the public map is a verification of the published transcription only. It cannot guarantee physical connectability or queue allocation.</p>
-    </div>}
-    <div className="wb-chart-row">
-      <div className="wb-chart-title">
-        <div><p className="eyebrow">DISCRETE COMPARISON</p><h3>Production versus consumption</h3></div>
-        <label>Effective year <select value={year} onChange={e=>setYear(Number(e.target.value))}>
-          {YEARS.map(y=><option key={y}>{y}</option>)}</select></label>
-      </div>
-      <div className="wb-chart"><ResponsiveContainer width="100%" height={350}>
-        <BarChart data={bars} margin={{top:8,right:15,left:0,bottom:35}} barCategoryGap="22%">
-          <CartesianGrid vertical={false} stroke="#e6eef8"/>
-          <XAxis dataKey="name" angle={-18} textAnchor="end" height={58} interval={0} tick={{fontSize:11,fill:"#526d8b"}} />
-          <YAxis label={{value:"MW",angle:-90,position:"insideLeft",fontSize:11}} width={67} tick={{fontSize:11}} domain={[0,"auto"]}/>
-          <Tooltip formatter={(v,name)=>[v==null?"Not recorded":String(v)+" MW",String(name)+" · indicative"]} />
-          <Legend verticalAlign="top" height={34}/>
-          <Bar dataKey="production" name="Production" fill="#0758b8" radius={[4,4,0,0]} isAnimationActive={false}/>
-          <Bar dataKey="consumption" name="Consumption" fill="#69b5e8" radius={[4,4,0,0]} isAnimationActive={false}/>
-        </BarChart>
-      </ResponsiveContainer></div>
-      <p className="chart-caption">Unrecorded directions are null, never plotted as zero. These conditional indicative values were screenshot-matched for the original sample only; they are not operator-confirmed headroom.</p>
-    </div>
-    <div className="audit-summary"><strong>Independent source audit</strong>
-      <span><b>{observations.filter(o=>sourceReviewStatus(o).status==="screenshot_match").length} / {observations.length}</b> original screenshot matches</span>
-      <span>17 tooltips + 1 panel number for original sample; newer captures require separate review</span>
-      <a href="/quality#audit">Audit method →</a>
-    </div>
-  </section>;
+type Choice = {pointId:string;direction:Direction;year:number};
+type CoverageFilter = "all"|"recorded"|"gaps";
+const directions:Direction[]=["production","consumption"];
+const key=(id:string,d:Direction,y:number)=>[id,d,y].join("|");
+const short=(name:string)=>name.replace(/\s+\d+\s*kV$/i,"");
+const quote=(value:unknown)=>'"'+String(value??"").replace(/"/g,'""')+'"';
+
+export function ConnectionWorkbench({points,observations,initialPointId}:{points:Point[];observations:Capacity[];initialPointId?:string}){
+ const [search,setSearch]=useState(points.find(p=>p.connection_point_id===initialPointId)?.name.replace(/\s+\d+\s*kV$/i,"")??"");
+ const [direction,setDirection]=useState<"both"|Direction>("both");
+ const [coverage,setCoverage]=useState<CoverageFilter>("all");
+ const [sort,setSort]=useState<"name"|"coverage">("name");
+ const [view,setView]=useState<"matrix"|"records">("matrix");
+ const [chosen,setChosen]=useState<Choice|null>(null);
+ const years=useMemo(()=>{
+   const found=Array.from(new Set(observations.map(o=>o.effective_year).filter((y):y is number=>y!==null))).sort((a,b)=>a-b);
+   return found;
+ },[observations]);
+ const [recordYear,setRecordYear]=useState<number|null>(null);
+ const chosenYear=recordYear!==null&&years.includes(recordYear)?recordYear:years[0]??null;
+ const indexed=useMemo(()=>{
+   const result=new Map<string,Capacity[]>();
+   for(const o of observations){
+     const k=key(o.connection_point_id,o.direction,o.effective_year??-1);
+     const arr=result.get(k)??[];arr.push(o);result.set(k,arr);
+   }
+   return result;
+ },[observations]);
+ const slotsFor=(point:Point)=>years.flatMap(y=>directions.map(d=>indexed.get(key(point.connection_point_id,d,y))??[]));
+ const visiblePoints=useMemo(()=>points.filter(p=>{
+   if(!p.name.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()))return false;
+   const cells=years.flatMap(y=>directions.filter(d=>direction==="both"||d===direction).map(d=>indexed.get(key(p.connection_point_id,d,y))??[]));
+   return coverage==="all"||(coverage==="recorded"?cells.some(c=>c.length===1):cells.some(c=>c.length!==1));
+ }).sort((a,b)=>sort==="name"?a.name.localeCompare(b.name):
+   slotsFor(b).filter(c=>c.length===1).length-slotsFor(a).filter(c=>c.length===1).length||a.name.localeCompare(b.name)),
+ [points,search,years,indexed,coverage,direction,sort]);
+ const fields=years.flatMap(y=>directions.filter(d=>direction==="both"||d===direction).map(d=>({y,d})));
+ const sampleCells=points.length*years.length*2;
+ const observedCells=points.reduce((n,p)=>n+years.flatMap(y=>directions.map(d=>indexed.get(key(p.connection_point_id,d,y))??[])).filter(a=>a.length===1).length,0);
+ const conflicts=points.reduce((n,p)=>n+years.flatMap(y=>directions.map(d=>indexed.get(key(p.connection_point_id,d,y))??[])).filter(a=>a.length>1).length,0);
+ const verified=observations.filter(o=>sourceReviewStatus(o).status==="screenshot_match").length;
+ const visibleIds=new Set(visiblePoints.map(p=>p.connection_point_id));
+ const recordRows=observations.filter(o=>visibleIds.has(o.connection_point_id)&&
+   (direction==="both"||o.direction===direction)&&
+   (chosenYear===null||o.effective_year===chosenYear))
+   .sort((a,b)=>a.name.localeCompare(b.name)||a.direction.localeCompare(b.direction));
+ const initial=observations.find(o=>visibleIds.has(o.connection_point_id)&&
+   (direction==="both"||o.direction===direction));
+ const active=chosen??(initial?{pointId:initial.connection_point_id,direction:initial.direction,year:initial.effective_year??years[0]}:null);
+ const activePoint=active?points.find(p=>p.connection_point_id===active.pointId)??null:null;
+ const matching=active?indexed.get(key(active.pointId,active.direction,active.year))??[]:[];
+ const selectedRecord=matching.length===1?matching[0]:null;
+ const grade=selectedRecord?sourceReviewStatus(selectedRecord):null;
+ const select=(pointId:string,d:Direction,y:number)=>setChosen({pointId,direction:d,year:y});
+ const exportRows=()=>{
+   const columns=["observation_id","connection_point_id","name","voltage_kv","direction","effective_year","capacity_value","capacity_unit","source_observed_at","source_url","review_status"];
+   const lines=[columns.join(","),...recordRows.map(o=>[o.observation_id,o.connection_point_id,o.name,o.voltage_kv,o.direction,o.effective_year,o.capacity_value,o.capacity_unit,o.source_observed_at,o.source_url,sourceReviewStatus(o).status].map(quote).join(","))];
+   const blob=new Blob([lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
+   const url=URL.createObjectURL(blob);
+   const a=document.createElement("a");a.href=url;a.download="finnish-grid-atlas-observations.csv";a.click();URL.revokeObjectURL(url);
+ };
+ return <section className="df-explorer" aria-label="Connection evidence explorer">
+  <div className="df-explorer-intro">
+   <div><span className="df-overline">SOURCE EVIDENCE / FINGRID GRID SCOPE</span><h2>Substation evidence explorer</h2>
+   <p>Explore what was captured, inspect original observations, and identify gaps. This is a sampled record collection, not a nationwide capacity map.</p></div>
+   <a href="/api/v1/export/recheck" className="button secondary">Audit worksheet ↗</a>
+  </div>
+  <div className="df-summary" aria-label="Evidence sample coverage">
+   <div><strong>{points.length}</strong><span>Substations in catalogue</span></div>
+   <div><strong>{observations.length}</strong><span>Recorded source values</span></div>
+   <div><strong>{Math.max(0,sampleCells-observedCells-conflicts)}</strong><span>Not captured in sample</span></div>
+   <div><strong>{verified}</strong><span>Screenshot-matched records</span></div>
+  </div>
+  <div className="df-definition"><strong>Coverage ≠ capacity.</strong> This comparison covers {points.length} captured substations and {years.length} recorded years, not every Finnish station or every Fingrid publication. Missing cells are <b>unknown, not zero MW</b>. No values are summed.</div>
+  <div className="df-controls" aria-label="Explore evidence filters">
+   <label className="df-search">Search substations<input aria-label="Filter substations by name" type="search" value={search} placeholder="Type a name…" onChange={e=>{setSearch(e.target.value);setChosen(null);}}/></label>
+   <label>Direction<select value={direction} onChange={e=>{setDirection(e.target.value as typeof direction);setChosen(null);}}><option value="both">Both</option><option value="production">Production</option><option value="consumption">Consumption</option></select></label>
+   <label>Coverage<select value={coverage} onChange={e=>setCoverage(e.target.value as CoverageFilter)}><option value="all">All substations</option><option value="recorded">Has recorded values</option><option value="gaps">Has uncaptured cells</option></select></label>
+   <label>Sort by<select value={sort} onChange={e=>setSort(e.target.value as typeof sort)}><option value="name">Name A–Z</option><option value="coverage">Most records first</option></select></label>
+  </div>
+  <div className="df-toolbar">
+   <div className="df-view-switch" role="group" aria-label="Evidence display">
+    <button type="button" aria-pressed={view==="matrix"} className={view==="matrix"?"on":""} onClick={()=>setView("matrix")}>Year matrix</button>
+    <button type="button" aria-pressed={view==="records"} className={view==="records"?"on":""} onClick={()=>setView("records")}>Source records</button>
+   </div>
+   <div className="df-toolbar-info">{visiblePoints.length} of {points.length} substations · {recordRows.length} source rows in {chosenYear??"all years"}</div>
+  </div>
+  {view==="matrix"?<div className="df-table-scroll" role="region" tabIndex={0} aria-label="Year-by-year evidence matrix, horizontally scrollable">
+   <table className="df-matrix"><thead><tr><th rowSpan={2} scope="col">Substation</th>{years.map(y=><th key={y} colSpan={direction==="both"?2:1} scope="colgroup">{y}</th>)}</tr>
+     <tr>{fields.map(({y,d})=><th key={y+d} scope="col">{d==="production"?"Production":"Consumption"}</th>)}</tr></thead>
+    <tbody>{visiblePoints.map(p=><tr key={p.connection_point_id}><th scope="row"><strong>{short(p.name)}</strong><small>{p.voltage_kv??"—"} kV · {p.operator}</small></th>
+    {fields.map(({y,d})=>{
+      const entries=indexed.get(key(p.connection_point_id,d,y))??[];
+      const observed=entries.length===1,ambiguous=entries.length>1;
+      const isSelected=active?.pointId===p.connection_point_id&&active.year===y&&active.direction===d;
+      return <td key={key(p.connection_point_id,d,y)}><button type="button" aria-pressed={isSelected} className={"df-cell "+(observed?"has-data":ambiguous?"conflict":"no-data")+(isSelected?" selected":"")} onClick={()=>select(p.connection_point_id,d,y)}
+        aria-label={short(p.name)+" "+d+" "+y+": "+(observed?entries[0].capacity_value+" "+entries[0].capacity_unit:ambiguous?"multiple entries need reconciliation":"not captured")}>
+         {observed?<><strong>{entries[0].capacity_value.toLocaleString("en-US")}</strong><small>{entries[0].capacity_unit} · indicative</small></>:ambiguous?<span>Needs review</span>:<span>Not captured</span>}
+       </button></td>;
+    })}</tr>)}</tbody></table>
+   {visiblePoints.length===0&&<div className="df-empty">No substations match these filters. Try clearing the search or coverage filter.</div>}
+  </div>:<div className="df-records-wrap">
+   <div className="df-records-head"><label>Effective year<select aria-label="Filter source records by effective year" value={chosenYear??""} onChange={e=>setRecordYear(Number(e.target.value))}>{years.map(y=><option key={y} value={y}>{y}</option>)}</select></label>
+   <button type="button" onClick={exportRows} disabled={recordRows.length===0} className="df-export">Download displayed CSV ↓</button></div>
+   <div className="df-table-scroll" role="region" tabIndex={0} aria-label="Recorded capacity observations">
+    <table className="df-record-table"><thead><tr><th>Substation</th><th>Direction</th><th>Effective year</th><th>Indicative figure</th><th>Review status</th><th>Inspect</th></tr></thead>
+    <tbody>{recordRows.map(o=><tr key={o.observation_id}><th scope="row">{short(o.name)}</th><td>{o.direction}</td><td>{o.effective_year??"Unknown"}</td><td><strong>{o.capacity_value} {o.capacity_unit}</strong></td><td>{sourceReviewStatus(o).status==="screenshot_match"?"Screenshot matched":"Not yet audited"}</td><td><button type="button" onClick={()=>select(o.connection_point_id,o.direction,o.effective_year??years[0])}>Inspect ↗</button></td></tr>)}</tbody></table>
+    {recordRows.length===0&&<div className="df-empty">No source observations match the current filters. This does not imply zero capacity.</div>}
+   </div>
+  </div>}
+  <div className="df-detail" aria-live="polite">
+   <div className="df-detail-heading"><div><span className="df-overline">SELECTED INTERSECTION / SOURCE PROVENANCE</span>
+    <h3>{activePoint?short(activePoint.name):"Select an observation"}</h3>
+    {active&&<p>{active.direction==="production"?"Generation / production":"Electricity consumption"} · {active.year} · {activePoint?.voltage_kv??"—"} kV</p>}</div>
+    <a href="/quality#audit">Audit evidence ↗</a></div>
+   {activePoint&&active?<div className="df-detail-body">
+     <div className="df-primary-reading">
+      <span>Indicative source figure</span><strong>{selectedRecord?selectedRecord.capacity_value.toLocaleString("en-US"):"—"}<small>{selectedRecord?selectedRecord.capacity_unit:"Not captured"}</small></strong>
+      <p>{matching.length>1?"Multiple records need reconciliation before display.":selectedRecord?"Recorded in a dated Fingrid Grid Scope capture. It is not an offer of available grid headroom.":"No value for this direction and effective year is in the captured dataset. The operator may have other values."}</p>
+     </div>
+     <dl className="df-provenance">
+      <div><dt>Source evidence</dt><dd>{selectedRecord?"Fingrid Grid Scope":"Not in compiled capture"}</dd></div>
+      <div><dt>Transcription review</dt><dd>{grade?.status==="screenshot_match"?(grade.grade==="exact_tooltip"?"Screenshot tooltip matched":"Screenshot panel number matched"):"No audit for this entry"}</dd></div>
+      <div><dt>Captured (UTC)</dt><dd>{selectedRecord?selectedRecord.source_observed_at.slice(0,16).replace("T"," "):"Unknown"}</dd></div>
+      <div><dt>Physical connection validation</dt><dd>Not established</dd></div>
+     </dl>
+   </div>:<p className="df-empty">Select a cell to inspect its source and limitations.</p>}
+   {activePoint&&<div className="df-detail-footer"><a href={selectedRecord?.source_url??activePoint.source_url} target="_blank" rel="noreferrer">Open Fingrid source ↗</a><span>Numbers cannot be combined between points or interpolated across years.</span></div>}
+  </div>
+  <div className="df-footer-notes"><strong>Interpretation rules</strong><p>These are dated transcriptions, not live offers. An unfilled cell is not a zero. Sample completeness is not national coverage; the Finnish main grid and Fingrid's capacity calculations are broader than this collected dataset. See <a href="/method">methodology</a> and <a href="/quality">data quality</a>.</p></div>
+ </section>;
 }
