@@ -17,6 +17,8 @@ write to Neon, mark anything operator-connected, or publish invented MW.
   production/consumption estimates for **some** substations. All missing
   figures remain unknown, never 0 MW.
 
+**Update — official source located:** Fingrid’s designation-decision appendix contains 128 transcribed substation-name / voltage entries in a table headed **1.1.2020**, although its printed total says 127. The original appendix is attached to a 2024 decision and is an archival enumeration, **not** a present-day verified register. See [designation baseline](FINGRID_DESIGNATION_BASELINE.md). A separate searchable source-linked `/stations` route is now implemented on the preview branch, without an inferred national capacity estimate.
+
 ## Source candidates and reuse checks
 
 1. **Fingrid Grid Scope**:

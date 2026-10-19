@@ -25,9 +25,7 @@ A successful endpoint read is not proof that the underlying source is current.
 - An unattended GitHub Actions source refresh succeeded on 18 October:
   [workflow run 39125767276](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39125767276).
   This is evidence of one scheduled success, not guaranteed continual uptime.
-- Vercel release uploads are **manual**, not automatically triggered by
-  GitHub commits until its separate GitHub Login Connection is configured.
-  A code commit is therefore not equivalent to a deployed release.
+- GitHub login connection was configured and PR #31 production deployed on **19 October 2026** (commit `b019632`). Further changes on draft PR #32 and draft PR #34 are **preview only**, not yet live on the production domain. A source commit/PR preview is not equivalent to a production release.
 
 ## Source evidence
 
@@ -46,6 +44,13 @@ A successful endpoint read is not proof that the underlying source is current.
 - **12 of 30** possible sample point/direction/year intersections were not
   transcribed. Unrecorded is **unknown**, not zero. Do not interpolate between
   effective years or sum values across substations.
+
+## Historical operator station inventory work (draft PR #34)
+
+- Fingrid designation appendix: **128 transcribed named substation rows** (400/220/110-kV), but original printed summary **127**; source table caption refers to **1.1.2020** despite appearing on the **2024 designation** page. It does not verify 2026 status.
+- Separate staged CSV, validated independent local SQLite archival table, Vercel-previewed `/stations` search and read-only historical JSON. No new MW values or verified geographic coordinates.
+- Current/geo-linked operating inventory remains a research objective; Fingrid’s **138 substations for 2025** are a different date/scope and cannot serve as an automatic denominator.
+- This stage changes neither live Neon records nor the original five point / 18 capacity evidence sample.
 
 ## Remaining scope for Krios-style grid analysis
 
