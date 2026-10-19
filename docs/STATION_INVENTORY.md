@@ -135,3 +135,30 @@ https://www.maanmittauslaitos.fi/rajapintapalvelut/maastotietojen-kyselypalvelu-
 NLS metadata alone contains no asserted Fingrid substation catalogue. The
 first safe data import will require a separately reviewed source layer and
 feature-to-operator reconciliation.
+
+## First additional documentary leads — not live station inventory
+
+The staged dataset \`data/catalogue/fingrid_named_leads_20261019.csv\`
+contains **five additional names**, each from a named Fingrid HTML source:
+
+- **Arkkukallio** and **Kärppiö** — Fingrid public network announcement,
+  31 January 2025:
+  https://www.fingrid.fi/en/news/news/2025/temporary-restrictions-on-grid-connections-for-grid-energy-storage-to-be-lifted-on-the-west-coast-south-of-vaasa/
+- **Hikiä** — 5 September 2025 network expansion announcement:
+  https://www.fingrid.fi/en/news/news/2025/new-two-circuit-transmission-line-supports-increased-electricity-consumption-in-southern-finland/
+- **Länsisalmi** and **Vanhakaupunki** — Helsinki cable link
+  construction report, 22 January 2024:
+  https://www.fingrid.fi/en/news/news/2024/construction-of-a-main-grid-cable-link-in-helsinki-to-begin-this-spring/
+
+These five are **separate source-backed name leads** from the five original
+Grid Scope connection points, making **10 total staged source objects**.
+They are not a proof of 10 verified presently operating Fingrid-owned
+substations. Article dates are historical; planned 2024 facilities are
+not silently labelled commissioned by October 2026. Source pages have
+no per-substation capacity observations in this batch; MW remains unknown.
+
+For sources without machine-issued feature IDs, \`source_feature_id\`
+uses the explicit **LOCAL:** namespace. That is a stable local citation key
+and must never be presented as a Fingrid-issued identifier.
+Before integration, compare these names against a current official
+asset inventory and obtain any operator-native identity.
