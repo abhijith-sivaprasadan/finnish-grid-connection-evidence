@@ -106,3 +106,32 @@ read-only UI count denominators. This should precede any proposed national map.
   site integration; PR #32 is the separate data-first UI track.
 
 This foundation deliberately does not alter the original 5 / 18 data.
+
+## NLS discovery CLI (credentials stay local)
+
+NLS confirms the open OGC API Features service requires a personal key; its
+preferred machine-client method is HTTP Basic with the key as the username
+and a blank password. The production service and **2026 beta** have different
+roots. The beta documentation warns that its underlying data are *not
+refreshed during the beta period*.
+
+- Get a free personal key through
+  https://www.maanmittauslaitos.fi/en/rajapinnat/api-avaimen-ohje
+  (do not send it in chat or commit it).
+- Set it as the \`NLS_API_KEY\` environment variable locally.
+- Run \`python -m src.ingest.nls_catalogue --output nls_collections.json\`.
+  Optionally add \`--beta\` to inspect the 2026 beta catalog.
+- Inspect *collection titles, feature classifications and schemas* before
+  electing a class to retrieve; metadata discovery makes no claims about
+  any particular class representing substations.
+- Do not place the API key in a query string, public GitHub issue, or logs.
+  The client sends a Basic Authorization header to a fixed NLS origin and
+  refuses redirects.
+
+Documentation:
+https://www.maanmittauslaitos.fi/en/rajapinnat/api-avaimen-ohje
+https://www.maanmittauslaitos.fi/rajapintapalvelut/maastotietojen-kyselypalvelu-beta/tekninen-kuvaus
+
+NLS metadata alone contains no asserted Fingrid substation catalogue. The
+first safe data import will require a separately reviewed source layer and
+feature-to-operator reconciliation.

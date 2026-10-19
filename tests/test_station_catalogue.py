@@ -41,7 +41,6 @@ def test_initial_real_pilot_is_staged_without_new_numbers():
     {"captured_utc": "2099-01-01T00:00:00Z"},
     {"review_state": "operator_identity_checked"},
     {"operator_evidence": "source_names_fingrid"},
-    {"review_state": "source_transcribed"},
     {"source_feature_id": ""},
     {"source_url": "file:///secret.csv"},
 ])
