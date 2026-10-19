@@ -1,6 +1,6 @@
 # Production site runbook — Finnish Grid Atlas
 
-Last audited: 18 October 2026. Source of truth: deployed HTTP responses,
+Last documented audit: 19 October 2026. Source of truth: [canonical status](STATUS.md), deployed HTTP responses,
 GitHub Actions, and current Vercel project configuration (not a deployment guess).
 
 ## What works
@@ -9,8 +9,8 @@ GitHub Actions, and current Vercel project configuration (not a deployment guess
 - Canonical source root: `website/`; framework Next.js 16, Node 22.
 - REST endpoints: `/api/v1/overview`, `/points`, `/capacity`, `/coverage`, `/operations`, `/health`, and `/api/openapi.json`.
 - Production routes publicly served. The static capacity fallback is explicit.
-- 5 public connection points, 18 transcribed indicative observations, 12 absent combinations in the compiled 2026/2030/2035 matrix. **None of the 18 have a completed independent source-value audit.**
-- **Verified 18 October 2026:** Sensitive, production-only `DATABASE_READ_URL` exists in Vercel; the deployed health route returns HTTP 200 with connected store; the overview reports `data_mode:neon`, 5 points, 18 unverified capacity transcriptions, and 288 operational rows. Successful read connectivity is not an audit of PostgreSQL grants or Fingrid source values.
+- 5 public connection points, 18 transcribed indicative observations, 12 absent combinations in the compiled 2026/2030/2035 matrix. **All 18 original source transcriptions matched reviewer-provided screenshots; this is not validated network headroom.**
+- **Verified 18 October 2026:** Sensitive, production-only `DATABASE_READ_URL` exists in Vercel; the deployed health route returns HTTP 200 with connected store; the overview reports `data_mode:neon`, 5 points, 18 original transcriptions, and 288 operational rows **at that dated deployment milestone**. Successful read connectivity is not an audit of PostgreSQL grants or Fingrid source values.
 - Public monitor checks deployed pages daily. It cannot use secrets and is not a substitute for independent grid verification.
 
 ## Completed: Connect the restricted Neon database reader to Vercel
@@ -50,7 +50,7 @@ with the Fingrid live viewer. Keep UTC review time, source URL and findings.
 Do not mark a capacity observation `operator_confirmed` merely because the
 transcription matches the current publicly indicative map.
 
-See `docs/GRID_SCOPE_RECHECK.md`. Independently recheck the 18 figures against
+See `docs/GRID_SCOPE_RECHECK.md`. For **new** observations, independently recheck the figures against
 the public operator interface before using them in any capacity ranking.
 Any changed current values belong in a **new dated capture**, not a destructive
 edit of the original October 17 2026 source snapshot.
@@ -62,7 +62,7 @@ edit of the original October 17 2026 source snapshot.
   Fingrid 124, Fingrid 74 and ENTSO-E A65; inserted 288 new observations
   atomically into Neon. Public production readback verified **576** total
   operational rows, latest UTC interval ending 2026-10-17 00:00.
-  The original 18 indicative Grid Scope transcriptions remain unverified.
+  The original 18 indicative Grid Scope transcriptions were later screenshot-matched on 18–19 October (17 tooltips and one explicit panel MW). Not physical capacity validation.
 - `.github/workflows/cloud-refresh.yml` now runs at **07:17 UTC daily** with
   a conservative **three-day publication lag** and one completed UTC day per
   run. It remains confined to `main` and standard runners; upstream API
@@ -79,7 +79,7 @@ edit of the original October 17 2026 source snapshot.
   direction. Do not claim a 200 website health response validates the physical
   transmission system.
 
-## P1: Automatic Vercel deploys from GitHub
+## P1: Automatic Vercel deploys from GitHub (still pending)
 
 The current public build was published through direct file deployment because
 the Vercel account lacks a GitHub Login Connection even though ChatGPT has

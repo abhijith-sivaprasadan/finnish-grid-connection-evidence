@@ -1,18 +1,20 @@
+> Current dated project status: [STATUS.md](STATUS.md). This hosting guide includes historical bootstrap and ingestion milestones; do not treat those counts as live totals.
+
 # Deploy the Finnish Grid Evidence dashboard online — free-tier path
 
 **Verified status (18 October 2026):** The existing Neon project
 `fragrant-dawn-65247206`, branch `production`, has been initialized using
 a one-time GitHub Actions run:
 [Neon production bootstrap #39079398497](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39079398497).
-Readback confirmed 5 connection points, 18 **indicative, independently unverified**
+Readback confirmed 5 connection points, 18 **indicative, at that initial bootstrap not independently rechecked**
 Grid Scope observations and **0 national operational rows**. The one-time
 bootstrap trigger has since been retired. The regular manual bootstrap remains
 available for future rechecks.
 
 **Streamlit deployment confirmed by the owner on 18 October 2026:**
 [https://finnish-grid-atlas.streamlit.app/](https://finnish-grid-atlas.streamlit.app/).
-The owner also reports the separate read-only Neon database connection is
-configured. Public readback has not been independently checked in this guide.
+The separate production Neon read-only connection was verified by public
+health and overview endpoints on 18 October 2026; see [status](STATUS.md).
 Source API import has been verified for 15 and 16 October 2026: 576 historical
 operational rows were visible via the live Vercel read-only database on
 18 October. Daily source refresh was subsequently approved by the owner.
@@ -219,7 +221,7 @@ can only query the SELECT-only database role's authorized objects.
   historical data remains in the managed DB subject to provider policies.
 - **Source revision:** new retrieval timestamps are preserved as
   independently dated rows. Do not overwrite old observations.
-- **Grid Scope:** still manually source-transcribed, awaiting an independent
+- **Grid Scope:** original 18 source transcriptions screenshot-matched 18–19 October; see [audit](audits/README.md). New/changed values still need a separate independent
   value-by-value audit; no automated Grid Scope API is claimed.
 - **ENTSO-E generation A75:** excluded from this scheduled pipeline until its
   separate authenticated smoke test succeeds.

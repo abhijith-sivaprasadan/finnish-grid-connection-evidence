@@ -28,7 +28,7 @@ with separately configured, private keys.
    recorded **500 MW consumption for 2026** and **380 MW production for 2026**.
    These are **different directions**, not two interchangeable capacities,
    and the 2030/2035 consumption intersections were not transcribed.
-   **These are source-transcribed figures awaiting an independent recheck.**
+   **These original source-transcribed figures matched reviewer-supplied screenshots on 18–19 October, but remain indicative and not grid-validated.**
 3. **Keep forecasts discrete.** Production values at a few points are
    identical in 2026, 2030 and 2035 in this sample. We draw separate
    observations only; we do not assert continuous constant headroom between
@@ -42,8 +42,7 @@ with separately configured, private keys.
 5. **Open Evidence & quality.** Show the clean separation of operator-
    published indicative observations, national operational context,
    operator-confirmed capacity (none) and model scenarios (none).
-   Download the **Independent source recheck** worksheet to demonstrate
-   the remaining verification discipline.
+   Show the [completed original screenshot audit](audits/README.md). The blank **Independent source recheck** worksheet is for new dated reviews.
 
 ## What this demonstrates against the role
 
@@ -71,9 +70,7 @@ operational feeds are kept in a separate category.
 
 **What remains before you can call it independently verified?**
 
-Independent Grid Scope value-by-value recheck with review timestamps and
-evidence links, a persistent actual local import and a portal-level operational
-spot check. The manual GitHub Actions smoke tests authenticate and parse
+The original Grid Scope value-by-value screenshot check is complete (17 exact tooltip matches and one explicit panel value). A persistent optional local import and an operational portal-level independent spot check remain separate future work. Physical network validation is not established. The manual GitHub Actions smoke tests authenticate and parse
 live responses, but their temporary databases were deleted afterward.
 ENTSO-E A75 generation is still an additional unverified mode.
 
@@ -87,8 +84,7 @@ rights, and a synthetic network must not be described as Fingrid's topology.
 
 A personal, five-substation proof of concept that distinguishes Fingrid's
 published indicative connection-capacity outlook from Finland-wide TSO
-operational data, with an auditable SQLite pipeline and an explicit
-source-verification gap.
+operational data, with an auditable SQLite pipeline and a dated 18-row source-transcription screenshot audit. There is still no operator-confirmed available MW.
 
 See [source audit protocol](GRID_SCOPE_RECHECK.md),
 [original capture notes](CAPTURE_LOG.md) and
