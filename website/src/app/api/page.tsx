@@ -8,6 +8,7 @@ const endpoints=[
  ["GET","/api/v1/capacity?direction=production&year=2030","Filtered published indicative estimates"],
  ["GET","/api/v1/coverage","Observed versus missing-in-compiled-capture combinations"],
  ["GET","/api/v1/quality","30-day source completeness and interval revisions"],
+ ["GET","/api/v1/source-review","Original 18-row screenshot matches; no guaranteed headroom"],
  ["GET","/api/v1/export/recheck","CSV worksheet for independently reviewing 18 source transcriptions"],
  ["GET","/api/v1/operations?source=fingrid&dataset_id=124","National operational intervals; paginated, timezone-aware"],
  ["GET","/api/openapi.json","OpenAPI 3.1 schema"],

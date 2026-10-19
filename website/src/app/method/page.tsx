@@ -9,7 +9,7 @@ export default function Method(){return <><section className="page-hero"><div cl
    <div className="section-intro"><p className="eyebrow">Evidence hierarchy</p><h2>What is observed? What is inferred?</h2></div>
    <div className="grid-2">
     <article className="research-card"><span className="kicker">01 · indicative</span><h3>Grid Scope estimate</h3>
-      <p>Source-transcribed conditional figures for specific named grid points, connection directions and source years. Original capture time and source link retained. No independent numeric recheck yet.</p></article>
+      <p>Source-transcribed conditional figures for specific named grid points, connection directions and source years. Original capture time and source link retained. Original 18 values were screenshot-matched to human-supplied Fingrid evidence (17 tooltips, one panel number), not physically validated.</p></article>
     <article className="research-card"><span className="kicker">02 · measured context</span><h3>National operational intervals</h3>
       <p>Authenticated Fingrid and ENTSO-E feeds stored with exact source-defined timestamps, units and retrieval history. Not a measurement of remaining substation capacity.</p></article>
     <article className="research-card"><span className="kicker">03 · simulated</span><h3>Scenario results</h3>

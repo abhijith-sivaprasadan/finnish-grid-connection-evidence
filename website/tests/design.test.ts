@@ -46,7 +46,7 @@ test("Research overview surfaces trustworthy source counts, trends and audit gap
  assert.match(home,/source integrity|source-linked|connection outlooks/i);
  assert.match(home,/operationalWindow\(latest,1\)/);
  assert.match(home,/ratio/);
- assert.match(home,/Numeric rechecks completed/);
+ assert.match(home,/Original screenshot matches/);
  assert.match(trends,/No stored observations/);
  assert.match(trends,/historical intervals/i);
  assert.match(connections,/Open filtered API JSON/);
