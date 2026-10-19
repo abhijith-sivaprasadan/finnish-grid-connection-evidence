@@ -43,6 +43,7 @@ export default async function Home(){
    </div>
    <Link href="/method">Understand the source hierarchy <span aria-hidden="true">→</span></Link>
   </section>
+  <div className="dashboard-archive-link"><div><strong>Explore the historical main-grid designation list</strong><span>128 source-listed station rows · printed total 127 · table caption 1.1.2020 · no inferred MW</span></div><Link href="/stations">Browse source archive ↗</Link></div>
   <section className="dashboard-metrics" aria-label="Coverage of current research sample">
     <div className="dash-metric"><span className="metric-dot blue"/> <p>CONNECTION POINTS</p><strong>{summary?.points??"—"}</strong><small>Selected 400 kV stations</small></div>
     <div className="dash-metric"><span className="metric-dot cyan"/><p>INDICATIVE RECORDS</p><strong>{summary?.capacity_observations??"—"}</strong><small>Original 18 screenshot-matched · indicative only</small></div>

@@ -7,6 +7,7 @@ import { GridMark } from "@/components/grid-mark";
 type Status = {mode:"neon"|"compiled_snapshot"|"unavailable"; latest:string|null; ageHours:number|null};
 const nav = [
   {href:"/",label:"Overview",hint:"Workspace",icon:"overview",group:"EXPLORE"},
+  {href:"/stations",label:"Station inventory",hint:"Historical names",icon:"nodes",group:"EXPLORE"},
   {href:"/connections",label:"Connection outlook",hint:"Capacity evidence",icon:"nodes",group:"EXPLORE"},
   {href:"/operations",label:"System operations",hint:"National time series",icon:"chart",group:"EXPLORE"},
   {href:"/quality",label:"Data quality",hint:"Audit & coverage",icon:"check",group:"EXPLORE"},

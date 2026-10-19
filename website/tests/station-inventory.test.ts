@@ -1,0 +1,25 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import archive from "../src/lib/main-grid-designation.json";
+import {readFileSync} from "node:fs";
+test("historical grid appendix remains a separate identity source, never invented MW",()=>{
+ assert.equal(archive.parsed_rows,128);
+ assert.equal(archive.source_printed_total,127);
+ assert.equal(archive.count_discrepancy_unresolved,true);
+ assert.equal(archive.source_table_caption,"Kantaverkko 1.1.2020");
+ assert.equal(archive.rows.length,128);
+ assert.deepEqual([400,220,110].map(k=>archive.rows.filter(x=>x.voltage_kv===k).length),[49,13,66]);
+ assert.equal(new Set(archive.rows.map(r=>r.id)).size,128);
+ assert.ok(archive.rows.every(r=>r.source_url===archive.source_url));
+ assert.ok(archive.rows.every(r=>!Object.hasOwn(r,"capacity_value")&&!Object.hasOwn(r,"latitude")&&!Object.hasOwn(r,"longitude")));
+ const route=readFileSync("src/app/api/v1/stations/route.ts","utf8");
+ const site=readFileSync("src/app/stations/page.tsx","utf8");
+ const explorer=readFileSync("src/components/station-inventory-explorer.tsx","utf8");
+ assert.match(route,/historical main-grid designation annex/);
+ assert.match(site,/table itself reads/);
+ assert.match(site,/does not establish|source rows|does not tell us/);
+ assert.match(explorer,/Search archive/);
+ assert.match(explorer,/aria-label="Filter station voltage class"/);
+ assert.match(explorer,/Current station status/);
+ assert.match(explorer,/None · not a capacity dataset/);
+});
