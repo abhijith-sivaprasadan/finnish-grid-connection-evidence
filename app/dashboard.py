@@ -86,14 +86,14 @@ else:
 render_section(
     st, "Current evidence base", "A transparent starting point, not a connection offer.",
     "These counters describe what's stored in this evidence collection. Published "
-    "Grid Scope figures remain indicative and independently unverified.",
+    "The 18 ORIGINAL indicative Grid Scope transcription values were screenshot-matched on 18–19 October 2026; physical capacity and connection rights remain unverified.",
 )
 a, b, c = st.columns(3)
 a.metric("Connection points", len(points))
 b.metric("Published observations", len(capacity))
 c.metric("Operational records", len(context))
 if context.empty:
-    st.warning("No persisted operational rows available for this selected database. Prior authenticated smoke checks used temporary databases, not the hosted dataset. Capacity observations are source transcriptions awaiting independent verification.")
+    st.warning("No persisted operational rows available for this selected database. Prior authenticated smoke checks used temporary databases, not the hosted dataset. The original source values matched reviewer-provided screenshots; that is not a physical grid capacity validation.")
 else:
     latest_record = pd.to_datetime(context["interval_end_utc"], utc=True).max()
     lag = (pd.Timestamp.now(tz="UTC") - latest_record).total_seconds() / 3600
@@ -228,7 +228,7 @@ with comparison_tab:
             st.info("Select at least one substation and one year to compare.")
         st.divider()
         st.markdown("#### Independent source recheck")
-        st.warning("The 18 Grid Scope figures were transcribed from the operator viewer; an independent numeric recheck is not yet documented. This checklist starts every row as pending.")
+        st.warning("All 18 ORIGINAL Grid Scope figures have a dated screenshot comparison ledger (17 exact tooltips and 1 panel-value match). This blank CSV checklist starts pending for a NEW review; the original sample data remain unchanged.")
         if audit_checklist:
             st.download_button("Download independent recheck checklist (CSV)",
                                pd.DataFrame(audit_checklist).to_csv(index=False),
