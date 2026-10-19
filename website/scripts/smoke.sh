@@ -37,7 +37,10 @@ grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/coverage"
 grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
 check 200 "/connections"
-grep -q "Download independent audit worksheet" /tmp/grid-smoke-response.json
+grep -q "Audit worksheet" /tmp/grid-smoke-response.json
+# Ensure the data-first evidence matrix and provenance inspector render.
+grep -q "Substation evidence explorer" /tmp/grid-smoke-response.json
+grep -q "Not captured" /tmp/grid-smoke-response.json
 check 200 "/api/v1/quality"
 grep -q '"data_mode":"compiled_snapshot"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/source-review"
@@ -55,6 +58,7 @@ check 503 "/api/v1/health"
 grep -q '"status":"degraded"' /tmp/grid-smoke-response.json
 check 200 "/"
 grep -q "Compiled source snapshot" /tmp/grid-smoke-response.json
-grep -q "Electricity grid" /tmp/grid-smoke-response.json
+grep -q "Grid connection evidence" /tmp/grid-smoke-response.json
+grep -q "What was actually recorded" /tmp/grid-smoke-response.json
 grep -q "RESEARCH WORKSPACE" /tmp/grid-smoke-response.json
 echo "All no-secret production route and public snapshot smoke checks passed."
