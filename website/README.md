@@ -9,7 +9,7 @@ the Python collector and existing Neon production PostgreSQL schema.
 - `/` — independent blue research homepage with conceptual evidence network
 - `/connections` — interactive 5-point × 2-direction × 3-year capacity evidence matrix, discrete comparison bars, individual provenance drawer, filtered raw records and source-audit worksheet
 - `/operations` — three synchronized source-separated charts, 1/2/3/7 observed UTC-day windows anchored to the latest stored interval, provenance-preserving CSV export
-- `/quality` — observed source-day continuity heatmap, distinct intervals versus retrieval revisions, and the 18-row pending-audit register
+- `/quality` — observed source-day continuity heatmap, distinct intervals versus retrieval revisions, and the original 18-row screenshot-comparison register
 - `/method` — scientific method and validation limits
 - `/api` — readable REST API documentation
 - `/api/openapi.json` — machine-readable OpenAPI 3.1
@@ -24,7 +24,7 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 All public endpoints are **read-only**. Missing numerical Grid Scope cells
 are unknown, not zero; reported capacities cannot be added or interpolated.
-The original 18 values still await *independent* operator recheck.
+The original 18 indicative values matched reviewer-provided screenshots on 18–19 October (17 exact tooltips and one visible panel MW). This is not certified connectability.
 
 ## Local development
 
@@ -67,7 +67,7 @@ Never expose the DB URL as `NEXT_PUBLIC_*`. Do not use `neondb_owner`,
 `NEON_API_KEY`, writer DB credentials or provider API tokens in the
 web deployment. Python GitHub Actions remain the sole data collector.
 
-Deployment: **https://finnish-grid-atlas.vercel.app** on Vercel. Live Neon
+For dated canonical deployment status and numerical counts, see [STATUS](../docs/STATUS.md) and [EVIDENCE_LOG](../docs/EVIDENCE_LOG.md). The next paragraphs record the initial deployment milestone, not necessarily current row counts.\n\nDeployment: **https://finnish-grid-atlas.vercel.app** on Vercel. Live Neon
 read connectivity was verified on **18 October 2026**, using a Sensitive,
 Production-scoped `DATABASE_READ_URL` for the restricted reader. The public
 API returned 5 connection points, 18 source-transcribed capacity records,
@@ -97,7 +97,7 @@ anywhere in the current website branding. The abstract lines and nodes are **not
 actual Fingrid transmission topology or locations of substations. The social
 thumbnail is served at `/opengraph-image`.
 
-**Production Neon integration verified 18 October 2026:** the production
+**Historical production Neon integration milestone (18 October 2026):** the production
 Vercel `DATABASE_READ_URL` is scoped Sensitive/Production, the health endpoint
 returns HTTP 200 and the overview reports `data_mode:neon`. The 16 October
 source refresh inserted 288 rows and the public API read back **576** historical

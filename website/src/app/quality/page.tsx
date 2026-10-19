@@ -3,6 +3,7 @@ import Link from "next/link";
 import { overview, capacities } from "@/lib/repository";
 import { qualityReport, auditRecords, FEEDS } from "@/lib/workbench";
 import { QualityWorkbench } from "@/components/quality-workbench";
+import { sourceReviewStatus, EXACT_TOOLTIP_COUNT, PANEL_VALUE_COUNT } from "@/lib/verification";
 export const dynamic="force-dynamic";
 export const metadata:Metadata={title:"Data quality and source audit"};
 export default async function QualityPage(){
@@ -17,10 +18,11 @@ export default async function QualityPage(){
     if(summary.data_mode==="neon"&&summary.newest_operational_interval_utc)
       quality=await qualityReport(summary.newest_operational_interval_utc);
   } catch {fault="The source evidence database is temporarily unavailable. Quality statistics are not fabricated.";}
+  const reviewed=audits.filter(a=>sourceReviewStatus(a).status==="screenshot_match").length;
   return <>
     <section className="page-hero"><div className="wrap"><p className="eyebrow">03 / Provenance and integrity</p>
       <h1>Trust the <em>evidence trail.</em></h1>
-      <p className="lede">See exactly what was recorded, how complete each day is, where retrieval revisions exist, and what still needs an independent operator check.</p></div></section>
+      <p className="lede">See exactly what was recorded, how complete each day is, where retrieval revisions exist, and what source values matched screenshots, and what remains scientifically unverified.</p></div></section>
     <section className="section compact"><div className="wrap">
       {fault&&<p role="alert" className="notice warn">{fault}</p>}
       {quality&&summary&&<>
@@ -40,20 +42,20 @@ export default async function QualityPage(){
       {!quality&&!fault&&<p className="notice">No Neon operational intervals available to calculate quality. The capacity audit remains available below.</p>}
       <section id="audit" className="audit-section" aria-label="Independent Grid Scope evidence audit">
         <div className="wb-heading"><div><p className="eyebrow">FINGRID GRID SCOPE / NUMERIC RECHECK</p>
-          <h2>18 source observations. No independent certificates.</h2>
-          <p>The original 17 October 2026 transcription is preserved. The public operator describes its connection estimates as rough and non-guaranteed. The interactive map has not yielded a reproducible independent number-by-number audit.</p></div>
+          <h2>18 original source observations. Screenshot comparison complete.</h2>
+          <p>The original 17 October 2026 transcription is preserved. The public operator describes its connection estimates as rough and non-guaranteed. All 18 original values matched reviewer-supplied screenshots on 18–19 October (17 exact tooltips and one explicit panel value). This does not verify physical capacity or connection rights.</p></div>
           <a className="button secondary" href="/api/v1/export/recheck">Download 18-row reviewer worksheet ↓</a>
         </div>
         <div className="quality-strip"><div><strong>{audits.length}</strong><span>Source-transcribed observations</span></div>
-          <div><strong>0</strong><span>Independently rechecked here</span></div>
-          <div><strong>{audits.length}</strong><span>Pending numerical audit</span></div></div>
+          <div><strong>{reviewed}</strong><span>Original records matched to screenshots</span></div>
+          <div><strong>{audits.length-reviewed}</strong><span>Returned records not included in original audit</span></div></div>
         <div className="table-wrap"><table><thead><tr><th>Substation</th><th>Direction</th><th>Effective year</th><th>Transcribed</th><th>Review state</th><th>Original evidence</th></tr></thead>
           <tbody>{audits.map(a=><tr key={a.observation_id}>
             <td>{a.name}</td><td>{a.direction}</td><td>{a.effective_year}</td><td>{a.capacity_value} {a.capacity_unit}</td>
-            <td><span className="pill note">Pending recheck</span></td>
+            <td>{sourceReviewStatus(a).status==="screenshot_match"?<span className="pill">{sourceReviewStatus(a).grade==="exact_tooltip"?"Tooltip match":"Panel-value match"}</span>:<span className="pill note">Not reviewed</span>}</td>
             <td><a href={a.source_url} target="_blank" rel="noreferrer">Fingrid viewer ↗</a></td></tr>)}</tbody>
         </table></div>
-        <p className="chart-caption">A reviewer must check point identity, voltage, selected generation/consumption layer, effective year, MW/MVA unit and exact numeric value, then retain dated evidence. Changed current publications must be stored as new captures—not destructive edits. <a href="https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/" rel="noreferrer" target="_blank">Official source limitations ↗</a></p>
+        <p className="chart-caption">{EXACT_TOOLTIP_COUNT} exact tooltips and {PANEL_VALUE_COUNT} panel-value match; screenshot hashes are in the public audit ledger, while images remain private pending permission review. A new review must check point, voltage, direction, year, unit and value. Changed current publications must be stored as new captures—not destructive edits. <a href="https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/" rel="noreferrer" target="_blank">Official source limitations ↗</a></p>
       </section>
     </div></section>
   </>;

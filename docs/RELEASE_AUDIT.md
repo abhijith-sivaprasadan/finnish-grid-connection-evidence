@@ -1,5 +1,7 @@
 # Initial public import — evidence and quality boundaries
 
+> **Historical pre-review release audit.** For later screenshot matching of all 18 original transcriptions see the [18–19 October audit](audits/README.md). This does not establish source publication dates or physically connectable MW.
+
 17 October 2026. This repository was imported from a local project snapshot **without** its virtual environment, package cache, generated SQLite database, logs, or local temporary files.
 
 ## Evidence levels

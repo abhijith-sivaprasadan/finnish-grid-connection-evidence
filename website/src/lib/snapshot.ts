@@ -2,7 +2,8 @@ import type { Capacity, Point } from "./types";
 
 /**
  * Public, repository-compiled Grid Scope transcription captured 2026-10-17.
- * Not independently rechecked. This is deliberately not a live operator feed,
+ * Original 18 transcriptions were compared with reviewer-supplied Fingrid screenshots
+ * on 18-19 October 2026. This is deliberately not a live operator feed,
  * and is served only when DATABASE_READ_URL has not been configured.
  * The figures MUST NOT be treated as connection guarantees or summed.
  */
@@ -61,7 +62,7 @@ export const snapshotCapacities: Capacity[] = series.map(([id, direction, year, 
     capacity_status: "published_indicative",
     source_observed_at: SNAPSHOT_CAPTURE_UTC,
     source_url: SNAPSHOT_ORIGIN,
-    validity_notes: "Repository-compiled indicative Fingrid Grid Scope transcription. Publication date not stated. Conditional screening estimate; independently recheck against the operator. No connection rights and not additive across substations.",
+    validity_notes: "Repository-compiled indicative Fingrid Grid Scope transcription. Publication date not stated. Conditional screening estimate; original 18 values screenshot-matched; not physically validated, no connection rights and not additive across substations.",
     source_published_on: null,
   };
 });

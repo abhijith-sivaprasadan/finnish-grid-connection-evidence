@@ -46,7 +46,7 @@ test("Research overview surfaces trustworthy source counts, trends and audit gap
  assert.match(home,/source integrity|source-linked|connection outlooks/i);
  assert.match(home,/operationalWindow\(latest,1\)/);
  assert.match(home,/ratio/);
- assert.match(home,/Numeric rechecks completed/);
+ assert.match(home,/Original screenshot matches/);
  assert.match(trends,/No stored observations/);
  assert.match(trends,/historical intervals/i);
  assert.match(connections,/Open filtered API JSON/);
@@ -59,7 +59,7 @@ test("Matrix, quality and operations preserve source links, nulls and interactio
  const operations=read("src/components/operations-workbench.tsx");
  assert.match(matrix,/Filter substations by name/);
  assert.match(matrix,/not recorded|not zero/i);
- assert.match(matrix,/Independent recheck/);
+ assert.match(matrix,/Screenshot recheck/);
  assert.match(quality,/No stored intervals/);
  assert.match(quality,/Incomplete coverage|Complete day/);
  assert.match(operations,/finnish-atlas-utc/);

@@ -34,7 +34,7 @@ test("capacity filters are parameterized, never interpolated SQL",async()=>{
   assert.ok(calls[0].sql.includes("effective_year = $2"));
   assert.ok(calls[0].sql.includes("connection_point_id = $3"));
   assert.ok(!calls[1].sql.includes("FI-FINGRID-ALAPITKA-400"));
-  assert.match(output.limitations[0],/not independently rechecked/);
+  assert.match(output.limitations[0],/screenshot|NOT operator-confirmed/i);
 });
 test("operations preserve 31-day bounded source scope and most recent revision view",async()=>{
   const calls:string[]=[];

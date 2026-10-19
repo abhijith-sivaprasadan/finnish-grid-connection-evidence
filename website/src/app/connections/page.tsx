@@ -4,6 +4,7 @@ import { BadInput } from "@/lib/params";
 import Link from "next/link";
 import { ConnectionWorkbench } from "@/components/connection-workbench";
 import type { Capacity } from "@/lib/types";
+import { sourceReviewStatus } from "@/lib/verification";
 export const dynamic="force-dynamic";
 export const metadata:Metadata={title:"Connection outlook"};
 type SP=Promise<Record<string,string|string[]|undefined>>;
@@ -49,7 +50,7 @@ export default async function Connections({searchParams}:{searchParams:SP}){
       </select></label><button className="button" type="submit">Apply filters →</button>
     </form>
     {fault&&<p role="alert" className="notice warn">{fault}</p>}
-    {data?.data_mode==="compiled_snapshot"&&<p role="status" className="notice warn">Offline evidence mode: 18 indicative values transcribed from Fingrid Grid Scope on 17 October 2026. Source captures are not independently rechecked or live connection offers. National operations require a database connection.</p>}
+    {data?.data_mode==="compiled_snapshot"&&<p role="status" className="notice warn">Offline evidence mode: 18 indicative values transcribed from Fingrid Grid Scope on 17 October 2026. The original 18 values matched reviewer-supplied screenshots; these are not live connection offers. National operations require a database connection.</p>}
     {stats&&<div className="data-strip three">
       <div><strong>{stats.coverage.published}</strong><span>Published source intersections</span></div>
       <div><strong>{stats.coverage.missing_in_compiled_capture}</strong><span>Missing in this compiled capture · not zero</span></div>
@@ -58,13 +59,14 @@ export default async function Connections({searchParams}:{searchParams:SP}){
     <p className="source-note">An empty table cell means the selected snapshot has no recorded value—not that the operator reports zero megawatts. Connection points and years cannot be summed or interpolated.</p>
     <div className="section-intro table-heading"><p className="eyebrow">Source records</p><h2>Figures, with the original context.</h2><p>Filtered {data?.pagination.total ?? "—"} records. Each row retains a source link and capture timestamp.</p></div>
     {data&&<p className="results-actions"><Link href={"/api/v1/capacity?" + q.toString()} className="button secondary">Open filtered API JSON ↗</Link></p>}
-    {data&&<div className="table-wrap"><table><thead><tr><th>Substation</th><th>Direction</th><th>Year</th><th>Indicative value</th><th>Source capture (UTC)</th><th>Evidence</th></tr></thead>
+    {data&&<div className="table-wrap"><table><thead><tr><th>Substation</th><th>Direction</th><th>Year</th><th>Indicative value</th><th>Source capture (UTC)</th><th>Source review</th><th>Evidence</th></tr></thead>
     <tbody>{data.data.map(o=><tr key={o.observation_id}><td><strong>{o.name}</strong></td><td>{o.direction}</td><td>{o.effective_year??"—"}</td>
       <td className="value-cell">{o.capacity_value} {o.capacity_unit}</td><td>{new Date(o.source_observed_at).toISOString().slice(0,16).replace("T"," ")}</td>
+      <td>{sourceReviewStatus(o).status==="screenshot_match"?(sourceReviewStatus(o).grade==="exact_tooltip"?"Exact tooltip":"Panel MW"):"Not audited"}</td>
       <td><a href={o.source_url} target="_blank" rel="noreferrer">Operator source ↗</a></td></tr>)}</tbody></table></div>}
     {data&&data.data.length===0&&<p className="notice">No recorded observations match these filters. This does not imply zero capacity.</p>}
     <div className="limit-box"><span className="kicker">Required interpretation</span><p>
-      These 18 source-transcribed Grid Scope figures still require an independent numeric recheck.
+      The 18 original Grid Scope values matched reviewer-supplied screenshots (17 tooltips and one panel number); this is not physical grid validation.
       They are not guaranteed connection rights or operator-confirmed available capacity.
       Selected sample observations do not characterize all Finnish substations.</p></div>
   </div></section></>;

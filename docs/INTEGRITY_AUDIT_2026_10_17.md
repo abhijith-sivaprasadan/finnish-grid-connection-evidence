@@ -1,5 +1,7 @@
 # Verification and audit record — 17 October 2026
 
+> **Historical integrity snapshot from 17 October 2026.** A subsequent [18/18 screenshot comparison](audits/README.md) was completed on 18–19 October; the older pending review status below was accurate at the time, not current. This is not physical capacity validation.
+
 ## Evidence levels
 
 | Evidence | What is supported | What is not supported |

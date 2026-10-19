@@ -45,7 +45,7 @@ export default async function Home(){
   </section>
   <section className="dashboard-metrics" aria-label="Coverage of current research sample">
     <div className="dash-metric"><span className="metric-dot blue"/> <p>CONNECTION POINTS</p><strong>{summary?.points??"—"}</strong><small>Selected 400 kV stations</small></div>
-    <div className="dash-metric"><span className="metric-dot cyan"/><p>INDICATIVE RECORDS</p><strong>{summary?.capacity_observations??"—"}</strong><small>Await independent numeric audit</small></div>
+    <div className="dash-metric"><span className="metric-dot cyan"/><p>INDICATIVE RECORDS</p><strong>{summary?.capacity_observations??"—"}</strong><small>Original 18 screenshot-matched · indicative only</small></div>
     <div className="dash-metric"><span className="metric-dot violet"/><p>STORED OPERATIONS</p><strong>{summary?.data_mode==="neon"?summary.operational_rows_stored.toLocaleString("en-US"):"—"}</strong><small>Includes retrieval revisions</small></div>
     <div className="dash-metric"><span className="metric-dot amber"/><p>SOURCE FRESHNESS</p><strong>{age!==null?age>=24?Math.floor(age/24)+"d":age+"h":"—"}</strong><small>{latest?"Since latest historical interval":"No interval timestamp"}</small></div>
   </section>
@@ -62,11 +62,11 @@ export default async function Home(){
       <div className="coverage-legend">
        <div><i className="legend-dot recorded"/><span>Recorded intersections</span><strong>{published??"—"}</strong></div>
        <div><i className="legend-dot unrecorded"/><span>Not in this capture</span><strong>{missing??"—"}</strong></div>
-       <div><i className="legend-dot unaudited"/><span>Numeric rechecks completed</span><strong>0</strong></div>
+       <div><i className="legend-dot unaudited"/><span>Original screenshot matches</span><strong>{summary?.source_transcription_screenshot_review.matched??"—"}</strong></div>
       </div>
     </div>
     <div className="panel-footnote">This is <strong>sample recording completeness</strong>, not 60% of Finland's connection capacity. Blank intersections are unknown, not zero.</div>
-    <Link href="/quality#audit" className="coverage-audit-link">Review the 18-row verification backlog <span aria-hidden="true">↗</span></Link>
+    <Link href="/quality#audit" className="coverage-audit-link">Review the 18-row screenshot audit <span aria-hidden="true">↗</span></Link>
    </section>
   </div>
   <div className="dashboard-secondary-grid">
@@ -78,7 +78,7 @@ export default async function Home(){
    </section>
    <section className="audit-panel">
     <div className="panel-heading"><div><span className="module-tag">EVIDENCE INTEGRITY</span><h2>What still needs work</h2><p>Visible limitations—not hidden assumptions</p></div></div>
-    <div className="audit-step"><span className="audit-step-icon pending">!</span><div><strong>18 indicative numbers</strong><p>Independent Grid Scope value-by-value confirmation is pending.</p></div><Link href="/quality#audit" aria-label="Open source audit">↗</Link></div>
+    <div className="audit-step"><span className="audit-step-icon pending">!</span><div><strong>18 indicative source values</strong><p>Original values screenshot-matched; no operator confirmation of actual connectability.</p></div><Link href="/quality#audit" aria-label="Open source audit">↗</Link></div>
     <div className="audit-step"><span className="audit-step-icon pass">✓</span><div><strong>National historical records</strong><p>Authenticated observations stay separate from point-specific capacity.</p></div><Link href="/operations" aria-label="Open national operations">↗</Link></div>
     <div className="audit-step"><span className="audit-step-icon info">i</span><div><strong>Modelled outcomes</strong><p>No operator-confirmed headroom or reconstructed transmission topology.</p></div><Link href="/method" aria-label="Open evidence method">↗</Link></div>
     <Link href="/quality" className="panel-action audit-panel-footer">Explore quality and provenance <span aria-hidden="true">↗</span></Link>

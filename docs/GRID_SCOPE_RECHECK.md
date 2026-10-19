@@ -1,14 +1,16 @@
 # Independently recheck the 18 Grid Scope observations
 
-**Status as of 18 October 2026: independent numerical recheck NOT performed.**
+**Update 19 October 2026:** All 18 original observations were compared with human-supplied Fingrid screenshots (17 exact year-specific tooltips and one explicit panel-number match). See the [metadata-only audit](audits/README.md). This does not prove physical headroom or operator-confirmed rights.
+
+**Historical status 18 October (before human review): independent numerical recheck NOT performed.**
 This is a source-audit protocol and a prepared worksheet, not a verification
 certificate. The shipped numbers remain *source-transcribed published
 indicative estimates* (see [capture log](CAPTURE_LOG.md)).
 
 A new [18 October source-access audit](GRID_SCOPE_AUDIT_ATTEMPT_2026_10_18.md)
 confirmed the official operator's scope and disclaimer but could not reliably
-retrieve the interactive point-detail values. The 18 source numbers are still
-pending. The Next.js [Data Quality page](https://finnish-grid-atlas.vercel.app/quality#audit)
+retrieve the interactive point-detail values. Those 18 source numbers were then screenshot-rechecked by a human on 18–19 October.
+The earlier automated attempt is preserved as a historical failed-access event. The Next.js [Data Quality page](https://finnish-grid-atlas.vercel.app/quality#audit)
 now offers an 18-row reviewer worksheet directly from the read-only source
 evidence database.
 
@@ -24,7 +26,7 @@ connect** or a substitute for network studies.
 
 We have 18 published-value transcriptions across five 400-kV substations:
 
-| Connection point | Direction | Transcribed year:value pairs (MW), all unverified independently |
+| Connection point | Direction | Transcribed year:value pairs (MW), later screenshot-matched on 18–19 October |
 |---|---|---|
 | VUOLIJOKI | production | 2026: 500; 2030: 500; 2035: 500 |
 | VUOLIJOKI | consumption | 2026: 500 |
@@ -44,7 +46,7 @@ is publicly readable and confirms the separate consumption and production
 layers and the non-guaranteed nature of the estimates. A second, **read-only
 automated browser attempt** to open its interactive map failed at page
 retrieval. No individual figure was independently reproduced by this attempt,
-so **all 18 source-value audit statuses remain pending**. A human reviewer
+so **all 18 were pending at the time of the automated attempt**. Subsequent reviewer-supplied screenshots matched the original 18 values. A human reviewer
 using the working browser map should complete the steps below. We do not
 interpret an automated-access failure as proof of zero or missing capacity.
 
@@ -60,7 +62,7 @@ python -m src.audit_capacity --output data/audit/grid_scope_recheck.csv
 The generated CSV has one row per recorded observation, including point,
 direction, effective year, transcribed value and unit, observation ID, original
 source URL, original source-capture time, stated/unknown publication date and
-caveats. **All 18 rows begin `pending_independent_recheck`.**
+caveats. **A newly generated checklist begins `pending_independent_recheck`** because it initiates an independent NEW review; the original 18-row comparison is recorded separately in the dated audit ledger.
 
 The script refuses to overwrite an existing checklist so reviewer notes cannot
 be lost accidentally. `data/audit/` is Git-ignored by default. The
