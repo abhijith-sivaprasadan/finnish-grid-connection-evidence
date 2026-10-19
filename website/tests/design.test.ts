@@ -59,7 +59,7 @@ test("Matrix, quality and operations preserve source links, nulls and interactio
  const operations=read("src/components/operations-workbench.tsx");
  assert.match(matrix,/Filter substations by name/);
  assert.match(matrix,/not recorded|not zero/i);
- assert.match(matrix,/Independent recheck/);
+ assert.match(matrix,/Screenshot recheck/);
  assert.match(quality,/No stored intervals/);
  assert.match(quality,/Incomplete coverage|Complete day/);
  assert.match(operations,/finnish-atlas-utc/);

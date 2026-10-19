@@ -1,7 +1,7 @@
 [
   {
     "observation_id": "gs-20261017-vuolijoki-400-production-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-VUOLIJOKI-400",
     "direction": "production",
     "effective_year": 2026,
     "capacity_value": 500,
@@ -15,7 +15,7 @@
   },
   {
     "observation_id": "gs-20261017-vuolijoki-400-production-2030",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-VUOLIJOKI-400",
     "direction": "production",
     "effective_year": 2030,
     "capacity_value": 500,
@@ -29,7 +29,7 @@
   },
   {
     "observation_id": "gs-20261017-vuolijoki-400-production-2035",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-VUOLIJOKI-400",
     "direction": "production",
     "effective_year": 2035,
     "capacity_value": 500,
@@ -43,7 +43,7 @@
   },
   {
     "observation_id": "gs-20261017-alapitka-400-production-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAPITKA-400",
     "direction": "production",
     "effective_year": 2026,
     "capacity_value": 380,
@@ -57,7 +57,7 @@
   },
   {
     "observation_id": "gs-20261017-alapitka-400-production-2030",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAPITKA-400",
     "direction": "production",
     "effective_year": 2030,
     "capacity_value": 380,
@@ -71,7 +71,7 @@
   },
   {
     "observation_id": "gs-20261017-alapitka-400-production-2035",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAPITKA-400",
     "direction": "production",
     "effective_year": 2035,
     "capacity_value": 380,
@@ -85,7 +85,7 @@
   },
   {
     "observation_id": "gs-20261017-alajarvi-400-production-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAJARVI-400",
     "direction": "production",
     "effective_year": 2026,
     "capacity_value": 400,
@@ -99,7 +99,7 @@
   },
   {
     "observation_id": "gs-20261017-alajarvi-400-production-2030",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAJARVI-400",
     "direction": "production",
     "effective_year": 2030,
     "capacity_value": 400,
@@ -113,7 +113,7 @@
   },
   {
     "observation_id": "gs-20261017-alajarvi-400-production-2035",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAJARVI-400",
     "direction": "production",
     "effective_year": 2035,
     "capacity_value": 400,
@@ -127,7 +127,7 @@
   },
   {
     "observation_id": "gs-20261017-seinajoki-400-consumption-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-SEINAJOKI-400",
     "direction": "consumption",
     "effective_year": 2026,
     "capacity_value": 400,
@@ -141,7 +141,7 @@
   },
   {
     "observation_id": "gs-20261017-seinajoki-400-consumption-2030",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-SEINAJOKI-400",
     "direction": "consumption",
     "effective_year": 2030,
     "capacity_value": 400,
@@ -155,7 +155,7 @@
   },
   {
     "observation_id": "gs-20261017-seinajoki-400-consumption-2035",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-SEINAJOKI-400",
     "direction": "consumption",
     "effective_year": 2035,
     "capacity_value": 400,
@@ -169,7 +169,7 @@
   },
   {
     "observation_id": "gs-20261017-uusnivala-400-consumption-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-UUSNIVALA-400",
     "direction": "consumption",
     "effective_year": 2026,
     "capacity_value": 400,
@@ -183,7 +183,7 @@
   },
   {
     "observation_id": "gs-20261017-uusnivala-400-consumption-2030",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-UUSNIVALA-400",
     "direction": "consumption",
     "effective_year": 2030,
     "capacity_value": 400,
@@ -197,7 +197,7 @@
   },
   {
     "observation_id": "gs-20261017-uusnivala-400-consumption-2035",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-UUSNIVALA-400",
     "direction": "consumption",
     "effective_year": 2035,
     "capacity_value": 400,
@@ -211,7 +211,7 @@
   },
   {
     "observation_id": "gs-20261017-vuolijoki-400-consumption-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-VUOLIJOKI-400",
     "direction": "consumption",
     "effective_year": 2026,
     "capacity_value": 500,
@@ -225,7 +225,7 @@
   },
   {
     "observation_id": "gs-20261017-alapitka-400-consumption-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAPITKA-400",
     "direction": "consumption",
     "effective_year": 2026,
     "capacity_value": 500,
@@ -239,7 +239,7 @@
   },
   {
     "observation_id": "gs-20261017-alajarvi-400-consumption-2026",
-    "connection_point_id": "",
+    "connection_point_id": "FI-FINGRID-ALAJARVI-400",
     "direction": "consumption",
     "effective_year": 2026,
     "capacity_value": 400,
