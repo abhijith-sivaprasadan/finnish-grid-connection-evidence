@@ -2,9 +2,10 @@ import { readQuery, type ReadQuery } from "./db";
 import { snapshotPoints, snapshotCapacities } from "./snapshot";
 import { directionParam, operationsParams, pageParams, pointParam, yearParam } from "./params";
 import type { Capacity, Operation, Overview, Paged, Point } from "./types";
+import { REVIEWED_SAMPLE_SIZE, EXACT_TOOLTIP_COUNT, PANEL_VALUE_COUNT } from "./verification";
 
 export const CAPACITY_CAUTION =
-  "Indicative Grid Scope transcription only; not independently rechecked or an operator-confirmed connection. Missing observations are unknown, not zero. Point values must not be added.";
+  "Original 18 Fingrid Grid Scope transcriptions matched reviewer-supplied screenshots on 18-19 October 2026. This is NOT operator-confirmed capacity, grid feasibility, or guaranteed headroom. Missing entries are unknown, not zero; values cannot be added.";
 export const OPERATIONS_CAUTION =
   "National operational context, not substation telemetry or available connection headroom.";
 
@@ -19,7 +20,9 @@ export async function overview(query: ReadQuery = readQuery): Promise<Overview> 
   if (useCompiledSnapshot(query)) return {
     points:snapshotPoints.length,capacity_observations:snapshotCapacities.length,
     operational_rows_stored:0,newest_operational_interval_utc:null,
-    source_values_independently_verified:false,data_mode:"compiled_snapshot",
+    source_values_independently_verified:false,
+    source_transcription_screenshot_review:{matched:REVIEWED_SAMPLE_SIZE,exact_tooltips:EXACT_TOOLTIP_COUNT,explicit_panel_numbers:PANEL_VALUE_COUNT,review_date:"2026-10-19"},
+    operator_confirmed_connection_capacity:false,data_mode:"compiled_snapshot",
   };
   const rows = await query<{
     points: string | number; capacity_observations: string | number;
@@ -29,7 +32,9 @@ export async function overview(query: ReadQuery = readQuery): Promise<Overview> 
   return {points: Number(row?.points || 0), capacity_observations: Number(row?.capacity_observations || 0),
     operational_rows_stored: Number(row?.operational_rows_stored || 0),
     newest_operational_interval_utc: row?.newest_operational_interval_utc ?? null,
-    source_values_independently_verified: false,data_mode:"neon"};
+    source_values_independently_verified: false,
+    source_transcription_screenshot_review:{matched:REVIEWED_SAMPLE_SIZE,exact_tooltips:EXACT_TOOLTIP_COUNT,explicit_panel_numbers:PANEL_VALUE_COUNT,review_date:"2026-10-19"},
+    operator_confirmed_connection_capacity:false,data_mode:"neon"};
 }
 export async function points(params = new URLSearchParams(), query: ReadQuery = readQuery): Promise<Paged<Point>> {
   const {limit, offset} = pageParams(params, 100);

@@ -40,7 +40,9 @@ export type Overview = {
   capacity_observations: number;
   operational_rows_stored: number;
   newest_operational_interval_utc: string | null;
-  source_values_independently_verified: false;
+  source_values_independently_verified: false; /* Legacy operator/physical confirmation flag; screenshot comparison reported separately. */
+  source_transcription_screenshot_review: { matched:number; exact_tooltips:number; explicit_panel_numbers:number; review_date:string };
+  operator_confirmed_connection_capacity:false;
   data_mode?: "neon" | "compiled_snapshot";
 };
 export type Pagination = { total: number; limit: number; offset: number };
