@@ -6,26 +6,31 @@
 
 A **personal, independent grid-data research and screening project**, not a grid operator, a network reconstruction, or a guarantee of available connection capacity. The Next.js website uses an abstract blue data-network identity, with no official flag, map, or agency branding. It exposes a read-only, source-linked REST API and national operational chronology while the original Python Streamlit application remains available.
 
-### Verified production status · 18 October 2026
+### Canonical status and evidence history
 
-- **Neon PostgreSQL is connected** to Vercel through the restricted `grid_dashboard_reader` role. Production `/api/v1/health` returns HTTP 200; `/api/v1/overview` reports `data_mode:neon`.
-- **Five selected 400 kV points and 18 Fingrid Grid Scope source-transcribed indicative observations** were captured 17 October. **Independent verification of those 18 capacity values remains pending**. Missing values are unknown, not zero; conditional point estimates cannot be aggregated as actual headroom.
-- **576 persisted historical national operational rows:** two complete UTC days (15 and 16 October), each containing 96 validated 15-minute intervals from Fingrid consumption 124, 96 from Fingrid production 74, and 96 from ENTSO-E actual load A65. This is national context, **not substation telemetry**.
-- A repeatable [hosted Neon bootstrap](.github/workflows/neon-bootstrap.yml) and [source refresh](.github/workflows/cloud-refresh.yml) use private GitHub Actions secrets. The one-time [16 October refresh validation](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39121937364) inserted 288 new rows without altering existing capacity records.
-- **Daily source refresh approved and enabled**: GitHub Actions at **07:17 UTC**, one completed UTC day per run, default conservative three-day lag. Stop future scheduled collection by setting repository variable `ENABLE_PUBLIC_REFRESH=false`; manual dispatch remains separate.
-- Four new [source-evidence workbenches](website/README.md) are now live: an interactive
-connection matrix and bar comparison; three aligned national-operation plots with
-historical CSV export; a 30-day quality/completeness heatmap; and a dedicated
-independent-review register and worksheet. These use the existing database,
-not simulated network topology. The operator's source disclaimer was rechecked
-but **none of the 18 Grid Scope numeric figures could be independently confirmed**.
+**Current project status:** [docs/STATUS.md](docs/STATUS.md) ·
+[Dated ingestion, source and CI milestones](docs/EVIDENCE_LOG.md) ·
+[Contribution discipline](docs/CONTRIBUTING.md).
 
-A separate [daily strict production monitor](.github/workflows/site-monitor.yml) checks connected Neon mode, freshness, field provenance, and all three feeds without private credentials. The [runbook](docs/SITE_OPERATIONS.md) documents safe operations and failure recovery.
-- The site is deployed manually to Vercel; **GitHub-to-Vercel automatic deployment still requires linking GitHub in the Vercel account**. The existing Neon reader is a server-only, sensitive production environment variable, never committed to this repository.
+The active Next.js deployment uses **`website/`** (the `web/` prototype is
+archived), read-only Neon PostgreSQL and three historical national energy
+feeds. A successful **scheduled** refresh is recorded in the evidence log.
+Public operational row counts change as new intervals and retrieval
+revisions are stored; query the [overview API](https://finnish-grid-atlas.vercel.app/api/v1/overview)
+and [quality API](https://finnish-grid-atlas.vercel.app/api/v1/quality)
+instead of treating old README values as permanently current.
 
-[![Evidence checks](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/workflows/ci.yml)
+**Source verification:** All **18 original indicative Grid Scope transcriptions**
+matched human-supplied Fingrid screenshots on 18–19 October 2026
+(17 year-specific tooltips and 1 explicit panel MW value), recorded in the
+[dated 18-row audit](docs/audits/GRID_SCOPE_18_ROW_SCREENSHOT_RECHECK_2026_10_19.csv).
+This **does not** establish physically available transmission-grid headroom,
+operator confirmation or guaranteed connectability. Missing combinations
+remain unknown, never zero.
 
-See [website architecture and API](website/README.md), [scientific scope and limitations](docs/SITE_OPERATIONS.md), and [free hosting and stop controls](docs/FREE_HOSTING.md). A75 generation, independent numerical confirmation of the Grid Scope sample, full network power flow and the optional Netherlands extension are **not complete**.
+Manual Vercel uploads are still distinct from automatic Git-based deployments.
+This repository is a portfolio research tool, **not** a SCADA platform or
+certified connection-availability system.
 
 ## Run locally
 
@@ -58,8 +63,8 @@ entitlement.
 
 | Evidence | This release | Meaning |
 |---|---|---|
-| Published indicative capacity | 18 source-transcribed readings; five points; selected 2026/2030/2035 entries | Reported Fingrid indicative estimates, awaiting independent source cross-check |
-| Operational context | Fingrid 124/74 and ENTSO-E A65 authenticated smoke tests passed; repo records a 288-row hosted Neon import, but Vercel remains disconnected | National Finnish load/production, not a substation measurement |
+| Published indicative capacity | 18 original source-transcribed readings; 17 screenshot tooltip matches and 1 panel MW match on 18–19 October | Fingrid indicative estimates, not certified or guaranteed available MW |
+| Operational context | Historical national Fingrid 124/74 and ENTSO-E A65 records persisted to read-only Neon website; see dated [evidence log](docs/EVIDENCE_LOG.md) and live [API](https://finnish-grid-atlas.vercel.app/api/v1/quality) | Historical retrieval rows include revisions; not nodal headroom |
 | Operator confirmation | Zero rows | Would require separate documentary evidence; public map values do not qualify |
 | Model scenarios | Separate schema, zero rows | PyPSA/pandapower are optional future studies |
 | Reinforcement projects | Separate schema and CSV template, zero rows | No source-verified project-to-point links in this release |
@@ -68,8 +73,7 @@ entitlement.
 [Capture log](docs/CAPTURE_LOG.md) documents exactly what was read and spot-checked.
 [Independent source-recheck guide](docs/GRID_SCOPE_RECHECK.md) documents
 how to manually re-open each direction/year in Grid Scope and preserve audit
-evidence. Its downloadable 18-row checklist starts entirely **pending**; no
-independent numeric verification is claimed.
+evidence. Its blank worksheet is intended for a **new** review; the original sample\x27s completed screenshot comparison is tracked separately in [audit metadata](docs/audits/README.md).
 [Internal verification and integrity audit](docs/INTEGRITY_AUDIT_2026_10_17.md)
 documents the difference between CSV-to-database consistency, operational
 interval validation and outstanding independent operator-value confirmation.
@@ -81,7 +85,7 @@ deliverable without claiming operator-confirmed connection headroom.
 [API setup](docs/SETUP.md) explains account/key setup and the first live commands.
 [Free online hosting setup](docs/FREE_HOSTING.md) describes Neon Free +
 Streamlit Community Cloud deployment, private API key handling, strict daily
-interval coverage and opt-in scheduled refresh.
+interval coverage and the approved scheduled refresh controls.
 [Persistent local import](docs/LIVE_CONTEXT_IMPORT.md) fetches all verified
 operational feeds, validates the responses, and atomically inserts into a
 Git-ignored SQLite database consumed by Streamlit.
@@ -155,8 +159,7 @@ or error-free; discuss an actual connection with the operator.
 
 The sample contains no interpolation, power-factor conversion or fabricated
 numbers. The operational clients currently cover Fingrid datasets 124/74 and
-ENTSO-E actual load/generation per type only. NTC, flows, outages, reserves, automatic
-scheduling and stretch modelling remain [tracked work](docs/ROADMAP.md).
+ENTSO-E actual load/generation per type only. NTC, flows, outages, reserves and stretch modelling remain [tracked work](docs/ROADMAP.md). Source refresh is scheduled with an emergency stop control.
 
 Primary sources: [Fingrid Grid Scope](https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/),
 [Fingrid Open Data](https://data.fingrid.fi/en/instructions),
@@ -164,5 +167,4 @@ Primary sources: [Fingrid Grid Scope](https://www.fingrid.fi/en/grid/grid-connec
 [Netbeheer Nederland](https://www.netbeheernederland.nl/netcapaciteit-en-flexibiliteit/capaciteitskaart).
 Source data retains the operator's rights and terms; no blanket data licence is
 asserted. This code is intended for the linked public portfolio repository; live API imports
-into a **local** database and independent capacity transcription verification
-are still pending.
+into a **local** database is an optional exercise; hosted Neon source ingestion\nand a screenshot comparison of the original Grid Scope 18-row sample have been completed.
