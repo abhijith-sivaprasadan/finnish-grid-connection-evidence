@@ -26,7 +26,7 @@ export function StationInventoryExplorer({rows}:{rows:Station[]}){
   <div className="si-controls">
    <label>Search archive<input type="search" aria-label="Search station names" placeholder="Station name…" value={term} onChange={e=>{setTerm(e.target.value);filterChange();}}/></label>
    <label>Voltage class<select aria-label="Filter station voltage class" value={voltage} onChange={e=>{setVoltage(e.target.value);filterChange();}}><option value="all">All classes</option><option value="400">400 kV</option><option value="220">220 kV</option><option value="110">110 kV</option></select></label>
-   <label>Sort<select aria-label="Sort stations" value={sort} onChange={e=>{setSort(e.target.value);setPage(0);}}><option value="name">Station name</option><option value="voltage">Highest voltage</option></select></label>
+   <label>Sort<select aria-label="Sort stations" value={sort} onChange={e=>{setSort(e.target.value as "name"|"voltage");setPage(0);}}><option value="name">Station name</option><option value="voltage">Highest voltage</option></select></label>
    <div className="si-controls-summary" role="status">{matches.length} matching rows in historical appendix</div>
   </div>
   <div className="si-scroll" role="region" tabIndex={0} aria-label="Historical station inventory table">
