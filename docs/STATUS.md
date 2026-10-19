@@ -40,7 +40,7 @@ A successful endpoint read is not proof that the underlying source is current.
   and [audit scope](audits/README.md). Reviewer screenshots remain
   private pending redistribution-rights review.
 - **This validates the numerical transcription comparison only.**
-  It does not reconstruct the original 17 October operator display,
+  It does not establish available substation headroom or reconstruct the original 17 October operator display,
   authenticate a network calculation, show actual connectability,
   allocate queue rights, or constitute Fingrid confirmation of available MW.
 - **12 of 30** possible sample point/direction/year intersections were not
