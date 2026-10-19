@@ -34,3 +34,20 @@ Spelling normalized from PDF text layer in four extraction glitches, checked aga
 5. Obtain Fingrid's current authoritative station-to-coordinate crosswalk or seek permission for a documented export. Incorporate verified updates append-only.
 
 No merge to production or direct Neon writes are necessary for this archival evidence source.
+
+## Optional local SQLite archival import (separate from capacity)
+
+The historical station enumeration may be stored in a **separate**
+\`historical_station_designation\` table. It will **never** create a
+\`connection_point\` row or \`capacity_observation\` value.
+
+    python -m src.station_catalogue_store --db data/station-research.sqlite
+    python -m src.station_catalogue_store --db data/station-research.sqlite --apply
+
+The first call validates only. The second writes 128 source-labelled
+historical rows to the specified **local** SQLite DB, idempotently.
+The import refuses conflicting immutable IDs and rolls back the transaction.
+This does not migrate Neon or the deployed UI; the public archive is
+currently served from an attributed static JSON projection with the same
+records. A later review can migrate the independent table to PostgreSQL,
+after production schema, source-rights and current-name reconciliation.
