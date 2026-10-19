@@ -1,0 +1,108 @@
+# Nationwide substation inventory — source intake (Stage 1)
+
+Last verified: **19 October 2026**. This adds an *offline validation gate* for
+source-backed geographical candidates. It does **not** scrape Fingrid or NLS,
+write to Neon, mark anything operator-connected, or publish invented MW.
+
+## Coverage is not the same thing as connection capacity
+
+- The current Grid Atlas includes **five** point identifiers manually copied
+  from Fingrid Grid Scope on 17 October and **18** original indicative MW
+  observations. Their screenshots were rechecked on 18–19 October.
+- Fingrid reports **138 main-grid substations for 2025**, but that is a
+  differently dated and scoped operator statistic. There is no public
+  source-verified complete ID mapping between those 138 assets and the five
+  Grid Scope point IDs in this project.
+- Grid Scope shows existing >=110 kV network infrastructure but only gives
+  production/consumption estimates for **some** substations. All missing
+  figures remain unknown, never 0 MW.
+
+## Source candidates and reuse checks
+
+1. **Fingrid Grid Scope**:
+   https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/
+   confirms the five original pilot **connection points**, with 18 numeric
+   transcriptions. It is not a validated all-station export or API.
+2. **Fingrid main-grid network statistic**:
+   https://www.fingrid.fi/en/grid/development/power-transmission-grid-of-fingrid/
+   lists 138 substations in its 2025 summary, but not 138 unique public
+   machine-readable station IDs and point-specific headroom values.
+3. **National Land Survey of Finland, Topographic Database**:
+   https://www.maanmittauslaitos.fi/en/maps-and-spatial-data/datasets-and-interfaces/product-descriptions/topographic-database
+   is nationwide geospatial material under **CC BY 4.0** and supplies
+   GeoPackage and OGC API Features options. **This is cartographic coverage,
+   not proof that an object is a Fingrid substation**. Verify whether
+   source layers distinguish high-voltage station objects at all.
+   - Download documentation:
+     https://www.maanmittauslaitos.fi/en/geopackage
+   - Features service information / API key:
+     https://www.maanmittauslaitos.fi/en/node/13475
+   - On 19 October the API's relevant **substation-specific collection and
+     attributes have NOT been independently identified**.
+   - Some NLS services have changed versions; inspect the API version,
+     coordinate reference system and collection schema on first retrieval.
+     Do not transform Finnish EPSG:3067 Easting/Northing into invented
+     WGS84 coordinates.
+   - Licence attribution on redistribution must give National Land Survey
+     of Finland, named dataset and retrieval date.
+4. **OpenStreetMap** may be useful for cross-checking missing objects, but
+   mapped ownership and electrical facts require reconciliation. ODbL is
+   different from CC BY 4.0; do not mix or redistribute derived OSM
+   databases until its terms have been assessed separately.
+
+**Source permissions and coverage have not yet been established for any
+bulk Fingrid Grid Scope station-capacity feed.** No hidden/private APIs.
+
+## Offline staging input
+
+The file data/catalogue/seed_20261017.csv contains **only the original
+five source-transcribed connection-point IDs**, not substations presumed to
+be owned by Fingrid. No coordinates or new values have been manufactured.
+
+Create a separately dated CSV with precisely the same columns for every new
+batch. Every row needs a source-native feature ID, original URL, capture
+timestamp, original reported name, evidence class and human notes. The
+registry_id is a project-local stable key, not automatically an operator ID.
+If the NLS source does not supply owner/voltage, leave those fields unknown.
+
+review_state | meaning
+--- | ---
+candidate | Mapped or documentary lead; no verified operator identity
+source_transcribed | Source actually displayed this identity/label; not confirmed physical owner
+operator_identity_checked | Independently documented operator ownership/identity, with row-specific documentary URL; **not** a verified connection capacity
+
+feature_kind | meaning
+--- | ---
+connection_point | A named connection point in an operator capacity viewer
+substation | A source explicitly labels the asset as a substation
+mapped_infrastructure | Cartographic power-infrastructure object; uncertain electrical semantics
+unspecified | Document does not establish more
+
+Run from repository root:
+
+    python -m src.station_catalogue --input data/catalogue/seed_20261017.csv
+    python -m src.station_catalogue --input path/to/staged_source.csv --output data/catalogue/review.json
+
+The audit detects duplicate source IDs and name+voltage collisions, checks
+coordinates in decimal WGS84 (not EPSG:3067), refuses future timestamps,
+credentials in URLs and unjustified claims of Fingrid identity.
+
+**No row is imported into the live capacity tables.** Review station/entity
+matching and approve source licences first. A later bounded migration should
+add an identity crosswalk and independent coverage endpoint, then reconcile
+read-only UI count denominators. This should precede any proposed national map.
+
+## Next source-acquisition milestones
+
+- Inspect Fingrid's existing public map and NLS's latest collections under
+  their own user terms; establish a licensed list of current, named main-grid
+  substations, voltage and source-native IDs.
+- Trial a **small geographically distributed batch** and verify NLS vs
+  Fingrid identities manually; record unsupported/ambiguous matches.
+- Count verified station identities separately from mapped candidates and
+  published MW observations. Never claim that station number rose until
+  new identities are accepted and imported.
+- Only then stage one-way SQL migrations, contributor review and read-only
+  site integration; PR #32 is the separate data-first UI track.
+
+This foundation deliberately does not alter the original 5 / 18 data.
