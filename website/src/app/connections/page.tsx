@@ -6,7 +6,7 @@ import { ConnectionWorkbench } from "@/components/connection-workbench";
 import type { Capacity } from "@/lib/types";
 import { sourceReviewStatus } from "@/lib/verification";
 export const dynamic="force-dynamic";
-export const metadata:Metadata={title:"Connection outlook"};
+export const metadata:Metadata={title:"Substation source evidence"};
 type SP=Promise<Record<string,string|string[]|undefined>>;
 export default async function Connections({searchParams}:{searchParams:SP}){
   const inputs=await searchParams;
@@ -29,16 +29,15 @@ export default async function Connections({searchParams}:{searchParams:SP}){
       "The read-only database is temporarily unavailable. No values have been substituted.";
   }
   return <><section className="page-hero"><div className="wrap">
-    <p className="eyebrow">01 / Source-transcribed connection capacity</p>
-    <h1>Connection <em>outlook.</em></h1><p className="lede">Explore only the years and directions
-    Fingrid Grid Scope was recorded as publishing for this small sample. Not a feasibility determination.</p>
+    <p className="eyebrow">01 / Substation evidence explorer</p>
+    <h1>Connection <em>evidence.</em></h1><p className="lede">Browse actual captured point, direction and year values. Inspect the underlying source, find collection gaps and export recorded observations. Not a national substation catalogue or a feasibility determination.</p>
   </div></section>
   <section className="section compact"><div className="wrap">
     {catalog.length>0&&<ConnectionWorkbench points={catalog} observations={allObservations} initialPointId={typeof inputs.point_id==="string"?inputs.point_id:undefined}/>}
-    <div className="section-intro table-heading" style={{marginTop:48}}><p className="eyebrow">RAW EVIDENCE LEDGER</p><h2>Filter individual source records.</h2><p>Keep every observation traceable to its published source and original capture time.</p></div>
+    <div className="section-intro table-heading" style={{marginTop:36}}><p className="eyebrow">RAW SOURCE LEDGER</p><h2>Trace individual records</h2><p>Filter the original source observations by station, direction and published effective year.</p></div>
     <form method="get" action="/connections" className="filters" aria-label="Capacity filters">
       <label>Substation<select name="point_id" defaultValue={typeof inputs.point_id==="string"?inputs.point_id:""}>
-        <option value="">All five points</option>
+        <option value="">All catalogue points</option>
         {catalog.map(p=><option key={p.connection_point_id} value={p.connection_point_id}>{p.name}</option>)}
       </select></label>
       <label>Direction<select name="direction" defaultValue={typeof inputs.direction==="string"?inputs.direction:""}>
@@ -68,6 +67,6 @@ export default async function Connections({searchParams}:{searchParams:SP}){
     <div className="limit-box"><span className="kicker">Required interpretation</span><p>
       The 18 original Grid Scope values matched reviewer-supplied screenshots (17 tooltips and one panel number); this is not physical grid validation.
       They are not guaranteed connection rights or operator-confirmed available capacity.
-      Selected sample observations do not characterize all Finnish substations.</p></div>
+      This sampled catalogue does not characterize all Finnish substations.</p></div>
   </div></section></>;
 }
