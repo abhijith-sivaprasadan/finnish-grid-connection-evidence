@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { Capacity,Point } from "@/lib/types";
 import { YEARS } from "@/lib/workbench-shared";
+import { sourceReviewStatus } from "@/lib/verification";
 
 type Slot = {point:Point; year:number; direction:"consumption"|"production"; value:Capacity|null};
 const order:["production","consumption"]=["production","consumption"];
@@ -87,7 +88,7 @@ export function ConnectionWorkbench({points,observations,initialPointId}:{points
       <p><strong>{activeStatus}.</strong> {selected.value?selected.value.capacity_value+" "+selected.value.capacity_unit+" was transcribed from Grid Scope.": "No value was recorded for this intersection in the published project sample."}</p>
       {selected.value&&<div className="evidence-meta">
         <span><b>Capture (UTC)</b>{selected.value.source_observed_at.replace("T"," ").slice(0,16)}</span>
-        <span><b>Independent recheck</b>Pending · no reviewer confirmation</span>
+        <span><b>Screenshot recheck</b>{sourceReviewStatus(selected.value).status==="screenshot_match"?(sourceReviewStatus(selected.value).grade==="exact_tooltip"?"Exact tooltip matched":"Panel MW matched"):"Not audited in original sample"}</span>
         <span><b>Evidence status</b>Published indicative only</span>
         <a href={selected.value.source_url} target="_blank" rel="noreferrer">Open operator viewer ↗</a>
       </div>}
@@ -110,11 +111,11 @@ export function ConnectionWorkbench({points,observations,initialPointId}:{points
           <Bar dataKey="consumption" name="Consumption" fill="#69b5e8" radius={[4,4,0,0]} isAnimationActive={false}/>
         </BarChart>
       </ResponsiveContainer></div>
-      <p className="chart-caption">Unrecorded directions are null, never plotted as zero. These values are conditional operator estimates awaiting independent numerical recheck.</p>
+      <p className="chart-caption">Unrecorded directions are null, never plotted as zero. These conditional indicative values were screenshot-matched for the original sample only; they are not operator-confirmed headroom.</p>
     </div>
     <div className="audit-summary"><strong>Independent source audit</strong>
-      <span><b>0 / {observations.length}</b> numerically rechecked</span>
-      <span>{observations.length} pending records · original 17 October capture retained unchanged</span>
+      <span><b>{observations.filter(o=>sourceReviewStatus(o).status==="screenshot_match").length} / {observations.length}</b> original screenshot matches</span>
+      <span>17 tooltips + 1 panel number for original sample; newer captures require separate review</span>
       <a href="/quality#audit">Audit method →</a>
     </div>
   </section>;
