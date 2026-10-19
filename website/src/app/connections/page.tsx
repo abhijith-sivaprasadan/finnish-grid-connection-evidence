@@ -4,7 +4,7 @@ import { evidenceCatalogue } from "@/lib/catalogue";
 import { BadInput } from "@/lib/params";
 import Link from "next/link";
 import { ConnectionWorkbench } from "@/components/connection-workbench";
-import type { Capacity } from "@/lib/types";
+import type { Capacity, Point } from "@/lib/types";
 import { sourceReviewStatus } from "@/lib/verification";
 export const dynamic="force-dynamic";
 export const metadata:Metadata={title:"Substation source evidence"};
@@ -20,7 +20,7 @@ export default async function Connections({searchParams}:{searchParams:SP}){
   let fault:string|null=null;
   let data:Awaited<ReturnType<typeof capacities>>|null=null;
   let stats:Awaited<ReturnType<typeof coverage>>|null=null;
-  let catalog:Awaited<ReturnType<typeof points>>["data"]=[];
+  let catalog:Point[]=[];
   let allObservations:Capacity[]=[];
   try {
     const [d,s,all]=await Promise.all([capacities(q),coverage(),evidenceCatalogue()]);
