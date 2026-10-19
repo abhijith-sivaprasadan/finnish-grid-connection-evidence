@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { capacities, coverage, points } from "@/lib/repository";
+import { capacities, coverage } from "@/lib/repository";
+import { evidenceCatalogue } from "@/lib/catalogue";
 import { BadInput } from "@/lib/params";
 import Link from "next/link";
 import { ConnectionWorkbench } from "@/components/connection-workbench";
@@ -22,8 +23,8 @@ export default async function Connections({searchParams}:{searchParams:SP}){
   let catalog:Awaited<ReturnType<typeof points>>["data"]=[];
   let allObservations:Capacity[]=[];
   try {
-    const [d,s,p,all]=await Promise.all([capacities(q),coverage(),points(new URLSearchParams("limit=100")),capacities(new URLSearchParams("limit=200"))]);
-    data=d;stats=s;catalog=p.data;allObservations=all.data;
+    const [d,s,all]=await Promise.all([capacities(q),coverage(),evidenceCatalogue()]);
+    data=d;stats=s;catalog=all.stations;allObservations=all.observations;
   } catch(error) {
     fault=error instanceof BadInput ? "A query filter is invalid; use the form below." :
       "The read-only database is temporarily unavailable. No values have been substituted.";
@@ -44,8 +45,8 @@ export default async function Connections({searchParams}:{searchParams:SP}){
         <option value="">Both directions</option><option value="production">Production</option><option value="consumption">Consumption</option>
       </select></label>
       <label>Published effective year<select name="year" defaultValue={typeof inputs.year==="string"?inputs.year:""}>
-        <option value="">All recorded years</option><option value="2026">2026</option>
-        <option value="2030">2030</option><option value="2035">2035</option>
+        <option value="">All recorded years</option>
+        {Array.from(new Set(allObservations.map(o=>o.effective_year).filter((y):y is number=>y!==null))).sort((a,b)=>a-b).map(y=><option key={y} value={y}>{y}</option>)}
       </select></label><button className="button" type="submit">Apply filters →</button>
     </form>
     {fault&&<p role="alert" className="notice warn">{fault}</p>}

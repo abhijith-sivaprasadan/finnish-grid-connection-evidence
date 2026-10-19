@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { overview, points, capacities, coverage } from "@/lib/repository";
+import { overview, coverage } from "@/lib/repository";
+import { evidenceCatalogue } from "@/lib/catalogue";
 import { operationalWindow } from "@/lib/workbench";
 import { OverviewTrends } from "@/components/overview-trends";
 import type { Capacity,Operation,Point } from "@/lib/types";
@@ -8,11 +9,11 @@ import { sourceReviewStatus } from "@/lib/verification";
 export const dynamic="force-dynamic";
 const short=(name:string)=>name.replace(/\s+\d+\s*kV$/i,"");
 export default async function Home(){
- const results=await Promise.allSettled([overview(),points(new URLSearchParams("limit=100")),capacities(new URLSearchParams("limit=200")),coverage()]);
+ const results=await Promise.allSettled([overview(),evidenceCatalogue(),coverage()]);
  const summary=results[0].status==="fulfilled"?results[0].value:null;
- const stations:Point[]=results[1].status==="fulfilled"?results[1].value.data:[];
- const capacity:Capacity[]=results[2].status==="fulfilled"?results[2].value.data:[];
- const counts=results[3].status==="fulfilled"?results[3].value.coverage:null;
+ const stations:Point[]=results[1].status==="fulfilled"?results[1].value.stations:[];
+ const capacity:Capacity[]=results[1].status==="fulfilled"?results[1].value.observations:[];
+ const counts=results[2].status==="fulfilled"?results[2].value.coverage:null;
  const latest=summary?.newest_operational_interval_utc??null;
  const age=latest?Math.max(0,Math.floor((Date.now()-Date.parse(latest))/3600000)):null;
  let operations:Operation[]=[];
@@ -36,10 +37,10 @@ export default async function Home(){
    </section>
    <div className="df-home-main">
     <section className="df-home-panel">
-     <div className="df-panel-head"><div><p className="df-overline">01 / CONNECTION CAPACITY SOURCE RECORDS</p><h2>What was actually recorded</h2><p>Individually recorded indicative values for {year??"the available"} effective year; other years are in the explorer.</p></div><Link href="/connections">Inspect all years ↗</Link></div>
+     <div className="df-panel-head"><div><p className="df-overline">01 / CONNECTION CAPACITY SOURCE RECORDS</p><h2>What was actually recorded</h2><p>Individually recorded indicative values for {year??"the available"} effective year; showing up to 15 of {stations.length} stations here. Inspect the explorer for all catalogue records.</p></div><Link href="/connections">Inspect all years ↗</Link></div>
      <div className="df-table-scroll" role="region" tabIndex={0} aria-label="Recorded source capacity values by station">
       <table className="df-home-table"><thead><tr><th scope="col">Substation</th><th scope="col">Production · {year??"—"}</th><th scope="col">Consumption · {year??"—"}</th><th scope="col">Open</th></tr></thead><tbody>
-      {stations.map(p=><tr key={p.connection_point_id}><th scope="row"><strong>{short(p.name)}</strong><small>{p.voltage_kv??"—"} kV</small></th>
+      {stations.slice(0,15).map(p=><tr key={p.connection_point_id}><th scope="row"><strong>{short(p.name)}</strong><small>{p.voltage_kv??"—"} kV</small></th>
       {(["production","consumption"] as const).map(d=>{const list=reading(p,d);return <td key={d}>{list.length===1?<><strong>{list[0].capacity_value} {list[0].capacity_unit}</strong><small>Indicative · source capture</small></>:<span className="df-not-captured">{list.length>1?"Needs reconciliation":"Not captured"}</span>}</td>;})}
       <td><Link href={"/connections?point_id="+encodeURIComponent(p.connection_point_id)}>Inspect ↗</Link></td></tr>)}
       </tbody></table>{stations.length===0&&<p className="df-empty">The source catalogue is currently unavailable. No data has been substituted.</p>}</div>

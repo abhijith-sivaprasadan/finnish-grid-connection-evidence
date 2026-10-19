@@ -4,7 +4,7 @@
 
 The site is a **source-evidence explorer**, not a national connection-capacity forecast or map. The primary interaction is a filterable matrix of published point × direction × effective year observations, with source-provenance inspection. A raw record view exports the records within the current filters. Historical system operations are separately labelled national series.
 
-The home screen leads with the observed rows and their coverage; a station list is **only the catalogue that has been ingested**, not every Finnish substation. Screens must derive points, years and directions from current data instead of presuming exactly five stations. All missing entries are **not captured**; there is no implicit 0 MW. Values at different substations cannot be added, and unobserved years cannot be interpolated. The original screenshot review applies only to source tuples matched to the immutable October capture.
+The home screen leads with the observed rows and their coverage; a station list is **only the catalogue that has been ingested**, not every Finnish substation. Screens must derive points, years and directions from current data instead of presuming exactly five stations. The server pages through all indexed point and observation records up to a fail-closed 5,000-row cap rather than silently displaying a partial collection; the homepage previews at most 15 stations, while the explorer reads the complete ingested catalogue. All missing entries are **not captured**; there is no implicit 0 MW. Values at different substations cannot be added, and unobserved years cannot be interpolated. The original screenshot review applies only to source tuples matched to the immutable October capture.
 
 ## Why five points are in the current dataset
 
