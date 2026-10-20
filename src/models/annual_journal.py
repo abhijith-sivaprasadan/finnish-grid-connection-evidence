@@ -73,46 +73,63 @@ def source_row(record)->dict:
 def digest_rows(rows)->str:
     return hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(",",":")).encode()).hexdigest()
 
-def split_aligned_and_quarantined(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
-    """Never silently snap an operator timestamp to an assumed quarter hour.
+def quarantine_kind(row:dict,dataset_id:int,start:datetime,end:datetime)->str:
+    """Verify an authentic but incompatible native interval without regridding it.
 
-    Off-grid 15-minute native source intervals are immutable quarantined
-    originals, with their source provenance and exact UTC offset preserved.
-    Only valid aligned original rows count as paired study observations.
-    Other source/data errors still fail closed.
+    Only two specifically established cases are retained: a source 15-minute
+    interval with an off-quarter-hour start, and a native 30-minute interval.
+    Unexpected durations, metadata or values must still fail closed.
     """
-    aligned,off_grid=[],[]
+    metric,unit=DATASETS[dataset_id]
+    if (row.get("source")!="fingrid" or row.get("area")!="FI" or
+        row.get("dataset_id")!=str(dataset_id) or row.get("metric")!=metric or
+        row.get("unit")!=unit or row.get("source_url")!=f"https://data.fingrid.fi/en/datasets/{dataset_id}"):
+        raise ValueError("Cached source row has wrong dataset identity or native unit")
+    ts=datetime.fromisoformat(canonical(row["timestamp_utc"]).replace("Z","+00:00"))
+    finish=datetime.fromisoformat(canonical(row["interval_end_utc"]).replace("Z","+00:00"))
+    if not start<=ts<finish<=end:
+        raise ValueError("Cached source timestamp is outside original queried time window")
+    value=float(row["value"])
+    if not math.isfinite(value) or value<0:
+        raise ValueError("Invalid quarantined source value")
+    canonical(row["retrieved_at"])
+    duration=finish-ts
+    aligned=(ts.minute%15==0 and ts.second==0 and ts.microsecond==0)
+    if duration==timedelta(minutes=15) and not aligned:
+        return "off_grid_original_15min"
+    if duration==timedelta(minutes=30) and aligned:
+        return "native_30min_interval"
+    raise ValueError("Unsupported native source interval; do not regrid or silently quarantine")
+
+
+def split_aligned_and_quarantined(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
+    """Keep both ordinary aligned records and verified irregular originals.
+
+    Irregular originals are excluded from all quarter-hour matching, daily
+    completeness and optimization. Their exact operator starts/ends survive.
+    """
+    aligned,quarantined=[],[]
     for row in rows:
         try:
             check_source_record(row,dataset_id,start,end)
-        except ValueError as exc:
-            if str(exc)!="Non-quarter-hour original source timestamp":
-                raise
-            # check_source_record already confirmed identity, duration, and window.
-            v=float(row["value"])
-            if not math.isfinite(v) or v<0:
-                raise ValueError("Nonphysical off-grid operator source row") from exc
-            canonical(row["retrieved_at"])
-            off_grid.append(row)
+        except ValueError:
+            quarantine_kind(row,dataset_id,start,end)
+            quarantined.append(row)
         else:
             aligned.append(row)
-    return aligned,off_grid
+    return aligned,quarantined
 
 
 def validate_quarantined(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
     for row in rows:
-        try:
-            check_source_record(row,dataset_id,start,end)
-        except ValueError as exc:
-            if str(exc)!="Non-quarter-hour original source timestamp":
-                raise
-            v=float(row["value"])
-            if not math.isfinite(v) or v<0:
-                raise ValueError("Invalid quarantined source value") from exc
-            canonical(row["retrieved_at"])
-        else:
-            raise ValueError("Aligned original source must not be quarantined")
+        quarantine_kind(row,dataset_id,start,end)
 
+
+def quarantine_status(rows:list[dict],dataset_id:int,start:datetime,end:datetime)->str:
+    kinds={quarantine_kind(row,dataset_id,start,end) for row in rows}
+    if "native_30min_interval" in kinds:
+        return "operator_native_30min_interval_preserved_not_interpolated"
+    return "operator_off_grid_timestamp_not_regular_15min_slot"
 
 
 def chunk_audit(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
@@ -143,7 +160,7 @@ def save_chunk(path:Path,dataset_id:int,start:datetime,end:datetime,rows:list[di
         validate_quarantined(quarantine,dataset_id,start,end)
         payload["off_grid_original_source_rows"]=quarantine
         payload["off_grid_original_source_rows_sha256"]=digest_rows(quarantine)
-        payload["quarantine_status"]="operator_off_grid_timestamp_not_regular_15min_slot"
+        payload["quarantine_status"]=quarantine_status(quarantine,dataset_id,start,end)
     path.parent.mkdir(parents=True,exist_ok=True)
     temp=path.with_suffix(".tmp")
     if path.exists():
@@ -170,7 +187,7 @@ def load_chunk(path:Path,dataset_id:int,start:datetime,end:datetime):
     quarantined=payload.get("off_grid_original_source_rows",[])
     if quarantined:
         if (digest_rows(quarantined)!=payload.get("off_grid_original_source_rows_sha256") or
-            payload.get("quarantine_status")!="operator_off_grid_timestamp_not_regular_15min_slot"):
+            payload.get("quarantine_status")!=quarantine_status(quarantined,dataset_id,start,end)):
             raise ValueError("Cached source quarantine hash or original identity inconsistent")
         validate_quarantined(quarantined,dataset_id,start,end)
     elif "off_grid_original_source_rows_sha256" in payload:
@@ -199,7 +216,7 @@ def report(directory:Path)->dict:
                 problems.append({"dataset_id":dataset_id,
                   "timestamp_utc":row["timestamp_utc"],
                   "interval_end_utc":row["interval_end_utc"],
-                  "status":"authentic_source_timestamp_off_grid_quarantined_not_interpolated"})
+                  "status":"authentic_source_"+quarantine_kind(row,dataset_id,a,b)+"_quarantined_not_interpolated"})
             for ts in payload["source_quality"]["source_missing_utc"]:
                 problems.append({"dataset_id":dataset_id,"timestamp_utc":ts,"status":"original_missing_at_capture"})
             for r in payload["original_rows"]:
