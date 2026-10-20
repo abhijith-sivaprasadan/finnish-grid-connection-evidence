@@ -20,7 +20,7 @@ jobs:
       - name: Check out immutable tested Fingrid collector
         uses: actions/checkout@v4
         with:
-          ref: 33b2b5ce5e29790288c34b77e56f97405ebaec43
+          ref: 65111e9ff69e1cac78214b5a74d78b5f7163062b
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
