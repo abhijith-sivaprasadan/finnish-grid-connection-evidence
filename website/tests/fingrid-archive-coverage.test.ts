@@ -11,7 +11,7 @@ const status=dates.map(day=>
   known.has(day)?"known_source_gap":"unknown_not_in_archives");
 
 test("original archive bank publishes exactly 125 unique verified source days, not 365",()=>{
- assert.equal(report.status,"verified_original_archive_coverage_only");
+ assert.equal(report.status,"verified_original_source_archive_union_partial_2025");
  assert.equal(report.distinct_original_paired_intervals,12283);
  assert.equal(report.verified_complete_days,125);
  assert.equal(report.known_missing_source_days,4);
