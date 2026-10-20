@@ -21,7 +21,7 @@ export default function CaseStudy(){
   <section className="page-hero"><div className="wrap">
    <p className="eyebrow">Portfolio / energy & grids / independent case study</p>
    <h1>From grid data to <em>decision evidence.</em></h1>
-   <p className="lede">A Finland-focused proof of concept built around the deliverables of a Grid Analyst role: source stewardship, conditional capacity outlooks, operational context, and clearly qualified model scenarios. This is personal research, not a Krios or Fingrid production system.</p>
+   <p className="lede">A Finland-focused proof of concept built around the deliverables of a Grid Analyst role: source stewardship, conditional capacity outlooks, operational context, and clearly qualified model scenarios. This is personal research, not a Krios or Fingrid production system. An independently audited Netherlands capacity-map source pilot is linked separately, without comparing congestion categories to Finnish MW.</p>
    <div className="action-row"><Link className="button" href="/screening?demand_mw=100&year=2030&direction=consumption&voltage=all">Start with a 100 MW screening request ↗</Link><Link className="button secondary" href="/connections">Inspect published estimates ↗</Link></div>
   </div></section>
   <section className="section compact"><div className="wrap">
@@ -60,6 +60,7 @@ export default function CaseStudy(){
   <section className="section"><div className="wrap">
    <div className="section-intro"><p className="eyebrow">Reproducibility and transparency</p><h2>Review the source and the limitations.</h2></div>
    <div className="source-links">
+    <Link href="/netherlands">Netherlands official congestion-data pilot <span>Source-verified 896 records, metadata only →</span></Link>
     <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence" target="_blank" rel="noreferrer">Source repository <span>Python / Next.js / SQLite / Neon / tests ↗</span></a>
     <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/blob/main/docs/KRIOS_DEMO.md" target="_blank" rel="noreferrer">Short interview demonstration <span>Source observations, screening and models ↗</span></a>
     <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/blob/main/docs/STATUS.md" target="_blank" rel="noreferrer">Dated release status <span>What works, what is not independently verified ↗</span></a>

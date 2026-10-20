@@ -30,6 +30,12 @@ This feature is a **pilot source-evidence triage**, not a load-flow model, elect
 9. If the configured read-only database becomes unavailable, screening responds HTTP 503 rather than switching silently to the repository-compiled sample.
 10. Historical 128 station-name rows from the annex headed 1.1.2020 are separate *unscreened research materials*, not current verified connection points.
 
+## Connection arrangement and technical readiness extension (20 October 2026)
+
+The source MW threshold remains unchanged. The API and interactive UI additionally classify **Fingrid's published nominal switchyard power/voltage guidance** separately: requested switchyard below 250 MW at a 400 kV labelled source point is **review_lower_voltage_switchyard**, at >=250 MW a 400 kV switchyard follows nominal voltage guidance only. Direct 400/220 kV transmission-line connections are disallowed, while 110 kV line arrangements require case-by-case review with a 40 MVA transformer restriction. The code refuses to convert MW to MVA or assume the existence of any lower-voltage bay at the sampled point.
+
+Controls: query parameter connection_type=switchyard|line|unspecified (defaults to switchyard); source evidence results include pathway_note, timing_evidence and concrete next_actions, and explicitly show no verified point-specific reinforcement. The readable Markdown export remains **a follow-up evidence brief**, not a grid capacity offer. Fingrid source: https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/. [Detailed source and Netherlands pilot report](KRIOS_CONNECTION_READINESS_AND_NL_PILOT.md).
+
 ## Acceptance and next steps
 
 - Automated tests cover baseline 2/3 classification, exact-year and exact-direction matching, inclusive threshold, unknown/null, MVA incompatibility, unreviewed/latest-snapshot behavior, duplicate conflict, param rejection and filtered zero-point scope.

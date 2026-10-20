@@ -63,6 +63,12 @@ is shown at a time. No lines are drawn between published years. This is an
 indicative evidence comparison, not a ranked list of sites or a connection
 entitlement.
 
+## Grid connection readiness and Netherlands official-source pilot
+
+The Finland [screening tool](https://finnish-grid-atlas.vercel.app/screening) now independently classifies **Fingrid's 250 MW switchyard-voltage planning guidance** from the published indicative MW threshold, with switchyard/line selection, 110 kV case-by-case exceptions, explicit next actions and a downloadable evidence brief. Two historical 100 MW / 2030 threshold matches remain a **voltage-pathway review**, not feasible site offers.
+
+A separately licensed-conservative [Netherlands source audit](https://finnish-grid-atlas.vercel.app/netherlands) covers **three real original Netbeheer Nederland capacity-map CSV schemas, 896 dated source rows**, source SHA-256 and aggregate TenneT consumption/feed-in codes. It is NOT a Dutch project capacity estimator or a current grid-connection right, and no original location-level Dutch rows are redistributed. [Audit and boundaries](docs/KRIOS_CONNECTION_READINESS_AND_NL_PILOT.md).
+
 ## Reproducible optional model scenario import
 
 After the normal manual capacity import, run `python -m src.cli import-verified-model` to load **12** source-hash-verified solver metrics from the already-published four 48-hour PyPSA cases into the **local SQLite scenario_result table**, not into the capacity-observation table. Reruns are idempotent. This command does **not** write Neon or update the hosted capacity API. PyPSA model inputs and outputs are additional historical sensitivity evidence only. See [reproduction and acceptance](docs/KRIOS_PORTFOLIO_RELEASE.md).

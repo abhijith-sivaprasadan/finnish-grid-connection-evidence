@@ -86,3 +86,38 @@ test("strict input schema refuses duplication and invalid direction and demand",
    assert.throws(()=>parseScreening(new URLSearchParams(q)),BadInput,q);
  }
 });
+
+test("Fingrid 250 MW switchyard guidance is separate from source threshold",()=>{
+ const s=screenRecords(snapshotPoints,snapshotCapacities,inputs);
+ const matched=s.results.filter(x=>x.evidence_status==="indicative_threshold_met");
+ assert.equal(matched.length,2);
+ assert.ok(matched.every(x=>x.connection_pathway==="review_lower_voltage_switchyard"));
+ assert.ok(matched.every(x=>x.verified_reinforcement_for_this_point===false));
+ assert.ok(matched.every(x=>x.feasibility==="not_assessed"));
+ assert.ok(matched.every(x=>x.pathway_source_url.startsWith("https://www.fingrid.fi/")));
+});
+
+test("exact 250 MW boundary, below threshold and suggested switchyard voltages",()=>{
+ const high=screenRecords(snapshotPoints,snapshotCapacities,parseScreening(new URLSearchParams("demand_mw=250")));
+ assert.ok(high.results.every(x=>x.connection_pathway==="nominal_switchyard_guidance_consistent"));
+ const low=screenRecords(snapshotPoints,snapshotCapacities,parseScreening(new URLSearchParams("demand_mw=249.999")));
+ assert.ok(low.results.every(x=>x.connection_pathway==="review_lower_voltage_switchyard"));
+});
+
+test("no direct 220/400 kV line connection; no 110 kV blanket line permission",()=>{
+ const line=parseScreening(new URLSearchParams("demand_mw=100&connection_type=line"));
+ const p=screenRecords(snapshotPoints,snapshotCapacities,line);
+ assert.ok(p.results.every(x=>x.connection_pathway==="line_220_400_prohibited"));
+ const virtualPoint={...snapshotPoints[0],voltage_kv:110};
+ const p110=screenRecords([virtualPoint],[],line);
+ assert.equal(p110.results[0].connection_pathway,"line_110_case_by_case");
+ assert.match(p110.results[0].pathway_note,/40 MVA/);
+ const undecided=parseScreening(new URLSearchParams("connection_type=unspecified"));
+ assert.equal(screenRecords(snapshotPoints,snapshotCapacities,undecided).results[0].connection_pathway,"connection_type_unspecified");
+});
+
+test("reject unsupported connection types and repeated query controls",()=>{
+ for(const q of ["connection_type=110","connection_type=switchyard&connection_type=line"]){
+  assert.throws(()=>parseScreening(new URLSearchParams(q)),BadInput);
+ }
+});
