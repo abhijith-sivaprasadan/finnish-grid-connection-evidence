@@ -1,7 +1,7 @@
 name: Finland 2024 proxy line-template and topology N-1 audit
 on:
   push:
-    branches: [feature/fi-osm-template-topology-n1]
+    branches: [main, feature/fi-osm-template-topology-n1]
     paths:
       - 'src/models/osm_finland_topology_audit.py'
       - 'src/models/fi_proxy_n1_audit.py'
