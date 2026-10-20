@@ -4,6 +4,8 @@
 [Original Streamlit Atlas](https://finnish-grid-atlas.streamlit.app/) ·
 [API specification](https://finnish-grid-atlas.vercel.app/api/openapi.json)
 
+**Whole-project integrity audit (20 October 2026):** [Data integrity and engineering audit report](docs/PROJECT_WIDE_DATA_INTEGRITY_AUDIT_2026_10_20.md). The audit introduced source-to-website CSV parity checks, full 107-node / 137-edge 2024 OSM source matching, fresh solver-output publication comparison, and stricter screenshot-review identity checks. **Operator-source independent verification and GitHub branch protections still require follow-up.**
+
 **Grid Analyst portfolio release (20 October 2026):** [role-specific case study](https://finnish-grid-atlas.vercel.app/case-study) · [reproducible demonstration](docs/KRIOS_DEMO.md) · [MVP acceptance matrix](docs/KRIOS_PORTFOLIO_RELEASE.md) · [dated status](docs/STATUS.md).
 
 **Overview:** Five selected Fingrid Grid Scope points, 18 original conditional estimates screenshot-matched on 18–19 October, actual Fingrid national and ENTSO-E A65 historical measurements, SQLite/Neon source provenance, 100 MW screening, and separate solver-verified PyPSA research. Operator-confirmed connectable MW remains **zero**. Finland MVP complete at the functional/code level; Dutch stretch and operator-grade AC model not complete.
