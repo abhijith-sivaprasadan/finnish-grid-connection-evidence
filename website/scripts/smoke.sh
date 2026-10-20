@@ -42,6 +42,13 @@ check 200 "/api/v1/observed/coverage/2025"
 grep -q '"distinct_original_paired_intervals":12283' /tmp/grid-smoke-response.json
 grep -q '"not_covered_by_archives_days":236' /tmp/grid-smoke-response.json
 grep -q '"is_calendar_year_source_complete":false' /tmp/grid-smoke-response.json
+check 200 "/analysis/borders-2025"
+grep -q "Observed" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/winter-2025"
+grep -q '"scenario_count_all_caps":48' /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/borders-2025"
+grep -q '"observed_quarter_hour_count":2880' /tmp/grid-smoke-response.json
+grep -q '"guaranteed_import_rights":false' /tmp/grid-smoke-response.json
 check 200 "/analysis/seasons"
 grep -q "Three seasons" /tmp/grid-smoke-response.json
 check 200 "/api/v1/model/finland/seasons"

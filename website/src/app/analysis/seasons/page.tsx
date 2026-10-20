@@ -16,6 +16,7 @@ export default function SeasonalStudy(){
     <strong>Observed source data does not imply grid feasibility.</strong> These are three selected, consecutive 14-day samples—not full seasons or a validated calendar-year study. Modelled penalty slack under arbitrary balancing limits is neither measured Finnish outages nor confirmed import or substation headroom. No 2030 forecast is made.
    </div>
    <div className="dashboard-archive-link"><div><strong>Original Fingrid 2025 archive coverage</strong><span>125 historical source-complete days from independently validated artifacts · full-year input unavailable</span></div><Link href="/analysis/source-coverage">Inspect original-source coverage ↗</Link></div>
+   <div className="dashboard-archive-link"><div><strong>Go beyond short samples</strong><span>Verified 27-day windows and genuine Swedish-border intraday market access evidence, with scientific caveats</span></div><Link href="/analysis/borders-2025">Longer windows and border market ↗</Link></div>
    <VerifiedSeasonalComparison study={study}/>
    <section className="vse-source">
     <div><p className="vse-kicker">SOURCE VALIDATION</p><h2>Missing values remain missing</h2>

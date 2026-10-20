@@ -6,6 +6,10 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis/borders-2025` — original 2025 27-day winter/late-winter PyPSA source and HiGHS solver, plus observed signed commercial Swedish border flows and remaining intraday market capacity (38/39) with strictly conditional additional-project modelling; not total physical transfer capability
+- `/api/v1/model/finland/winter-2025` and `/api/v1/model/finland/borders-2025` — read-only, source-provenance-pinned original data and separate hypothetical models, no confirmed 2030 grid connectability
+
+
 - `/analysis/source-coverage` — original Fingrid 2025 historical 58-day source coverage from independent verified archive captures, not an annual simulation; explicitly 2 days with known missing source intervals and 305 dates not present in reused archives
 - `/api/v1/observed/coverage/2025` — original-source evidence summary with source fingerprints and explicit non-annual status; no substation/2030 feasibility inference
 
