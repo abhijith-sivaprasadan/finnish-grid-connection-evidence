@@ -1,0 +1,97 @@
+name: Calendar 2025 Fingrid source audit and seasonal PyPSA
+on:
+  push:
+    branches: [feature/long-horizon-pypsa-sensitivity]
+    paths:
+      - "src/models/seasons.py"
+      - "tests/test_pypsa_seasons.py"
+      - ".github/workflows/pypsa-seasons.yml"
+      - "src/models/history.py"
+      - "src/models/finland.py"
+      - "src/models/sweep.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: audited-fingrid-2025-seasons
+  cancel-in-progress: false
+jobs:
+  source-and-seasonal-models:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && (github.event_name == 'push' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install isolated model and source dependencies
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Unit-test annual audit and seasonal window splitting
+        run: python -m pytest -q tests/test_pypsa_seasons.py tests/test_long_history_sweep.py
+      - name: Reject missing private API configuration
+        shell: bash
+        run: |
+          if [ -z "${FINGRID_API_KEY:-}" ]; then
+            echo "::error::FINGRID_API_KEY is missing; authenticated annual study cannot run"
+            exit 1
+          fi
+      - name: Retrieve complete UTC calendar 2025 actual Fingrid consumption and production
+        shell: bash
+        run: |
+          mkdir -p /tmp/fi-annual-2025
+          python -m src.models.history \
+            --start 2025-01-01 --end 2026-01-01 \
+            --out /tmp/fi-annual-2025/fingrid_calendar_2025.csv \
+            --chunk-days 7
+      - name: Verify full original annual source observations and optimize all three seasons
+        shell: bash
+        run: |
+          python -m src.models.seasons \
+            --input /tmp/fi-annual-2025/fingrid_calendar_2025.csv \
+            --output-dir /tmp/fi-annual-2025/seasons
+      - name: Audit source provenance and 36 seasonal optimal solves
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          base=Path("/tmp/fi-annual-2025")
+          original=base/"fingrid_calendar_2025.csv"
+          manifest=json.loads((base/"fingrid_calendar_2025.manifest.json").read_text())
+          report=json.loads((base/"seasons/seasonal_comparison_2025.json").read_text())
+          assert manifest["status"]=="source_complete"
+          assert manifest["complete_days"]==365
+          assert manifest["source_intervals"]==35040
+          assert manifest["csv_sha256"]==hashlib.sha256(original.read_bytes()).hexdigest()
+          assert report["annual_observations"]["source_sha256"]==manifest["csv_sha256"]
+          assert len(report["seasonal_studies"])==3
+          assert len(report["across_season_parameter_comparison"])==12
+          assert sum(len(x["modelled_results"]) for x in report["seasonal_studies"])==36
+          for season in report["seasonal_studies"]:
+            assert season["complete_days"]==30 and season["source_intervals"]==2880
+            f=base/"seasons"/("fingrid_"+season["season"]+"_2025_15min.csv")
+            assert hashlib.sha256(f.read_bytes()).hexdigest()==season["source_sha256"]
+            assert all(x["solver_status"]=="ok" and x["solver_termination"]=="optimal" and
+                x["max_balance_error_mw"]<1e-5 and x["added_load_energy_mwh"]==72000
+                for x in season["modelled_results"])
+          print("VERIFIED_SEASONAL_AUDIT_JSON="+json.dumps({
+            "annual_days":365,"paired_source_intervals":35040,
+            "source_sha256":manifest["csv_sha256"],
+            "seasonal_windows":[{"name":s["season"],"start":s["source_start_utc"],"end":s["source_end_utc"],"hash":s["source_sha256"]} for s in report["seasonal_studies"]],
+            "winter_summer_autumn_model_solutions":36,
+            "cross_season_cases":12
+          },separators=(",",":")))
+          PY
+      - name: Upload annual observed records and proven season-sensitivity results
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-fingrid-2025-annual-and-three-seasons
+          path: /tmp/fi-annual-2025/
+          retention-days: 30
