@@ -107,13 +107,13 @@
       "corridors_allowed": "SE1_only",
       "flex_half_span_mw_assumed": 0,
       "battery_duration_hours_assumed": 2,
-      "modelled_project_relaxation_mwh": 46005.2731
+      "modelled_project_relaxation_mwh": 46005.2709
     },
     {
       "corridors_allowed": "SE1_only",
       "flex_half_span_mw_assumed": 0,
       "battery_duration_hours_assumed": 4,
-      "modelled_project_relaxation_mwh": 43737.6434
+      "modelled_project_relaxation_mwh": 43737.641
     },
     {
       "corridors_allowed": "SE1_only",
@@ -131,13 +131,13 @@
       "corridors_allowed": "SE1_only",
       "flex_half_span_mw_assumed": 50,
       "battery_duration_hours_assumed": 2,
-      "modelled_project_relaxation_mwh": 42056.0177
+      "modelled_project_relaxation_mwh": 42056.0209
     },
     {
       "corridors_allowed": "SE1_only",
       "flex_half_span_mw_assumed": 50,
       "battery_duration_hours_assumed": 4,
-      "modelled_project_relaxation_mwh": 39897.3891
+      "modelled_project_relaxation_mwh": 39897.3935
     },
     {
       "corridors_allowed": "SE1_only",
@@ -155,13 +155,13 @@
       "corridors_allowed": "SE3_only",
       "flex_half_span_mw_assumed": 0,
       "battery_duration_hours_assumed": 2,
-      "modelled_project_relaxation_mwh": 19916.4419
+      "modelled_project_relaxation_mwh": 19916.4401
     },
     {
       "corridors_allowed": "SE3_only",
       "flex_half_span_mw_assumed": 0,
       "battery_duration_hours_assumed": 4,
-      "modelled_project_relaxation_mwh": 16838.1951
+      "modelled_project_relaxation_mwh": 16838.1969
     },
     {
       "corridors_allowed": "SE3_only",
@@ -179,13 +179,13 @@
       "corridors_allowed": "SE3_only",
       "flex_half_span_mw_assumed": 50,
       "battery_duration_hours_assumed": 2,
-      "modelled_project_relaxation_mwh": 16040.3002
+      "modelled_project_relaxation_mwh": 16040.2993
     },
     {
       "corridors_allowed": "SE3_only",
       "flex_half_span_mw_assumed": 50,
       "battery_duration_hours_assumed": 4,
-      "modelled_project_relaxation_mwh": 13971.1795
+      "modelled_project_relaxation_mwh": 13971.1809
     },
     {
       "corridors_allowed": "SE3_only",
