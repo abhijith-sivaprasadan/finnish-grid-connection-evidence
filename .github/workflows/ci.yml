@@ -29,6 +29,8 @@ jobs:
           python-version: '3.12'
           cache: pip
       - run: python -m pip install -r requirements.txt
+      - name: Independent source/website/model publication integrity
+        run: python -m src.audit_release_invariants --json /tmp/krios-release-audit.json
       - run: python -m pytest -q
       - run: python -m src.cli import-manual
       - name: Rebuild 4 solver-verified scenarios in separate SQLite evidence
