@@ -142,9 +142,10 @@ def report(directory:Path)->dict:
             for ts in payload["source_quality"]["source_missing_utc"]:
                 problems.append({"dataset_id":dataset_id,"timestamp_utc":ts,"status":"original_missing_at_capture"})
             for r in payload["original_rows"]:
-                if r["timestamp_utc"] in combined[dataset_id]:
+                key=canonical(r["timestamp_utc"])
+                if key in combined[dataset_id]:
                     raise ValueError("Duplicate across capture journal chunks")
-                combined[dataset_id][r["timestamp_utc"]]=r
+                combined[dataset_id][key]=r
         fetched[str(dataset_id)]=counts
     keys=set(combined[124])&set(combined[74])
     complete=(all(fetched[str(i)]["chunks_persisted"]==len(all_windows) for i in DATASET_IDS)
@@ -193,7 +194,7 @@ def daily_coverage(directory:Path)->dict:
             by_date={}
             for row in chunk["original_rows"]:
                 day=row["timestamp_utc"][:10]
-                by_date.setdefault(day,[]).append(row["timestamp_utc"])
+                by_date.setdefault(day,[]).append(canonical(row["timestamp_utc"]))
             cursor=start
             while cursor<stop:
                 day=cursor.date().isoformat()
@@ -306,7 +307,7 @@ def complete_source_csv(directory:Path,target:Path)->dict:
         for a,b in windows():
             path=directory/(chunk_key(dataset_id,a,b)+".json")
             for item in load_chunk(path,dataset_id,a,b)["original_rows"]:
-                record[item["timestamp_utc"]]=item
+                record[canonical(item["timestamp_utc"])]=item
         combined[dataset_id]=record
     paired=[]
     for i in range(EXPECTED_PAIRS):
