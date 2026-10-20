@@ -9,6 +9,8 @@ on:
       - 'src/models/fi_regional_pypsa_v2.py'
       - 'src/models/fi_osm_uncertainty_2024.py'
       - 'src/audit_osm_map.py'
+      - 'src/audit_engineering_publication.py'
+      - 'website/src/lib/krios-engineering-verified-2026.json'
       - 'website/src/lib/osm-2024-proxy-map-odbl.ts'
       - 'tests/test_pandapower_lab.py'
       - 'tests/test_pypsa_regional_v2.py'
@@ -124,3 +126,38 @@ jobs:
           name: finland-osm-2024-input-uncertainty-ODbL-no-operator-calibration
           path: /tmp/fi-odbl/*
           retention-days: 45
+
+  published-numerical-integrity:
+    needs: [pandapower-ac, pypsa-regional, independently-compare-ac-solvers, osm-template-uncertainty]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: krios-pandapower-cigre-and-3bus
+          path: /tmp/pp-original
+      - uses: actions/download-artifact@v4
+        with:
+          name: krios-pypsa-v2-and-3bus
+          path: /tmp/pypsa-original
+      - uses: actions/download-artifact@v4
+        with:
+          name: krios-two-engine-ac-cross-validation
+          path: /tmp/cross-original
+      - uses: actions/download-artifact@v4
+        with:
+          name: finland-osm-2024-input-uncertainty-ODbL-no-operator-calibration
+          path: /tmp/osm-original
+      - name: Fail publication if any model summary metric disagrees with solver artifacts
+        run: |
+          python -m src.audit_engineering_publication \
+            --cigre /tmp/pp-original/cigre_ac_n1.json \
+            --regional /tmp/pypsa-original/finland_region_assumptions_v2.json \
+            --cross /tmp/cross-original/independent_ac_comparison.json \
+            --osm /tmp/osm-original/osm-rating-sensitivity-2024.json
