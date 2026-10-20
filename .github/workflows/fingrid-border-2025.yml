@@ -1,12 +1,7 @@
 name: Verified 2025 Fingrid border market flows and conditional import model
 on:
-  push:
-    branches: [feature/long-horizon-pypsa-sensitivity]
-    paths:
-      - "src/models/verified_border_market.py"
-      - "src/ingest/fingrid.py"
-      - "tests/test_border_market.py"
-      - ".github/workflows/fingrid-border-2025.yml"
+  # Initial authenticated source run #39420079414 succeeded.
+  # No repeat Fingrid requests on code pushes; rerun only deliberately.
   workflow_dispatch:
 permissions:
   contents: read
