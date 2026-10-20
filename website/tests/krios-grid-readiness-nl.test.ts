@@ -27,7 +27,7 @@ test("Netherlands historical categorical values are not interpreted as connectio
  const page=readFileSync("src/app/netherlands/page.tsx","utf8");
  assert.match(page,/not inferred|not a live site|without fabricated capacity|NOT/i);
  assert.match(page,/unmapped|untranslated|original categorical/i);
- assert.match(page,/\\/api\\/v1\\/netherlands\\/source-summary/);
+ assert.ok(page.includes("/api/v1/netherlands/source-summary"));
 });
 test("Fingrid source-readiness never changes original two indicative matches or operator security claims",()=>{
  const input=parseScreening(new URLSearchParams("demand_mw=100&year=2030&connection_type=switchyard"));
