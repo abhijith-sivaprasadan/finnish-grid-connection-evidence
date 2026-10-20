@@ -5,6 +5,7 @@ const endpoints=[
  ["GET","/api/v1/overview","Stored evidence counters and source freshness"],
  ["GET","/api/v1/observed/coverage/2025","Actual original Fingrid 2025 15-min source archive: 125 paired complete days; missing versus not imported distinct; NOT grid capacity"],
  ["GET","/api/v1/model/finland/winter-2025","Two 27-day verified 2025 source windows with 48 optimised hypothetical stress cases, NOT actual outage records"],
+ ["GET","/api/v1/model/finland/corridors-2025","Three abstract market-zone buses and two source-capped 15-min SE1/SE3 market links; 24 hypothetical optimal cases, not physical grid rating"],
  ["GET","/api/v1/model/finland/borders-2025","Actual signed Swedish border commercial flows and unused intraday SE1/SE3 import market capacity, plus separate conditional 100 MW project model"],
  ["GET","/api/v1/model/finland","Verified PyPSA single-zone model scenario results; historical 2026 sensitivities, not 2030 forecasts or substation headroom"],
  ["GET","/api/v1/screening?demand_mw=100&year=2030&direction=consumption&voltage=all","Evidence-only 100 MW / 2030 screening; no feasibility conclusion"],
