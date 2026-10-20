@@ -1,7 +1,7 @@
 name: Official Netherlands capacity CSV source audit
 on:
   push:
-    branches: [feature/krios-grid-readiness-nl-official-pilot]
+    branches: [main, feature/krios-grid-readiness-nl-official-pilot]
     paths:
       - 'src/ingest/netherlands_capacity_map_pilot.py'
       - 'tests/test_netherlands_capacity_map_pilot.py'
