@@ -1,6 +1,6 @@
 """CIGRE actual reference cases in pinned pandapower 3.5.6 environment."""
 import pytest
-from src.models.cigre_engineering_lab import run,add_project,HV_MW,MV_MW
+pytest.importorskip("pandapower")  # normal app CI does not install electrical solver\nfrom src.models.cigre_engineering_lab import run,add_project,HV_MW,MV_MW
 
 def test_network_inventory_and_scale():
  import pandapower.networks as pn
