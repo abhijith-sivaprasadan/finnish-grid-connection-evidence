@@ -13,6 +13,8 @@ export async function GET() {
     servers:[{url:"/"}],
     paths:{
       "/api/v1/observed/coverage/2025":{get:{summary:"Verified source coverage 2025; 125 original paired days, known source gaps and uncollected dates; no annual or network feasibility claim",responses:{200:success}}},
+      "/api/v1/model/finland/winter-2025":{get:{summary:"Historical verified 27-day winter optimisation with arbitrary stress assumptions, never physical connectivity",responses:{200:success}}},
+      "/api/v1/model/finland/borders-2025":{get:{summary:"Observed Swedish commercial market border and unused intraday capacity plus conditional hypothetical project sensitivity, not import rights",responses:{200:success}}},
       "/api/v1/model/finland":{get:{summary:"Historical PyPSA Finland scenario output (modelled assumptions, no substation connectability claim)",responses:{200:success}}},
       "/api/v1/overview":{get:{summary:"Evidence counts and freshness",responses:{200:success,503:errors[503]}}},
       "/api/v1/health":{get:{summary:"Database availability",responses:{200:success,503:errors[503]}}},
