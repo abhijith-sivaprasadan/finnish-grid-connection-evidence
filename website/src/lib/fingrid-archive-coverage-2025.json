@@ -1,0 +1,110 @@
+{
+  "status": "verified_original_source_archive_union_partial_2025",
+  "source_year": 2025,
+  "historical_source_kind": "observed_fingrid_national_aggregate",
+  "dataset_ids": [
+    124,
+    74
+  ],
+  "native_source_units": "MWh/h (native mean MW over each 15-minute interval)",
+  "validation_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39418640253",
+  "source_year_complete": false,
+  "annual_pypsa_solved": false,
+  "site_grid_connection_feasible": null,
+  "distinct_original_paired_intervals": 12283,
+  "verified_complete_days": 125,
+  "known_missing_source_days": 4,
+  "not_covered_by_archives_days": 236,
+  "original_source_windows": [
+    {
+      "label": "January first block",
+      "start": "2025-01-01",
+      "end_exclusive": "2025-01-17",
+      "days": 16,
+      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "Winter continuous block",
+      "start": "2025-01-18",
+      "end_exclusive": "2025-02-14",
+      "days": 27,
+      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "Late-winter continuous block",
+      "start": "2025-02-15",
+      "end_exclusive": "2025-03-14",
+      "days": 27,
+      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "March continuous block",
+      "start": "2025-03-15",
+      "end_exclusive": "2025-03-26",
+      "days": 11,
+      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "Summer observed block",
+      "start": "2025-06-15",
+      "end_exclusive": "2025-06-29",
+      "days": 14,
+      "original_capture_sha256": "d8ad5dc81ecee9b7b410aa19c2316faff16d55827a48d5fd59bcb667bf16a679",
+      "archive_kind": "paired_original_source_csv"
+    },
+    {
+      "label": "Autumn observed block",
+      "start": "2025-09-15",
+      "end_exclusive": "2025-10-15",
+      "days": 30,
+      "original_capture_sha256": "3093f704484848919d83feb6c133c2e2abf2299566d5bd02a109e01b7fdec2e0",
+      "archive_kind": "paired_original_source_csv"
+    }
+  ],
+  "independent_autumn_overlap_original_sha256": "a38d703c23037bae75370e6414ff4b0034eb64b9832ea15167e40141c44235be",
+  "journal_original_zip_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+  "journal_run": 39418640253,
+  "journal_artifact_id": 12262681192,
+  "journal_utc_window": {
+    "start": "2025-01-01",
+    "end_exclusive": "2025-03-26",
+    "source_complete_days": 81,
+    "source_gap_days": 3,
+    "original_paired_intervals": 8059
+  },
+  "verified_overlap_pair_count": 1344,
+  "known_missing_original_124_intervals_utc": [
+    "2025-01-17T17:00:00Z",
+    "2025-01-17T17:45:00Z",
+    "2025-02-14T17:00:00Z",
+    "2025-02-14T17:45:00Z",
+    "2025-03-14T17:00:00Z",
+    "2025-07-11T16:15:00Z"
+  ],
+  "partial_original_paired_interval_count": 283,
+  "known_gap_days_in_journal": 3,
+  "missing_recheck_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39406458886",
+  "archived_source_runs": [
+    39418640253,
+    39416081929,
+    39413812083,
+    39391985966,
+    39396079522
+  ],
+  "source_urls": [
+    "https://data.fingrid.fi/en/datasets/124",
+    "https://data.fingrid.fi/en/datasets/74"
+  ],
+  "provenance": "Actual 2025 original 124 and 74 source chunks and earlier original CSV archives; prior original journal hashes rechecked, 1,344 matching paired winter overlap values, not filled.",
+  "boundaries": [
+    "125 complete UTC days are source coverage, NOT 365 source-complete annual observations.",
+    "Six known consumption quarter-hour readings are missing across January 17, February 14, March 14 and July 11; the operator correction request is outstanding. Missing is never a numeric zero.",
+    "236 other days are outside the currently imported archives, not evidence that Fingrid has no original readings.",
+    "The selected 2025 data are discontinuous: no single uninterrupted calendar-year PyPSA storage operation or defensible 2025 full-year total.",
+    "The historical national aggregates do not confirm site-specific electrical connection rights, transmission capacity, available reserve generation, or 2030 demand."
+  ]
+}
