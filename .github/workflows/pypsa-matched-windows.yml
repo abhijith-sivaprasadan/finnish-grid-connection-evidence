@@ -1,11 +1,7 @@
 name: Fingrid real gap audit and matched-season PyPSA
 on:
-  push:
-    branches: [feature/long-horizon-pypsa-sensitivity]
-    paths:
-      - "src/models/observed_windows.py"
-      - "tests/test_pypsa_matched_windows.py"
-      - ".github/workflows/pypsa-matched-windows.yml"
+  # Authenticated Fingrid runs are manual only after the 2026-10-20
+  # rate-limit response. Never retry automatically on branch pushes.
   workflow_dispatch:
 permissions:
   contents: read

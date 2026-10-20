@@ -12,6 +12,7 @@ export async function GET() {
       description:"Public read-only research evidence. Indicative source transcriptions are NOT operator-verified headroom. No additive capacity or network-studies claim."},
     servers:[{url:"/"}],
     paths:{
+      "/api/v1/model/finland/seasons":{get:{summary:"Three equal 14-day verified historical winter/summer/autumn PyPSA studies with honest 2025 missing-source coverage, not full year or grid feasibility",responses:{200:success}}},
       "/api/v1/model/finland/sensitivity":{get:{summary:"Thirty-day Fingrid-observed historical input and solver-verified hypothetical PyPSA parameter scenarios, not capacity or forecasts",responses:{200:success}}},
       "/api/v1/model/finland":{get:{summary:"Historical PyPSA Finland scenario output (modelled assumptions, no substation connectability claim)",responses:{200:success}}},
       "/api/v1/overview":{get:{summary:"Evidence counts and freshness",responses:{200:success,503:errors[503]}}},

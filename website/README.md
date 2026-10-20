@@ -6,6 +6,10 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis/seasons` — three source-audited matched 14-day winter/summer/autumn 2025 PyPSA studies, 36 actual optimized project cases; missing original source intervals and unverified annual coverage explicitly shown
+- `/api/v1/model/finland/seasons` — read-only seasonal model-scenario summaries with original source hashes and GitHub solver artifact; no inferred 2030 connectivity
+
+
 - `/analysis/sensitivity` — independently solver-verified 30-day **historical 2025** Fingrid PyPSA assumption sweep; 12 model scenarios, 2,880 original paired observations, never guaranteed import capacity or outages
 - `/api/v1/model/finland/sensitivity` — read-only source-attributed model sensitivity data with original job, input hash and scientific limitations
 - `/analysis` — 48-hour **historical 2026** PyPSA Finland one-bus analysis; source-linked real Fingrid consumption/production, hypothetical balancing constraint, four model scenarios; NOT site-level connection capacity

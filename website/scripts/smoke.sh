@@ -36,6 +36,12 @@ check 200 "/api/v1/capacity?direction=production&year=2030"
 grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/coverage"
 grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
+check 200 "/analysis/seasons"
+grep -q "Three seasons" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/seasons"
+grep -q '"modelled_days_per_season":14' /tmp/grid-smoke-response.json
+grep -q '"annual_2025_verified_complete":false' /tmp/grid-smoke-response.json
+grep -q '"model_feasibility_claim":false' /tmp/grid-smoke-response.json
 check 200 "/analysis/sensitivity"
 grep -q "30 days" /tmp/grid-smoke-response.json
 check 200 "/api/v1/model/finland/sensitivity"
