@@ -187,7 +187,7 @@ def test_other_invalid_operator_source_record_never_quarantined(tmp_path):
     a,b=next(windows())
     row=mk(124,a,1)[0]
     row["interval_end_utc"]="2025-01-01T00:05:00Z"
-    with pytest.raises(ValueError,match="outside original queried time window"):
+    with pytest.raises(ValueError,match="Unsupported native source interval"):
         split_aligned_and_quarantined([row],124,a,b)
 
 def test_authentic_native_30min_fingrid_interval_is_preserved_not_regridded(tmp_path):
