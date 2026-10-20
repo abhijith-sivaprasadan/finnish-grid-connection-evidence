@@ -54,6 +54,10 @@ grep -q '"scenario_count_all_caps":48' /tmp/grid-smoke-response.json
 check 200 "/api/v1/model/finland/borders-2025"
 grep -q '"observed_quarter_hour_count":2880' /tmp/grid-smoke-response.json
 grep -q '"guaranteed_import_rights":false' /tmp/grid-smoke-response.json
+check 200 "/case-study"
+grep -q "From grid data to" /tmp/grid-smoke-response.json
+grep -q "Four reproducible outputs" /tmp/grid-smoke-response.json
+grep -q "Fingrid" /tmp/grid-smoke-response.json
 check 200 "/analysis"
 grep -q "What changes when" /tmp/grid-smoke-response.json
 grep -q "1,500 MW" /tmp/grid-smoke-response.json

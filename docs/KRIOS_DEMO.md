@@ -1,91 +1,60 @@
-# Krios Grid Analyst portfolio walkthrough — Finland MVP
+# Grid Analyst interview demonstration — Finnish Grid Atlas
 
-Use this as a **two-to-three-minute technical walkthrough**, not as evidence
-of production grid-planning experience or confirmed site connectability.
+**2–3 minutes; evidence-first and independent.** This is a portfolio project inspired by the requirements of a Grid Analyst position. It is NOT a Krios or Fingrid production platform. Dated source scope is documented in [release handoff](KRIOS_PORTFOLIO_RELEASE.md).
 
-## Before presenting
+## Start: the decision and why it is hard (about 20 seconds)
 
-```powershell
-python -m src.cli import-manual
-python -m streamlit run app/dashboard.py
-```
+"A proposed 100 MW electricity load needs an early, defensible site screen. National generation-minus-consumption tells us little about the grid's *local* connection capacity. I therefore start with published point-specific Fingrid Grid Scope estimates, keep the original source and qualifiers, and put operational history and PyPSA modelling into separate layers."
 
-No API keys are needed to view the committed, source-transcribed Grid Scope
-capacity sample. The National context tab will remain empty unless the
-[local persistent import](LIVE_CONTEXT_IMPORT.md) has actually been executed
-with separately configured, private keys.
+Open the [portfolio case study](https://finnish-grid-atlas.vercel.app/case-study) and [100-MW screening example](https://finnish-grid-atlas.vercel.app/screening?demand_mw=100&year=2030&direction=consumption&voltage=all).
 
-## Demonstration
+## Part 1: show conditional point data (about 35 seconds)
 
-1. **Open Power availability outlook.** Show five publicly named Fingrid 400-kV
-   substations and the original 17 October 2026 capture. The comparison
-   enumerates **30 possible** point × direction × year intersections
-   (5 points × 2 directions × 2026/2030/2035). **18 were explicitly
-   transcribed and 12 were absent from this compiled capture.** We do not
-   infer whether those 12 are absent from the live operator viewer. An absent
-   cell is not zero availability.
-2. **Separate consumption from production.** At ALAPITKÄ, the initial capture
-   recorded **500 MW consumption for 2026** and **380 MW production for 2026**.
-   These are **different directions**, not two interchangeable capacities,
-   and the 2030/2035 consumption intersections were not transcribed.
-   **These original source-transcribed figures matched reviewer-supplied screenshots on 18–19 October, but remain indicative and not grid-validated.**
-3. **Keep forecasts discrete.** Production values at a few points are
-   identical in 2026, 2030 and 2035 in this sample. We draw separate
-   observations only; we do not assert continuous constant headroom between
-   those years, an increase from a reinforcement, or guaranteed availability.
-4. **Switch to National context.** If a private local real-data import has
-   actually been run, demonstrate the Fingrid 124/74 and ENTSO-E A65 daily
-   time series, retrieval provenance, timezone and source units. These
-   are **Finland-wide** context, not substation telemetry and not point
-   connection capacity. If not populated, show the truthful empty state
-   and the reproducible importer instructions instead.
-5. **Open Evidence & quality.** Show the clean separation of operator-
-   published indicative observations, national operational context,
-   operator-confirmed capacity (none) and model scenarios (none).
-   Show the [completed original screenshot audit](audits/README.md). The blank **Independent source recheck** worksheet is for new dated reviews.
+"Here are five selected 400-kV Fingrid substations, not a sample of all Finnish grid points. The original October 17 snapshot records **18 indicative estimates across 30 possible point × direction × year intersections**. The remaining 12 are *not captured*—not zero. Independent comparison against reviewer-supplied Grid Scope screenshots matched all original figures on 18–19 October: 17 exact tooltips and one displayed panel MW value. This verifies transcription, not physical connection rights."
 
-## What this demonstrates against the role
+"The 2030 consumption case has **400 MW** published indicative figures at Seinäjoki and Uusnivala. They pass an **illustrative 100-MW threshold filter**. Neither is approved or ranked as a connectable project. For Vuolijoki, Alapitkä and Alajärvi, the *specific 2030 consumption evidence is missing from this capture*; no technical infeasibility can be inferred."
 
-| Role activity from project brief | Proof visible in this repository |
-|---|---|
-| Own the grid data | Separate Fingrid/ENTSO-E authenticated-source smoke checks, typed importers, provenance and revision-aware SQLite schema |
-| Understand current and future capacity | Year-specific, direction-specific, source-linked Fingrid Grid Scope sample with explicit uncertainty and gaps |
-| Own the Power Availability Curve | A selective, date-stamped point-by-year outlook table and discrete chart with a repeatable evidence source |
-| Model and assess | Constraints, explicit model-output category and an honest Phases 4–6 roadmap; **no load-flow model presented as complete** |
+Click a [source-linked capacity row](https://finnish-grid-atlas.vercel.app/connections). Show unit, direction, effective year, source capture time and the operator URL. Do not add a station's production MW to its consumption MW, or interpolate between 2026/2030/2035.
 
-## Questions to anticipate
+## Part 2: prove source engineering (about 35 seconds)
 
-**Can 500 MW actually connect at that substation?**
+"The [national operations](https://finnish-grid-atlas.vercel.app/operations) and [data-quality](https://finnish-grid-atlas.vercel.app/quality) workbenches pull authenticated Fingrid datasets 124 and 74, plus ENTSO-E A65 actual load. They retain native measurement units, exact UTC time intervals, retrieved source provenance, missing intervals and revisions in SQLite or hosted Neon. The dashboard is read-only; scheduled ingestion uses separate private credentials."
 
-No such claim can be made from a public indicative figure. Connection depends
-on network conditions, other customers and dialogue with Fingrid. A source
-estimate is not a reserved, guaranteed or operator-confirmed connection right.
+"One unattended refresh is documented on October 18. Later historical source-archive work verified **171 complete 2025 UTC days** and preserved original gaps. That archive is NOT the same thing as a complete 2025 annual dataset or a source of point connection MW."
 
-**Does generation minus national load indicate a candidate site's headroom?**
+At demonstration time, first inspect actual freshness and health. If a live source is not available, say "last source interval unavailable" or explicitly describe a historical snapshot. Never claim current operational freshness from a passing unit test.
 
-No. A national supply/demand balance ignores transmission bottlenecks,
-contingencies, local topology and allocation of connection rights. That is why
-Grid Scope is the primary *indicative* evidence layer and ENTSO-E/Fingrid
-operational feeds are kept in a separate category.
+## Part 3: explain PyPSA without overclaiming (about 35 seconds)
 
-**What remains before you can call it independently verified?**
+"The [PyPSA analysis](https://finnish-grid-atlas.vercel.app/analysis) has **four verified 48-hour historical national cases**. A hypothetical 100-MW new load is compared with flexible demand and storage, bounded by an *assumed* balancing ceiling. A further two noncontiguous 27-day winters contain **54 optimal model solves**, and a three-market-bus Swedish corridor study contains **24 scenarios** using authentic commercial-flow/headroom source data."
 
-The original Grid Scope value-by-value screenshot check is complete (17 exact tooltip matches and one explicit panel value). A persistent optional local import and an operational portal-level independent spot check remain separate future work. Physical network validation is not established. The manual GitHub Actions smoke tests authenticate and parse
-live responses, but their temporary databases were deleted afterward.
-ENTSO-E A75 generation is still an additional unverified mode.
+"These are **sensitivity studies**, not a validated Fingrid AC network, electrical N−1 security analysis, operator import rights or a local headroom estimate. A numerical model's shortfall slack is not a Finnish power outage."
 
-**Why no PyPSA or pandapower result yet?**
+The 2024 OSM high-voltage network proxy and February 2025 third-party map comparison are deliberately separate research with unverified electrical ratings and unresolved map redistribution rights.
 
-The project intentionally prioritises a reliable, attributable primary signal.
-A zonal sensitivity model would not validate substation-level connection
-rights, and a synthetic network must not be described as Fingrid's topology.
+## Finish: handoff to real engineering (about 20 seconds)
 
-## One-sentence description
+"A credible next project step would require a precisely located connection site, proposed commissioning year, time-resolved load and flexibility, voltage, power factor/reactive requirements, published queues and reinforcements, and ultimately a Fingrid connection study. This tool reduces evidence-gathering uncertainty and makes unknowns visible; it doesn't grant grid access."
 
-A personal, five-substation proof of concept that distinguishes Fingrid's
-published indicative connection-capacity outlook from Finland-wide TSO
-operational data, with an auditable SQLite pipeline and a dated 18-row source-transcription screenshot audit. There is still no operator-confirmed available MW.
+### Expected questions
 
-See [source audit protocol](GRID_SCOPE_RECHECK.md),
-[original capture notes](CAPTURE_LOG.md) and
-[model/extension roadmap](ROADMAP.md).
+**Can a 100-MW data centre connect to Seinäjoki or Uusnivala?** Not established. The figures are conditional 2030 estimates for a small historical snapshot and support only the source threshold classification; they do not state reserved or guaranteed MW.
+
+**Is the PyPSA line network real?** The main studied winter/corridor cases are national or abstract market-bus models, not physical Finnish branch-constrained AC networks. The OSM-derived topology is a separately licensed 2024 *candidate*, with standardized estimated impedances; proximity to another map is not operator engineering verification.
+
+**Why use two years in the same portfolio?** October 2026 is the date of the original Grid Scope sample and 48-hour model; 2025 is historical national 15-minute observations and winter/cross-border sensitivity. The source datasets and their periods are labelled individually, never silently combined.
+
+**Do you have a current 2025 physical-grid headroom estimate?** No. Site physical headroom is intentionally null; operator-confirmed capacity count is zero.
+
+**Is the Netherlands stretch done?** No. The Finnish MVP was the original cut line. The Netherlands DSO data import and optional pandapower feeder would be an independent follow-on with its own licensing and source assurance.
+
+### Local reproducibility
+
+    python -m pip install -r requirements.txt
+    python -m src.cli import-manual
+    python -m src.cli import-verified-model
+    python -m streamlit run app/dashboard.py
+
+The optional model import writes **12 validated scenario metrics** to local SQLite under model_scenario, never into published capacity. It does **not** publish model data to Neon. If no local provider credentials are configured, the Streamlit national-context view may correctly remain empty; hosted live operations are sourced through separate guarded collectors.
+
+Start-to-finish release evidence and the original Krios acceptance requirements: [portfolio release](KRIOS_PORTFOLIO_RELEASE.md), [current dated status](STATUS.md), [source audit](audits/README.md).

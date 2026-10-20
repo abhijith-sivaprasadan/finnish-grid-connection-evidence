@@ -12,6 +12,15 @@ integration. Public availability alone is not treated as a blanket licence.
 | [ENTSO-E Transparency Platform](https://transparency.entsoe.eu/) | Authenticated A65 load smoke run passed 17 Oct 2026 (96 records for 14 Oct UTC), following A03 parser correction | Platform terms and data-owner reuse conditions apply; no raw ENTSO-E data redistributed in this repo | Live A65 verified in temporary SQLite; A75 generation still pending |
 | [Netbeheer Nederland capacity map](https://www.netbeheernederland.nl/netcapaciteit-en-flexibiliteit/capaciteitskaart) | Official landing page links to the national map | Export schema, actual download retrieval and redistribution terms not verified here | Stretch, not ingested |
 
+Additional research-source register (20 October 2026; **not site headroom**):
+
+| Research source | Original provenance and use | Explicit status |
+| --- | --- | --- |
+| [PyPSA-Eur OSM prebuilt v0.6](https://doi.org/10.5281/zenodo.14144752) | Sep 2024 OpenStreetMap-derived 220/400-kV Finnish network candidate; source original hashes preserved | Reusable **ODbL 1.0** with required derivative attribution/share-alike; third-party electrical template proxies, not Fingrid line ratings |
+| [FCG-hosted February 2025 map item](https://www.arcgis.com/home/item.html?id=c24608cc5f5943469d04821c77954e95) | Public polyline layer for 110+ kV, attributed by FCG to Fingrid map; separate map proximity only | **No explicit licenceInfo/permission to redistribute geometry**. Ephemeral feature comparison only; aggregate distance metrics and fingerprint retained |
+| [Fingrid October 2025 operator changes](../data/reference/fi_2025_operator_asset_chronology.json) | Dated Aurora Line, Huittinen–Forssa, EstLink 2, ownership and future project news with direct operator citations | Documentary chronology only. Zero authenticated OSM/Fingrid branch ID matches or source equipment impedance/rating evidence |
+| [Fingrid original 2025 124/74 source archive](FINGRID_2025_COLLECTION_BATCH_05.md) | 171 verified complete UTC dates and separately preserved missing/irregular original observations | Partial year, not 2025 demand at an individual grid point or 365-day annual PyPSA input |
+
 Fingrid's Grid Scope landing page describes estimates for selected substations and
 warns that projects affect other points. Its data are not a comprehensive or
 guaranteed offer. The observation notes retain that qualification. The initial

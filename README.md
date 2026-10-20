@@ -4,6 +4,10 @@
 [Original Streamlit Atlas](https://finnish-grid-atlas.streamlit.app/) ·
 [API specification](https://finnish-grid-atlas.vercel.app/api/openapi.json)
 
+**Grid Analyst portfolio release (20 October 2026):** [role-specific case study](https://finnish-grid-atlas.vercel.app/case-study) · [reproducible demonstration](docs/KRIOS_DEMO.md) · [MVP acceptance matrix](docs/KRIOS_PORTFOLIO_RELEASE.md) · [dated status](docs/STATUS.md).
+
+**Overview:** Five selected Fingrid Grid Scope points, 18 original conditional estimates screenshot-matched on 18–19 October, actual Fingrid national and ENTSO-E A65 historical measurements, SQLite/Neon source provenance, 100 MW screening, and separate solver-verified PyPSA research. Operator-confirmed connectable MW remains **zero**. Finland MVP complete at the functional/code level; Dutch stretch and operator-grade AC model not complete.
+
 A **personal, independent grid-data research and screening project**, not a grid operator, a network reconstruction, or a guarantee of available connection capacity. The Next.js website uses an abstract blue data-network identity, with no official flag, map, or agency branding. It exposes a read-only, source-linked REST API and national operational chronology while the original Python Streamlit application remains available.
 
 ### Canonical status and evidence history
@@ -59,6 +63,10 @@ is shown at a time. No lines are drawn between published years. This is an
 indicative evidence comparison, not a ranked list of sites or a connection
 entitlement.
 
+## Reproducible optional model scenario import
+
+After the normal manual capacity import, run `python -m src.cli import-verified-model` to load **12** source-hash-verified solver metrics from the already-published four 48-hour PyPSA cases into the **local SQLite scenario_result table**, not into the capacity-observation table. Reruns are idempotent. This command does **not** write Neon or update the hosted capacity API. PyPSA model inputs and outputs are additional historical sensitivity evidence only. See [reproduction and acceptance](docs/KRIOS_PORTFOLIO_RELEASE.md).
+
 ## What is real, and what is pending
 
 | Evidence | This release | Meaning |
@@ -66,7 +74,7 @@ entitlement.
 | Published indicative capacity | 18 original source-transcribed readings; 17 screenshot tooltip matches and 1 panel MW match on 18–19 October | Fingrid indicative estimates, not certified or guaranteed available MW |
 | Operational context | Historical national Fingrid 124/74 and ENTSO-E A65 records persisted to read-only Neon website; see dated [evidence log](docs/EVIDENCE_LOG.md) and live [API](https://finnish-grid-atlas.vercel.app/api/v1/quality) | Historical retrieval rows include revisions; not nodal headroom |
 | Operator confirmation | Zero rows | Would require separate documentary evidence; public map values do not qualify |
-| Model scenarios | Separate schema, zero rows | PyPSA/pandapower are optional future studies |
+| Model scenarios | Verified 48-hour, winter and market-corridor PyPSA JSON studies; 12 optional single-bus metric records can be imported into local SQLite | Hypothetical and separate; never operator headroom or source capacity |
 | Reinforcement projects | Separate schema and CSV template, zero rows | No source-verified project-to-point links in this release |
 | Netherlands | Source/access assessment only | No congestion data imported or Dutch model claimed |
 
@@ -131,7 +139,7 @@ explains what can inform later modelling and why the MVP is original code.
 |---|---|
 | Own grid data | Audited registry, source-transcribed capacity records, two authenticated source smoke tests and a tested opt-in local persist operation |
 | Understand current/future grid | Five-substation two-direction capacity outlook across discrete published years, unreported-cell visibility, and source-linked audit checklist |
-| Model and assess | Clear modelling boundary and reserved scenario schema; no completed model claim |
+| Model and assess | Solver-verified PyPSA national, winter and market-corridor sensitivities with separate source and model limitations |
 | Maintain a power-availability database | Reproducible SQLite evidence records and filterable dashboard |
 
 ## Verify
@@ -158,8 +166,8 @@ capacities are not independent. Fingrid does not guarantee the viewer is complet
 or error-free; discuss an actual connection with the operator.
 
 The sample contains no interpolation, power-factor conversion or fabricated
-numbers. The operational clients currently cover Fingrid datasets 124/74 and
-ENTSO-E actual load/generation per type only. NTC, flows, outages, reserves and stretch modelling remain [tracked work](docs/ROADMAP.md). Source refresh is scheduled with an emergency stop control.
+numbers. The operational ingestion is verified for Fingrid datasets 124/74 and
+ENTSO-E actual load A65. Historic Swedish commercial-border data and PyPSA studies are published as distinct research, not nodal telemetry. NTC, reserves, physical AC branch constraints and Netherlands ingestion remain [tracked work](docs/ROADMAP.md). Source refresh is scheduled with an emergency stop control.
 
 Primary sources: [Fingrid Grid Scope](https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/),
 [Fingrid Open Data](https://data.fingrid.fi/en/instructions),
