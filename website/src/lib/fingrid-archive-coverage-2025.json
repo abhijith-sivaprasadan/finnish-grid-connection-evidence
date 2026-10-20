@@ -1,0 +1,64 @@
+{
+  "status": "verified_original_archive_coverage_only",
+  "source_year": 2025,
+  "historical_source_kind": "observed_fingrid_national_aggregate",
+  "dataset_ids": [
+    124,
+    74
+  ],
+  "native_source_units": "MWh/h (15-minute interval mean MW)",
+  "validation_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39412085922",
+  "source_year_complete": false,
+  "annual_pypsa_solved": false,
+  "site_grid_connection_feasible": null,
+  "distinct_original_paired_intervals": 5568,
+  "verified_complete_days": 58,
+  "known_missing_source_days": 2,
+  "not_covered_by_archives_days": 305,
+  "original_source_windows": [
+    {
+      "label": "Winter source block",
+      "start": "2025-01-18",
+      "end_exclusive": "2025-02-01",
+      "days": 14,
+      "original_csv_sha256": "b0504230744d16020e253dd48bbeb7693459414ab0893f3770f6adc188596977"
+    },
+    {
+      "label": "Summer source block",
+      "start": "2025-06-15",
+      "end_exclusive": "2025-06-29",
+      "days": 14,
+      "original_csv_sha256": "d8ad5dc81ecee9b7b410aa19c2316faff16d55827a48d5fd59bcb667bf16a679"
+    },
+    {
+      "label": "Autumn source block",
+      "start": "2025-09-15",
+      "end_exclusive": "2025-10-15",
+      "days": 30,
+      "original_csv_sha256": "3093f704484848919d83feb6c133c2e2abf2299566d5bd02a109e01b7fdec2e0"
+    }
+  ],
+  "independent_autumn_overlap_original_sha256": "a38d703c23037bae75370e6414ff4b0034eb64b9832ea15167e40141c44235be",
+  "known_missing_original_124_intervals_utc": [
+    "2025-01-17T17:00:00Z",
+    "2025-01-17T17:45:00Z",
+    "2025-07-11T16:15:00Z"
+  ],
+  "missing_recheck_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39406458886",
+  "archived_source_runs": [
+    39391985966,
+    39396079522
+  ],
+  "source_urls": [
+    "https://data.fingrid.fi/en/datasets/124",
+    "https://data.fingrid.fi/en/datasets/74"
+  ],
+  "provenance": "Source hashes and independent autumn numerical overlap verified in GitHub Actions, with no new Fingrid calls.",
+  "boundaries": [
+    "Archived source-complete means both Fingrid 124 and 74 have original 15-minute readings on every interval of the listed UTC date. It does not establish Finnish electrical network feasibility.",
+    "Known missing original consumption readings remain source unknown, never zero or inferred from adjacent 15-minute intervals.",
+    "305 days are not covered by the imported historic archives. This is an archive coverage statement, not proof that Fingrid lacks observations on those days.",
+    "The original 2025 source is NOT a 365-day complete dataset. Do not annualize the sample energy nor represent separate blocks as one continuous battery simulation.",
+    "The original data do not provide 2030 forecasts, import rights, operator-confirmed substation connection capacity, or price projections."
+  ]
+}
