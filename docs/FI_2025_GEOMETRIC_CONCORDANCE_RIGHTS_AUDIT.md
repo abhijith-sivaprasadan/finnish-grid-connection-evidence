@@ -51,7 +51,7 @@ The Feb-2025 snapshot also PRE-DATES both the Q3 2025 commissioning of Huittinen
 - Source-authenticated 2024 ODbL Finnish 220/400 kV geometry;
 - a real February 2025 geospatial reference from a separately hosted third-party map copy;
 - a reproducible, voltage-aware source-map concordance metric over **3,157 source midpoints**;
-- strict raw-geometry non-redistribution while the comparison-layer rights remain unresolved.
+- strict raw-geometry non-redistribution, plus a repeatable cryptographic fingerprint of the mutable hosted source, while comparison-layer rights remain unresolved.
 
 **Still unresolved / explicit stop conditions:**
 - permission to redistribute the hosted FCG geometry (none granted by the visible ArcGIS item);
@@ -74,6 +74,6 @@ Execute on a machine with access to the public Zenodo and ArcGIS endpoints:
       --osm-dir /tmp/osm-fi-source \
       --out /tmp/osm-fi-aggregated/AGGREGATED_COUNTS_ONLY.json
 
-Do not commit the source FCG response, query-result geometry or source-ID joins. The output contains aggregates and rights/status metadata only, without raw coordinates, IDs, or source-side private/redistribution-unapproved contents. Live upstream GIS updates can change the results; the workflow records the item ID, owner and public collection date but cannot authenticate an immutable snapshot checksum for third-party FCG geometry.
+Do not commit the source FCG response, query-result geometry or source-ID joins. The output contains aggregates and rights/status metadata only, without raw coordinates, IDs, or source-side private/redistribution-unapproved contents. Live upstream GIS updates can change the results; the workflow records the item ID, owner and public collection date and creates a non-reversible SHA-256 fingerprint of the actually served 220/400-kV features in memory. On subsequent runs, that fingerprint detects changes in the hosted copy; it **cannot prove** that the mutable third-party copy faithfully reproduces Fingrid's exact 22 February 2025 original or establish redistribution rights.
 
 **Next grounded asset-identity milestone:** Obtain an explicit Fingrid-licensed authoritative time-stamped map or branch list, or rights clearance and technical lineage for the GIS copy; manually match a *limited named 400-kV corridor* against original OSM IDs and equipment ratings with independent operator documents. Without those inputs, geographic map proximity alone cannot promote any branch to operator-verified status.
