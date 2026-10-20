@@ -34,3 +34,11 @@ Fingrid sources:
 https://data.fingrid.fi/en/datasets/124
 https://data.fingrid.fi/en/datasets/74
 https://data.fingrid.fi/en/instructions
+
+## Completed authenticated study and published research preview
+
+2026-10-20 GitHub Actions workflow run [39391985966](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39391985966) retrieved **2,880 consecutive paired operator observations** (30 complete UTC days), passed source coverage and checksum checks, and solved **12 full-factorial PyPSA/HiGHS scenarios plus 3 reference cases**, all optimal with verified 15-minute energy balance. The source checksum is `3093f704484848919d83feb6c133c2e2abf2299566d5bd02a109e01b7fdec2e0`.
+
+The workflow stores the full source CSV, manifest, and solver output as the temporary artifact `verified-fingrid-long-horizon-pypsa` (GitHub artifact ID `12249992474`). Re-execution with private API credentials can reproduce the retrieval, though revision timestamps may differ across collections. The site embeds only the **verified provenance-linked summary** and renders scenario sensitivity as a mathematically qualified model output. It does not publish the 30-day model as current actual grid or connection headroom.
+
+The 30-day experiment covers September–October 2025 only; neither seasonal representativeness nor 2030 relevance has been demonstrated. Follow-on work should add verified winter and summer windows and true year-long coverage before annualizing results.
