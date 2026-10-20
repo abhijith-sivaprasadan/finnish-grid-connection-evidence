@@ -141,3 +141,51 @@ def test_legacy_dataset_major_journals_resume_without_redownloading(tmp_path):
     result=collect(tmp_path,execute=True,max_chunks=1,getter=getter)
     assert len(calls)==1 and calls[0][0]==74
     assert result["confirmed_original_paired_slots_captured"]==672
+
+
+def test_off_grid_original_operator_15min_record_is_quarantined_no_utc_rounding(tmp_path):
+    from src.schema import OperationalRecord
+    from src.models.annual_journal import daily_coverage
+    a,b=next(windows())
+    def getter(dataset_id,start,end):
+        records=mk(dataset_id,a,672)
+        wrong=dict(records[2])
+        wrong["timestamp_utc"]="2025-01-01T00:30:02Z"
+        wrong["interval_end_utc"]="2025-01-01T00:45:02Z"
+        if dataset_id==124:
+            # The real aligned slot was replaced by anomalous original source.
+            records.pop(2)
+        # The production source has BOTH the normal row and the extra 2-second row.
+        records.append(wrong)
+        return [OperationalRecord(
+          source=r["source"],dataset_id=r["dataset_id"],metric=r["metric"],
+          unit=r["unit"],value=r["value"],timestamp_utc=r["timestamp_utc"],
+          interval_end_utc=r["interval_end_utc"],retrieved_at=r["retrieved_at"],
+          source_url=r["source_url"]) for r in records]
+    result=collect(tmp_path,execute=True,max_chunks=2,getter=getter)
+    assert result["confirmed_original_paired_slots_captured"]==671
+    assert result["dataset_audit"]["124"]["quarantined_operator_source_intervals"]==1
+    assert result["dataset_audit"]["74"]["quarantined_operator_source_intervals"]==1
+    assert result["dataset_audit"]["124"]["original_missing_slots"]==1
+    assert result["dataset_audit"]["74"]["original_missing_slots"]==0
+    day=daily_coverage(tmp_path)["daily_status"][0]
+    assert day["paired_status"]=="known_source_gap"
+    assert day["consumption_124"]["observed_original_intervals"]==95
+    assert day["production_74"]["observed_original_intervals"]==96
+    p=tmp_path/(chunk_key(124,a,b)+".json")
+    saved=load_chunk(p,124,a,b)
+    assert saved["off_grid_original_source_rows"][0]["timestamp_utc"]=="2025-01-01T00:30:02.000000Z"
+    assert saved["source_quality"]["source_missing_utc"]==["2025-01-01T00:30:00Z"]
+    corrupted=json.loads(p.read_text())
+    corrupted["off_grid_original_source_rows"][0]["timestamp_utc"]="2025-01-01T00:30:03Z"
+    p.write_text(json.dumps(corrupted))
+    with pytest.raises(ValueError,match="quarantine hash"):
+        load_chunk(p,124,a,b)
+
+def test_other_invalid_operator_source_record_never_quarantined(tmp_path):
+    from src.models.annual_journal import split_aligned_and_quarantined
+    a,b=next(windows())
+    row=mk(124,a,1)[0]
+    row["interval_end_utc"]="2025-01-01T00:05:00Z"
+    with pytest.raises(ValueError,match="outside original queried time window"):
+        split_aligned_and_quarantined([row],124,a,b)
