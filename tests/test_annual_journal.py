@@ -189,3 +189,46 @@ def test_other_invalid_operator_source_record_never_quarantined(tmp_path):
     row["interval_end_utc"]="2025-01-01T00:05:00Z"
     with pytest.raises(ValueError,match="outside original queried time window"):
         split_aligned_and_quarantined([row],124,a,b)
+
+def test_authentic_native_30min_fingrid_interval_is_preserved_not_regridded(tmp_path):
+    """Regression for original Fingrid 124 May 8 2025 11:30–12:00 source record.
+
+    Synthetic numerical values here are test fixtures, not historic data.
+    """
+    from src.models.annual_journal import daily_coverage
+    from src.schema import OperationalRecord
+    a,b=next(windows())
+    def getter(dataset_id,start,end):
+        rows=mk(dataset_id,a,672)
+        if dataset_id==124:
+            longer=dict(rows[46])
+            longer["interval_end_utc"]=(a+timedelta(hours=12)).isoformat().replace("+00:00","Z")
+            rows=[r for i,r in enumerate(rows) if i not in (46,47)]
+            rows.append(longer)
+        return [OperationalRecord(source=r["source"],dataset_id=r["dataset_id"],
+            metric=r["metric"],unit=r["unit"],value=r["value"],
+            timestamp_utc=r["timestamp_utc"],interval_end_utc=r["interval_end_utc"],
+            retrieved_at=r["retrieved_at"],source_url=r["source_url"]) for r in rows]
+    result=collect(tmp_path,execute=True,max_chunks=2,getter=getter)
+    assert result["confirmed_original_paired_slots_captured"]==670
+    assert result["dataset_audit"]["124"]["quarantined_operator_source_intervals"]==1
+    assert result["dataset_audit"]["124"]["original_missing_slots"]==2
+    saved=load_chunk(tmp_path/(chunk_key(124,a,b)+".json"),124,a,b)
+    assert saved["quarantine_status"]=="operator_native_30min_interval_preserved_not_interpolated"
+    original=saved["off_grid_original_source_rows"][0]
+    assert original["timestamp_utc"]=="2025-01-01T11:30:00.000000Z"
+    assert original["interval_end_utc"]=="2025-01-01T12:00:00.000000Z"
+    gaps=saved["source_quality"]["source_missing_utc"]
+    assert "2025-01-01T11:30:00Z" in gaps
+    assert "2025-01-01T11:45:00Z" in gaps
+    assert daily_coverage(tmp_path)["paired_day_counts"]["known_source_gap"]==1
+    assert result["full_calendar_2025_source_verified"] is False
+
+
+def test_authentic_source_quarantine_does_not_accept_arbitrary_durations(tmp_path):
+    from src.models.annual_journal import split_aligned_and_quarantined
+    a,b=next(windows())
+    row=mk(124,a,1)[0]
+    row["interval_end_utc"]=(a+timedelta(minutes=45)).isoformat().replace("+00:00","Z")
+    with pytest.raises(ValueError,match="Unsupported native source interval"):
+        split_aligned_and_quarantined([row],124,a,b)
