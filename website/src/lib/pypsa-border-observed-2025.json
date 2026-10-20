@@ -1,0 +1,74 @@
+{
+  "source_kind": "original_Fingrid_31_32_commercial_and_38_39_intraday_market",
+  "model_kind": "conditional_project_only_market_access_PyPSA",
+  "source_run": 39420079414,
+  "source_artifact_id": 12262258789,
+  "source_utc_start": "2025-09-15",
+  "source_utc_end_exclusive": "2025-10-15",
+  "complete_days": 30,
+  "observed_quarter_hour_count": 2880,
+  "source_sha256_by_dataset": {
+    "31": "0ac06b6c4f4e6fb66a74368506ca9330472f02f0bbff85df2815530dcb3cf1c6",
+    "32": "06596a60b1d4054aadc9957728d5f672a4342a4c5dea2e4bdabad179528722ec",
+    "38": "db1a347f4c99fd4e9f33814bb68dd95afd7e47aa9b83527ee67ddd5ed76c6b82",
+    "39": "06fd05c4d7e825fb6547dbeba26d58aafefcf0aeb5e32664fa3ea9854e653bb7"
+  },
+  "joined_source_sha256": "659092a40ac298a256ba79cf6f7361f999ac9cfb8ed38e4dbcdb7cc4aee5097d",
+  "observed_statistics": {
+    "fi_se1_commercial_signed_mean_mw": -525.599,
+    "fi_se3_commercial_signed_mean_mw": -204.562,
+    "unused_intraday_import_SE1_SE3_median_mw": 553.6,
+    "unused_intraday_min_mw": 0,
+    "unused_intraday_max_mw": 3528.9,
+    "quarter_hour_share_unused_intraday_capacity_at_least_100mw": 0.67153
+  },
+  "scenarios": [
+    {
+      "flex_half_span_mw": 0,
+      "battery_duration_hours": 0,
+      "modelled_project_penalty_relaxation_mwh": 22052.15
+    },
+    {
+      "flex_half_span_mw": 0,
+      "battery_duration_hours": 2,
+      "modelled_project_penalty_relaxation_mwh": 18346.6584
+    },
+    {
+      "flex_half_span_mw": 0,
+      "battery_duration_hours": 4,
+      "modelled_project_penalty_relaxation_mwh": 15624.4102
+    },
+    {
+      "flex_half_span_mw": 0,
+      "battery_duration_hours": 8,
+      "modelled_project_penalty_relaxation_mwh": 12349.3702
+    },
+    {
+      "flex_half_span_mw": 50,
+      "battery_duration_hours": 0,
+      "modelled_project_penalty_relaxation_mwh": 18294.725
+    },
+    {
+      "flex_half_span_mw": 50,
+      "battery_duration_hours": 2,
+      "modelled_project_penalty_relaxation_mwh": 14525.8401
+    },
+    {
+      "flex_half_span_mw": 50,
+      "battery_duration_hours": 4,
+      "modelled_project_penalty_relaxation_mwh": 12836.2951
+    },
+    {
+      "flex_half_span_mw": 50,
+      "battery_duration_hours": 8,
+      "modelled_project_penalty_relaxation_mwh": 10868.4018
+    }
+  ],
+  "limitations": [
+    "Dataset 31/32 signed commercial flows are not measured physical flows; negative means Finnish import.",
+    "Dataset 38/39 provide unused intraday SE1/SE3->FI market capacity AFTER day-ahead, not total physical interconnection capability or project import rights.",
+    "Conditional project-only model is not national residual electricity-balance PyPSA; its penalty relaxation is not comparable to the arbitrary-national-cap study or real blackouts.",
+    "Actual new-load feasibility requires bids, domestic topology, generation deliverability and substation rights. None verified.",
+    "Hypothetical flexibility assumes perfect hindsight and cyclic 100 MW batteries; not a 2030 forecast."
+  ]
+}
