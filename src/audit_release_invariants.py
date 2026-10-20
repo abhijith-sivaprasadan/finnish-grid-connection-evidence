@@ -65,7 +65,9 @@ def run(root=ROOT):
         assert_that(r["shown_value"]==r["capacity_value"] and
                     r["shown_unit"]==r["capacity_unit"],"Screenshot-ledger row mismatch")
         assert_that(is_sha(r["evidence_sha256"]),"Missing screenshot fingerprint metadata")
-        assert_that(v["evidence_sha256"]==r["evidence_sha256"],"Reviewer screenshot fingerprint drift")
+        for verified_field in ("shown_value","shown_unit","evidence_grade","evidence_review_date","evidence_sha256"):
+            assert_that(str(v[verified_field])==str(r[verified_field]),
+                        f"Published review metadata field {verified_field} differs from original CSV for {rid}")
         assert_that(record["capacity_unit"]=="MW" and
                     float(record["capacity_value"])>=0,"Unexpected source unit/value")
         key=(record["connection_point_id"],record["direction"],record["effective_year"])
