@@ -79,7 +79,7 @@ def solve_zonal(original,caps:dict,*,corridor:str,flex_mw:float,battery_hours:fl
     import pypsa
     if corridor not in CORRIDORS or flex_mw not in FLEX_SPANS or battery_hours not in STORAGE_HOURS:
         raise ValueError("Scenario configuration not explicitly permitted")
-    load=additional_load(original,"flexible_100mw" if flex_mw else "flat_100mw",flex_span_mw=flex_mw)
+    load=additional_load(original,"flexible_100mw" if flex_mw else "flat_100mw")
     network=pypsa.Network()
     network.set_snapshots(pd.DatetimeIndex(original.index))
     network.snapshot_weightings.loc[:,:]=0.25
