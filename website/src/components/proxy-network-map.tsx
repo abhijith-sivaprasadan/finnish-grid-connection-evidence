@@ -49,7 +49,7 @@ export function ProxyNetworkMap(){
       const a=project(osmProxyNodes[i]),b=project(osmProxyNodes[j]);
       return <line key={idx} x1={a.x} y1={a.y} x2={b.x} y2={b.y}
        stroke={osmProxyNodes[i].kv===220?"#66c9bc":"#6d98da"} strokeWidth={selected===i||selected===j?2.6:1.15}
-       strokeOpacity={selected===i||selected===j?.95:.5}/>;
+       strokeOpacity={(selected===i||selected===j)?0.95:0.5}/>;
     })}
     {visible.map(n=>{
       const a=project(n),active=n.id===selected;
