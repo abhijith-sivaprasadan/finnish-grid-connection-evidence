@@ -1,0 +1,48 @@
+name: Finland PyPSA system sensitivity
+on:
+  push:
+    paths:
+      - "src/models/**"
+      - "data/model_inputs/**"
+      - "requirements-model.txt"
+      - "tests/test_finland_model.py"
+      - "src/models/verify_publication.py"
+      - "website/src/lib/pypsa-scenario-results.json"
+      - "website/src/lib/finland-observed.json"
+      - ".github/workflows/pypsa-study.yml"
+  pull_request:
+    paths:
+      - "src/models/**"
+      - "data/model_inputs/**"
+      - "requirements-model.txt"
+      - "tests/test_finland_model.py"
+      - "src/models/verify_publication.py"
+      - "website/src/lib/pypsa-scenario-results.json"
+      - "website/src/lib/finland-observed.json"
+      - ".github/workflows/pypsa-study.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  solve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - run: python -m pip install -r requirements-model.txt
+      - name: Source validation and PyPSA / HiGHS optimizations
+        run: python -m pytest -q tests/test_finland_model.py
+      - name: Write real model results without credentials
+        run: python -m src.models.finland --output /tmp/finland_pypsa_model.json
+      - name: Verify published website results match a fresh solver run
+        run: python -m src.models.verify_publication --solved /tmp/finland_pypsa_model.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: finland-pypsa-evidence-model-results
+          path: /tmp/finland_pypsa_model.json
+          retention-days: 30

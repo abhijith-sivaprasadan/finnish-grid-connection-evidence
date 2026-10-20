@@ -30,6 +30,7 @@ export default async function Home(){
     <div className="df-header-actions"><Link href="/screening" className="button">Screen a 100 MW connection ↗</Link> <Link href="/connections">Source matrix →</Link></div>
    </header>
    <div className="dashboard-archive-link"><div><strong>Historical main-grid station archive</strong><span>128 source-listed rows · printed 127 · table heading 1.1.2020 · not a current capacity register</span></div><Link href="/stations">Explore source names ↗</Link></div>
+   <div className="dashboard-archive-link"><div><strong>NEW · PyPSA Finland historical demand sensitivity</strong><span>192 real source intervals · 4 HiGHS-optimal scenarios · hypothetical 1,500 MW balancing cap, not grid availability</span></div><Link href="/analysis">Explore system model ↗</Link></div>
    <section className="df-home-stats" aria-label="Recorded data summary">
     <div><span>Substations in this dataset</span><strong>{summary?.points??"—"}</strong><small>Not a national catalogue</small></div>
     <div><span>Recorded indicative values</span><strong>{summary?.capacity_observations??"—"}</strong><small>Dated Fingrid transcriptions</small></div>

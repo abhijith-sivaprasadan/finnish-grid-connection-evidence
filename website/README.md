@@ -6,6 +6,9 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis` — 48-hour **historical 2026** PyPSA Finland one-bus analysis; source-linked real Fingrid consumption/production, hypothetical balancing constraint, four model scenarios; NOT site-level connection capacity
+- `/api/v1/model/finland` — solver-verified historical model results and assumptions as model_scenario data, **not live observations or grid feasibility**
+
 - `/screening` — evidence-qualified screening by demand/year and recorded voltage; never a feasibility conclusion
 - `/api/v1/screening` — read-only screening and source-review evidence; 100 MW 2030 pilot returns two indicative threshold matches and three unknowns
 

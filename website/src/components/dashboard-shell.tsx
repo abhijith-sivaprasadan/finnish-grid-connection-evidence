@@ -11,6 +11,7 @@ const nav = [
   {href:"/stations",label:"Station inventory",hint:"Historical names",icon:"nodes",group:"EXPLORE"},
   {href:"/connections",label:"Connection outlook",hint:"Capacity evidence",icon:"nodes",group:"EXPLORE"},
   {href:"/operations",label:"System operations",hint:"National time series",icon:"chart",group:"EXPLORE"},
+  {href:"/analysis",label:"PyPSA research",hint:"Model scenarios",icon:"chart",group:"EXPLORE"},
   {href:"/quality",label:"Data quality",hint:"Audit & coverage",icon:"check",group:"EXPLORE"},
   {href:"/method",label:"Methodology",hint:"Evidence limits",icon:"book",group:"REFERENCE"},
   {href:"/api",label:"Developer API",hint:"Read-only endpoints",icon:"code",group:"REFERENCE"}

@@ -36,6 +36,13 @@ check 200 "/api/v1/capacity?direction=production&year=2030"
 grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/coverage"
 grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
+check 200 "/analysis"
+grep -q "What changes when" /tmp/grid-smoke-response.json
+grep -q "1,500 MW" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland"
+grep -q '"publication_status":"verified_solver_output"' /tmp/grid-smoke-response.json
+grep -q '"verified_operator_connectability":false' /tmp/grid-smoke-response.json
+grep -q '"modelled_shortfall_under_assumption_mwh":1642.3275' /tmp/grid-smoke-response.json
 check 200 "/screening"
 grep -q "Connection" /tmp/grid-smoke-response.json
 check 200 "/api/v1/screening?demand_mw=100&year=2030&direction=consumption&voltage=all"
