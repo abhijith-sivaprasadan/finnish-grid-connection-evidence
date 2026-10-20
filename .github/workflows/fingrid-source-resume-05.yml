@@ -20,7 +20,7 @@ jobs:
       - name: Check out immutable tested Fingrid collector
         uses: actions/checkout@v4
         with:
-          ref: 65111e9ff69e1cac78214b5a74d78b5f7163062b
+          ref: e66f2b5bd7e7079ff977ceae654bd4d70d9db1e3
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -77,7 +77,7 @@ jobs:
           assert cached["new_original_source_chunks_saved_this_run"]<=8
           assert a["dataset_audit"]["124"]["chunks_persisted"] >=16
           assert a["dataset_audit"]["74"]["chunks_persisted"] >=16
-          assert d["paired_day_counts"]["all_calendar_days"]==665
+          assert d["paired_day_counts"]["all_calendar_days"]==365
           assert d["paired_day_counts"]["unknown_not_downloaded"]>0
           print("FINGRID_BATCH5_VERIFIED_JSON="+json.dumps({
              "journal_chunks":sum(x["chunks_persisted"] for x in a["dataset_audit"].values()),
