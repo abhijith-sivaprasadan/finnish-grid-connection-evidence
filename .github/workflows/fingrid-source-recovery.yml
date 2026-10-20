@@ -1,0 +1,100 @@
+name: Manual verified Fingrid source recovery
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: "Only original Fingrid 124/74 readings; no interpolation"
+        required: true
+        type: choice
+        default: recheck_three_gaps
+        options:
+          - recheck_three_gaps
+          - annual_source_chunk_batch
+      resume_run_id:
+        description: "Optional previous recovery workflow run ID to resume the original source journal"
+        required: false
+        type: string
+      max_new_chunks:
+        description: "At most 1–16 previously uncollected 7-day dataset chunks"
+        required: true
+        type: string
+        default: "8"
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: fingrid-source-recovery-limited
+  cancel-in-progress: false
+
+jobs:
+  original-source-audit:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+      OPERATION: ${{ inputs.operation }}
+      MAX_NEW_CHUNKS: ${{ inputs.max_new_chunks }}
+      RESUME_RUN_ID: ${{ inputs.resume_run_id }}
+    steps:
+      - name: Check out immutable, tested research implementation (not an arbitrary PR ref)
+        uses: actions/checkout@v4
+        with:
+          ref: f9fa6630318e5c8cea426b82a6c847cd88dc9ff5
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install isolated research dependencies
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Test pinned offline source-contract logic
+        run: python -m pytest -q tests/test_recover_fingrid_gaps.py tests/test_annual_journal.py tests/test_pypsa_matched_windows.py
+      - name: Validate resume ID and requested batch size
+        shell: bash
+        run: |
+          if [ -n "$RESUME_RUN_ID" ] && ! [[ "$RESUME_RUN_ID" =~ ^[0-9]{7,15}$ ]]; then
+            echo "::error::resume_run_id must be a numeric workflow run ID."
+            exit 1
+          fi
+          if ! [[ "$MAX_NEW_CHUNKS" =~ ^([1-9]|1[0-6])$ ]]; then
+            echo "::error::max_new_chunks must be 1–16."
+            exit 1
+          fi
+      - uses: actions/download-artifact@v4
+        if: inputs.operation == 'annual_source_chunk_batch' && inputs.resume_run_id != ''
+        with:
+          name: fingrid-original-2025-recovery
+          run-id: ${{ inputs.resume_run_id }}
+          github-token: ${{ github.token }}
+          path: /tmp/fingrid-recovery
+      - name: Validate private Fingrid key presence without exposing it
+        shell: bash
+        run: |
+          if [ -z "${FINGRID_API_KEY:-}" ]; then
+            echo "::error::Private FINGRID_API_KEY is unavailable."
+            exit 1
+          fi
+      - name: Recheck only the three known original Fingrid 124 gaps
+        if: inputs.operation == 'recheck_three_gaps'
+        run: |
+          mkdir -p /tmp/fingrid-recovery
+          python -m src.models.recover_fingrid_gaps --execute \
+            --output /tmp/fingrid-recovery/three_original_fingrid_gap_rechecks.json
+      - name: Advance bounded original-source 2025 data journal
+        if: inputs.operation == 'annual_source_chunk_batch'
+        shell: bash
+        run: |
+          mkdir -p /tmp/fingrid-recovery
+          python -m src.models.annual_journal --execute \
+            --dir /tmp/fingrid-recovery/chunks \
+            --max-new-chunks "$MAX_NEW_CHUNKS"
+      - name: Save original data and provenance, including incomplete audits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fingrid-original-2025-recovery
+          path: /tmp/fingrid-recovery/
+          if-no-files-found: ignore
+          retention-days: 30
