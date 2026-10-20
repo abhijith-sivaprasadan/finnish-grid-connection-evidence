@@ -58,8 +58,12 @@ def _validate_source(rows,dataset_id:int,start:datetime,end:datetime):
             raise ValueError(f"Incorrect identity, unit or value in Fingrid {dataset_id}")
         stamp=datetime.fromisoformat(canonical(row.timestamp_utc).replace("Z","+00:00"))
         finish=datetime.fromisoformat(canonical(row.interval_end_utc).replace("Z","+00:00"))
-        if stamp in seen or finish-stamp!=timedelta(minutes=15) or not start<=stamp<finish<=end:
-            raise ValueError(f"Duplicate, shifted or invalid 15-minute Fingrid {dataset_id} interval")
+        if stamp in seen:
+            raise ValueError(f"Fingrid {dataset_id} duplicate source UTC timestamp {stamp.isoformat()}")
+        if finish-stamp != timedelta(minutes=15):
+            raise ValueError(f"Fingrid {dataset_id} non-15-minute source duration at UTC {stamp.isoformat()} (actual minutes={(finish-stamp).total_seconds()/60:g}); no interpolation")
+        if not start <= stamp < finish <= end:
+            raise ValueError(f"Fingrid {dataset_id} source interval outside requested UTC window, starts {stamp.isoformat()}")
         seen.add(stamp)
     expected=int((end-start).total_seconds()/900)
     if len(ordered)!=expected:
@@ -86,6 +90,9 @@ def retrieve(start:str,end:str,*,getter=None,client=None,chunk_days:int=7):
             high=final.isoformat().replace("+00:00","Z")
             result=(getter(dataset_id,low,high) if getter is not None else
                     fetch(dataset_id,low,high,client=shared))
+            # Fail immediately on the affected source chunk, not after a 365-day download.
+            # This also avoids falsely claiming that an incomplete older series is 15-minute.
+            _validate_source(result,dataset_id,cursor,final)
             collected[dataset_id].extend(result)
             cursor=final
     by_id={i:_validate_source(rows,i,first,last) for i,rows in collected.items()}
