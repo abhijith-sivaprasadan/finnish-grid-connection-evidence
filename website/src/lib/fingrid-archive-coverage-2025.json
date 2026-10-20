@@ -7,49 +7,65 @@
     74
   ],
   "native_source_units": "MWh/h (native mean MW over each 15-minute interval)",
-  "validation_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39418640253",
+  "validation_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39447129155",
   "source_year_complete": false,
   "annual_pypsa_solved": false,
   "site_grid_connection_feasible": null,
-  "distinct_original_paired_intervals": 12283,
-  "verified_complete_days": 125,
-  "known_missing_source_days": 4,
-  "not_covered_by_archives_days": 236,
+  "distinct_original_paired_intervals": 14966,
+  "verified_complete_days": 150,
+  "known_missing_source_days": 7,
+  "not_covered_by_archives_days": 208,
   "original_source_windows": [
     {
-      "label": "January first block",
+      "label": "Jan 1–16 verified",
       "start": "2025-01-01",
       "end_exclusive": "2025-01-17",
       "days": 16,
-      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
       "archive_kind": "journal_chunks_124_74"
     },
     {
-      "label": "Winter continuous block",
+      "label": "Jan 18–Feb 13 verified",
       "start": "2025-01-18",
       "end_exclusive": "2025-02-14",
       "days": 27,
-      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
       "archive_kind": "journal_chunks_124_74"
     },
     {
-      "label": "Late-winter continuous block",
+      "label": "Feb 15–Mar 13 verified",
       "start": "2025-02-15",
       "end_exclusive": "2025-03-14",
       "days": 27,
-      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
       "archive_kind": "journal_chunks_124_74"
     },
     {
-      "label": "March continuous block",
+      "label": "Mar 15–29 verified",
       "start": "2025-03-15",
-      "end_exclusive": "2025-03-26",
-      "days": 11,
-      "original_capture_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
+      "end_exclusive": "2025-03-30",
+      "days": 15,
+      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
       "archive_kind": "journal_chunks_124_74"
     },
     {
-      "label": "Summer observed block",
+      "label": "Mar 31–Apr 10 verified",
+      "start": "2025-03-31",
+      "end_exclusive": "2025-04-11",
+      "days": 11,
+      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "Apr 12–21 verified",
+      "start": "2025-04-12",
+      "end_exclusive": "2025-04-22",
+      "days": 10,
+      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "Jun 15–28 source verified",
       "start": "2025-06-15",
       "end_exclusive": "2025-06-29",
       "days": 14,
@@ -57,7 +73,7 @@
       "archive_kind": "paired_original_source_csv"
     },
     {
-      "label": "Autumn observed block",
+      "label": "Sep 15–Oct 14 source verified",
       "start": "2025-09-15",
       "end_exclusive": "2025-10-15",
       "days": 30,
@@ -66,15 +82,16 @@
     }
   ],
   "independent_autumn_overlap_original_sha256": "a38d703c23037bae75370e6414ff4b0034eb64b9832ea15167e40141c44235be",
-  "journal_original_zip_sha256": "e3babddecb6436fb6a8a4b83203b03abc2c3dc97f355e2875f31079bf5eb486c",
-  "journal_run": 39418640253,
-  "journal_artifact_id": 12262681192,
+  "journal_original_zip_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+  "journal_run": 39447129155,
+  "journal_artifact_id": 12276347617,
   "journal_utc_window": {
     "start": "2025-01-01",
-    "end_exclusive": "2025-03-26",
-    "source_complete_days": 81,
-    "source_gap_days": 3,
-    "original_paired_intervals": 8059
+    "end_exclusive": "2025-04-23",
+    "source_complete_days": 106,
+    "source_gap_days": 6,
+    "original_paired_intervals": 10742,
+    "source_chunks_saved": 32
   },
   "verified_overlap_pair_count": 1344,
   "known_missing_original_124_intervals_utc": [
@@ -83,10 +100,15 @@
     "2025-02-14T17:00:00Z",
     "2025-02-14T17:45:00Z",
     "2025-03-14T17:00:00Z",
+    "2025-03-30T10:45:00Z",
+    "2025-04-11T16:15:00Z",
+    "2025-04-11T17:15:00Z",
+    "2025-04-11T17:45:00Z",
+    "2025-04-22T17:00:00Z",
     "2025-07-11T16:15:00Z"
   ],
-  "partial_original_paired_interval_count": 283,
-  "known_gap_days_in_journal": 3,
+  "partial_original_paired_interval_count": 566,
+  "known_gap_days_in_journal": 6,
   "missing_recheck_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39406458886",
   "archived_source_runs": [
     39418640253,
@@ -101,10 +123,24 @@
   ],
   "provenance": "Actual 2025 original 124 and 74 source chunks and earlier original CSV archives; prior original journal hashes rechecked, 1,344 matching paired winter overlap values, not filled.",
   "boundaries": [
-    "125 complete UTC days are source coverage, NOT 365 source-complete annual observations.",
-    "Six known consumption quarter-hour readings are missing across January 17, February 14, March 14 and July 11; the operator correction request is outstanding. Missing is never a numeric zero.",
-    "236 other days are outside the currently imported archives, not evidence that Fingrid has no original readings.",
-    "The selected 2025 data are discontinuous: no single uninterrupted calendar-year PyPSA storage operation or defensible 2025 full-year total.",
-    "The historical national aggregates do not confirm site-specific electrical connection rights, transmission capacity, available reserve generation, or 2030 demand."
+    "150 source-complete UTC dates are selected historical original observations, not verified 2025 calendar completeness.",
+    "Eleven original consumption quarter-hours are missing across seven UTC dates; the 2025-03-30 slot has a nonstandard 10:45:02 source row retained in quarantine, never snapped to 10:45:00.",
+    "208 remaining dates are outside captured source coverage and are NOT evidence that Fingrid never published them.",
+    "Do not concatenate separated periods into a continuous 365-day battery model or annualize sample source totals.",
+    "Neither these national original series nor commercial-border market observations prove substation physical capacity, line reactance, operator import rights or 2030 project feasibility."
+  ],
+  "authentic_off_grid_quarantined_source_intervals": [
+    {
+      "dataset_id": 124,
+      "start_utc": "2025-03-30T10:45:02Z",
+      "end_utc_exclusive": "2025-03-30T11:00:02Z",
+      "status": "original_source_preserved_but_not_quarterhour_aligned"
+    },
+    {
+      "dataset_id": 74,
+      "start_utc": "2025-03-30T10:45:02Z",
+      "end_utc_exclusive": "2025-03-30T11:00:02Z",
+      "status": "original_source_preserved_but_not_quarterhour_aligned"
+    }
   ]
 }
