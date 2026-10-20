@@ -80,12 +80,22 @@ def nminus1(net, *, families=("line","trafo")):
                          "max_trafo_loading_percent":result["max_trafo_loading_percent"],
                          "reference_voltage_band_violation":result["explicit_reference_voltage_band_violation"],
                          "reference_loading_over_100pct":result["loading_above_nameplate_100pct"]}
-            except (ValueError, RuntimeError, Exception) as exc:
-                # A disconnected or unsolvable scenario is counted explicitly,
-                # never invented as a converged and compliant scenario.
+            except Exception as exc:
+                # Only recognized power-flow nonconvergence and invalid solved
+                # values can be recorded as unresolved engineering cases.
+                # Programmer errors (KeyError, TypeError, AttributeError,
+                # AssertionError, unexpected RuntimeError, etc.) MUST fail
+                # the job; treating them as outages hides model defects.
+                solver_failure=(type(exc).__name__=="LoadflowNotConverged" and
+                                type(exc).__module__.startswith("pandapower."))
+                solved_value_error=isinstance(exc, ValueError)
+                if not (solver_failure or solved_value_error):
+                    raise
                 outcome={"outage_type":family,"outage_index":int(idx),
                          "outage_name":label,"converged":False,
-                         "reason_type":type(exc).__name__}
+                         "reason_type":type(exc).__name__,
+                         "failure_classification":("powerflow_nonconvergence" if solver_failure
+                            else "value_error_requires_manual_diagnosis")}
             finally:
                 net[family].at[idx,"in_service"]=original
             outcomes.append(outcome)
