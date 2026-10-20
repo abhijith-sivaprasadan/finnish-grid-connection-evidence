@@ -2,7 +2,6 @@
 from pathlib import Path
 import json
 import pytest
-from shapely.geometry import LineString
 from src.models.fi_spatial_concordance_2025 import (
     check_metadata, prepare_pairs, sample_distances, audit_spatial,
     load_osm_lines, ITEM_ID, SVC_OWNER
@@ -36,6 +35,8 @@ def test_changed_source_owner_or_collection_date_must_fail():
 
 
 def test_voltage_specific_spatial_comparison():
+    pytest.importorskip("shapely")
+    pytest.importorskip("pyproj")
     # Two tiny invented lines in WGS84 Helsinki-like range. Zero operator source.
     osm=[{"line_id":"SYNTHETIC400","voltage":"400",
           "geometry":"LINESTRING (25 61,25 61.04)"},
@@ -55,7 +56,8 @@ def test_voltage_specific_spatial_comparison():
 
 
 def test_false_spatial_match_and_duplicate_hosted_voltage_guard():
-    from shapely.geometry import LineString
+    pytest.importorskip("pyproj")
+    LineString = pytest.importorskip("shapely.geometry").LineString
     near=LineString([(0,0),(10000,0)])
     far=LineString([(0,50000),(10000,50000)])
     assert min(sample_distances([near],[far])[0]) > 49000
