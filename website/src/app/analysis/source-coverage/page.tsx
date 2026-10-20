@@ -42,7 +42,7 @@ export default function ArchiveCoverage(){
   <div className="cov-stats">
    <div><small>PAIRED HISTORICAL DAYS</small><strong>{evidence.verified_complete_days}</strong><span>Only the verified original-source windows</span></div>
    <div><small>PAIRED 15-MINUTE READINGS</small><strong>{evidence.distinct_original_paired_intervals.toLocaleString("en-US")}</strong><span>Verified Fingrid 124 and 74 observations</span></div>
-   <div><small>KNOWN OPERATOR-SOURCE GAP DAYS</small><strong>{counts.source_missing}</strong><span>Three missing readings across two UTC dates</span></div>
+   <div><small>KNOWN OPERATOR-SOURCE GAP DAYS</small><strong>{counts.source_missing}</strong><span>Six missing consumption readings across four UTC dates</span></div>
    <div><small>NOT COVERED BY THESE ARCHIVES</small><strong>{counts.not_in_archives}</strong><span>May be available from Fingrid; not yet audited here</span></div>
   </div>
   <section className="cov-panel">
