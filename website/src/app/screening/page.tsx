@@ -16,7 +16,7 @@ export default async function Screening({searchParams}:{searchParams:SP}){
   else if(value!==undefined){q.set(key,"INVALID_MULTIPLE");}
  }
  let error:string|null=null;
- let initial:ReturnType<typeof parseScreening>={demand_mw:100,year:2030,direction:"consumption",voltage:"all"};
+ let initial:ReturnType<typeof parseScreening>={demand_mw:100,year:2030,direction:"consumption",voltage:"all",connection_type:"switchyard"};
  try{initial=parseScreening(q);}catch(e){error=e instanceof BadInput?e.message:"Invalid screening input";}
  let evidence:Awaited<ReturnType<typeof evidenceCatalogue>>|null=null;
  try{evidence=await evidenceCatalogue();}catch{error="The read-only evidence store is unavailable. No sample numbers were substituted.";}
@@ -24,7 +24,7 @@ export default async function Screening({searchParams}:{searchParams:SP}){
   <header className="sc-hero">
     <div className="sc-eyebrow">RESEARCH WORKSPACE / FINLAND / EVIDENCE TRIAGE</div>
     <h1>Connection <em>screening.</em></h1>
-    <p>Compare a proposed electricity-consumption request against recorded Fingrid Grid Scope figures. Screen the evidence first; do not mistake a published estimate for physical connectability.</p>
+    <p>Compare a proposed electricity-consumption request against recorded Fingrid Grid Scope figures. Review capacity evidence, Fingrid connection-pathway guidance and next actions separately. A threshold match does not establish that a 100 MW project can use a specific 400 kV bay.</p>
     <div className="sc-hero-links"><Link href="/connections">Inspect capacity records ↗</Link><Link href="/stations">Historical station names ↗</Link><Link href="/method">Source limitations ↗</Link></div>
   </header>
   {error&&<p className="notice warn" role="alert">{error}</p>}
