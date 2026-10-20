@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 from collections import Counter
 from datetime import datetime, timezone
 import json
@@ -95,6 +96,19 @@ def acquire_fc_geometry(*, item: dict | None = None, layer: dict | None = None) 
     ids = [x.get("properties",{}).get("FID") for x in features]
     if len(ids)!=len(set(ids)) or any(x is None for x in ids):
         raise ValueError("Missing/duplicate third-party feature IDs")
+    # Keep a non-reversible canonical checksum so a later mutable hosted
+    # map update is detectable. Never save its raw geometry or feature IDs.
+    hasher = hashlib.sha256()
+    for feature in features:
+        hasher.update(json.dumps(
+            feature, sort_keys=True, separators=(",",":"), ensure_ascii=False,
+            allow_nan=False).encode("utf-8"))
+        hasher.update(b"\n")
+    provenance["ephemeral_canonical_220_400_geojson_sha256"] = hasher.hexdigest()
+    provenance["hash_scope"] = "468-style voltage-filtered ordered features; GeoJSON FID/geometry/attributes hashed in memory but NOT distributed"
+    provenance["hosted_item_modified_utc"] = (
+        datetime.fromtimestamp(item["modified"]/1000, tz=timezone.utc).isoformat()
+        if isinstance(item.get("modified"),(int,float)) else None)
     provenance["hosted_400_220_feature_count"] = count
     return provenance, features
 
