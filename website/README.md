@@ -10,7 +10,7 @@ the Python collector and existing Neon production PostgreSQL schema.
 - `/api/v1/model/finland/winter-2025` and `/api/v1/model/finland/borders-2025` — read-only source-provenance-pinned historic model summaries. Not an annual model or actual import rights.
 
 
-- `/analysis/source-coverage` — real 2025 original Fingrid 124/74 source bank with 125 verified UTC days, 4 known source-gap dates and 236 dates outside the captured bank. No annual total or confirmed transmission headroom
+- `/analysis/source-coverage` — real 2025 original Fingrid 124/74 source bank with 150 verified UTC days, 7 known source-gap dates and 208 dates outside the captured bank. No annual total or confirmed transmission headroom
 - `/api/v1/observed/coverage/2025` — immutable-provenance, read-only 2025 source coverage and unresolved evidence classifications
 
 

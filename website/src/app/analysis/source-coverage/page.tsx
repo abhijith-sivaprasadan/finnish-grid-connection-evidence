@@ -42,7 +42,7 @@ export default function ArchiveCoverage(){
   <div className="cov-stats">
    <div><small>PAIRED HISTORICAL DAYS</small><strong>{evidence.verified_complete_days}</strong><span>Only the verified original-source windows</span></div>
    <div><small>PAIRED 15-MINUTE READINGS</small><strong>{evidence.distinct_original_paired_intervals.toLocaleString("en-US")}</strong><span>Verified Fingrid 124 and 74 observations</span></div>
-   <div><small>KNOWN OPERATOR-SOURCE GAP DAYS</small><strong>{counts.source_missing}</strong><span>Six missing consumption readings across four UTC dates</span></div>
+   <div><small>KNOWN OPERATOR-SOURCE GAP DAYS</small><strong>{counts.source_missing}</strong><span>Eleven original consumption slots missing across seven UTC dates</span></div>
    <div><small>NOT COVERED BY THESE ARCHIVES</small><strong>{counts.not_in_archives}</strong><span>May be available from Fingrid; not yet audited here</span></div>
   </div>
   <section className="cov-panel">
@@ -55,7 +55,7 @@ export default function ArchiveCoverage(){
       <div className="cov-month-days">{days.filter(d=>d.month===index).map(d=><span key={d.date} className={"cov-date cov-"+d.status} title={d.date+" — "+labels[d.status]} aria-label={d.date+" — "+labels[d.status]}>{d.day}</span>)}</div>
      </div>)}
    </div>
-   <p className="cov-caption">An uncovered date does not mean Fingrid has no data; it means that date has not been verified in this particular archive bank. Jan 17, Feb 14, Mar 14 and Jul 11 contain source-missing intervals; uncovered dates have not been verified in these archives.</p>
+   <p className="cov-caption">An uncovered date does not mean Fingrid has no data; it means that date has not been verified in this particular archive bank. Jan 17, Feb 14, Mar 14, Mar 30, Apr 11, Apr 22 and Jul 11 have missing source-aligned observations; uncovered dates have not been verified in these archives.</p>
   </section>
   <section className="cov-panel">
    <p className="cov-kicker">02 / CONTIGUOUS, SOURCE-COMPLETE PERIODS</p><h2>Original-data windows ready for separate historical modelling</h2>
