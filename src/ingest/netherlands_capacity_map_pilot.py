@@ -49,7 +49,7 @@ def inspect_csv(name, source, data):
     if not columns or len(columns)!=len(set(columns)) or len(columns)<3:
         raise ValueError("Unknown export schema or delimiter; manual review before claims")
     nonempty=Counter()
-    sample_types={name:set() for name in columns}
+    categories={field:Counter() for field in ("afname","opwek") if field in columns and name=="tennet_congestion"}
     count=0
     for row in reader:
         if None in row: raise ValueError("Inconsistent CSV field count")
@@ -57,9 +57,14 @@ def inspect_csv(name, source, data):
         for key,val in row.items():
             if val and val.strip():
                 nonempty[key]+=1
-                # Keep no source values: totals only.
+                if key in categories:
+                    categories[key][val.strip()]+=1
+                # All record identifiers and geometry are discarded.
     if count==0: raise ValueError("Official source empty")
+    if any(len(v)>12 or any(len(x)>48 for x in v) for v in categories.values()):
+        raise ValueError("Unexpected unbounded categorical source labels; no publication")
     return {
+        "observed_congestion_source_labels":{key:dict(sorted(values.items())) for key,values in categories.items()},
         "source":source,
         "downloaded_utc":datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "sha256_original_csv":hashlib.sha256(data).hexdigest(),
@@ -105,7 +110,8 @@ def main(argv=None):
     args.out.write_text(json.dumps(result,indent=2,ensure_ascii=False,sort_keys=True)+"\n",encoding="utf-8")
     print("NL_NBN_OFFICIAL_CSV_AUDIT="+json.dumps({
         "feeds":{k:{"rows":v["rows"],"columns":v["original_columns"],
-                    "bytes":v["original_bytes"],"sha256":v["sha256_original_csv"]}
+                    "bytes":v["original_bytes"],"sha256":v["sha256_original_csv"],
+                    "source_congestion_labels":v["observed_congestion_source_labels"]}
                  for k,v in result["feeds"].items()},
         "licensed_raw_export":False,
         "approved_project_capacity":False
