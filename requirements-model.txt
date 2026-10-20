@@ -1,4 +1,6 @@
-# Optional PyPSA single-bus scenario study, isolated from the main API dependencies.
--r requirements.txt
+# Separate modelling environment: PyPSA 1.4 needs pandas >=3;
+# the dashboard/ingestion environment pins pandas 2.3.3, so do NOT import requirements.txt.
 pypsa==1.4.0
+pandas>=3.0,<3.1
 highspy>=1.11,<1.14
+pytest==8.4.2
