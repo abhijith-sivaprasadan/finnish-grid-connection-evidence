@@ -1,0 +1,4 @@
+# Optional PyPSA single-bus scenario study, isolated from the main API dependencies.
+-r requirements.txt
+pypsa==1.4.0
+highspy>=1.11,<1.14
