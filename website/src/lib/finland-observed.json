@@ -1,0 +1,1363 @@
+{
+  "data_kind": "observed_fingrid_national_aggregate",
+  "source_datasets": [
+    {
+      "id": "124",
+      "url": "https://data.fingrid.fi/en/datasets/124"
+    },
+    {
+      "id": "74",
+      "url": "https://data.fingrid.fi/en/datasets/74"
+    }
+  ],
+  "source_unit": "MWh/h (interval-average MW)",
+  "time_interval_minutes": 15,
+  "capture_interval_start_utc": "2026-10-15T00:00:00.000000Z",
+  "capture_interval_end_utc": "2026-10-17T00:00:00.000000Z",
+  "time_series": [
+    {
+      "timestamp_utc": "2026-10-15T00:00:00.000000Z",
+      "consumption_mw": 8531.23,
+      "production_mw": 6861.65,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T00:15:00.000000Z",
+      "consumption_mw": 8621.89,
+      "production_mw": 6711.26,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T00:30:00.000000Z",
+      "consumption_mw": 8648.63,
+      "production_mw": 6693.78,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T00:45:00.000000Z",
+      "consumption_mw": 8674.04,
+      "production_mw": 6703.77,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T01:00:00.000000Z",
+      "consumption_mw": 8756.05,
+      "production_mw": 6779.13,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T01:15:00.000000Z",
+      "consumption_mw": 8826.07,
+      "production_mw": 6810.65,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T01:30:00.000000Z",
+      "consumption_mw": 8807.91,
+      "production_mw": 6802.92,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T01:45:00.000000Z",
+      "consumption_mw": 8853.37,
+      "production_mw": 7074.67,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T02:00:00.000000Z",
+      "consumption_mw": 8912.25,
+      "production_mw": 7232.1,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T02:15:00.000000Z",
+      "consumption_mw": 9008.92,
+      "production_mw": 7214.47,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T02:30:00.000000Z",
+      "consumption_mw": 9146.21,
+      "production_mw": 7189.54,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T02:45:00.000000Z",
+      "consumption_mw": 9286.78,
+      "production_mw": 7431.33,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T03:00:00.000000Z",
+      "consumption_mw": 9560.24,
+      "production_mw": 7766.95,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T03:15:00.000000Z",
+      "consumption_mw": 9604.06,
+      "production_mw": 7901.45,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T03:30:00.000000Z",
+      "consumption_mw": 9556.18,
+      "production_mw": 8050.85,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T03:45:00.000000Z",
+      "consumption_mw": 9565.21,
+      "production_mw": 8310.57,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T04:00:00.000000Z",
+      "consumption_mw": 9704.22,
+      "production_mw": 8562.39,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T04:15:00.000000Z",
+      "consumption_mw": 9928.39,
+      "production_mw": 8706.5,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T04:30:00.000000Z",
+      "consumption_mw": 9940.54,
+      "production_mw": 8755.04,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T04:45:00.000000Z",
+      "consumption_mw": 9863.93,
+      "production_mw": 8877.11,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T05:00:00.000000Z",
+      "consumption_mw": 9926.05,
+      "production_mw": 9067.68,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T05:15:00.000000Z",
+      "consumption_mw": 9900.61,
+      "production_mw": 9238.89,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T05:30:00.000000Z",
+      "consumption_mw": 9886.56,
+      "production_mw": 9277.55,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T05:45:00.000000Z",
+      "consumption_mw": 10000.7,
+      "production_mw": 9144.12,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T06:00:00.000000Z",
+      "consumption_mw": 10028.2,
+      "production_mw": 9106.89,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T06:15:00.000000Z",
+      "consumption_mw": 10058.3,
+      "production_mw": 9159.72,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T06:30:00.000000Z",
+      "consumption_mw": 10054.8,
+      "production_mw": 9222.45,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T06:45:00.000000Z",
+      "consumption_mw": 10111,
+      "production_mw": 9523.12,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T07:00:00.000000Z",
+      "consumption_mw": 10093.6,
+      "production_mw": 9742.97,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T07:15:00.000000Z",
+      "consumption_mw": 10181.8,
+      "production_mw": 9910.78,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T07:30:00.000000Z",
+      "consumption_mw": 10308.5,
+      "production_mw": 9979.76,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T07:45:00.000000Z",
+      "consumption_mw": 10351.5,
+      "production_mw": 10139.6,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T08:00:00.000000Z",
+      "consumption_mw": 10409.9,
+      "production_mw": 10170.4,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T08:15:00.000000Z",
+      "consumption_mw": 10458.4,
+      "production_mw": 10273.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T08:30:00.000000Z",
+      "consumption_mw": 10507.4,
+      "production_mw": 10407.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T08:45:00.000000Z",
+      "consumption_mw": 10571,
+      "production_mw": 10353.9,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T09:00:00.000000Z",
+      "consumption_mw": 10555.3,
+      "production_mw": 10379.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T09:15:00.000000Z",
+      "consumption_mw": 10628.1,
+      "production_mw": 10502,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T09:30:00.000000Z",
+      "consumption_mw": 10649.1,
+      "production_mw": 10690.2,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T09:45:00.000000Z",
+      "consumption_mw": 10579.9,
+      "production_mw": 10886.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T10:00:00.000000Z",
+      "consumption_mw": 10558.9,
+      "production_mw": 10872.5,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T10:15:00.000000Z",
+      "consumption_mw": 10490,
+      "production_mw": 10841,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T10:30:00.000000Z",
+      "consumption_mw": 10464.1,
+      "production_mw": 10945.5,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T10:45:00.000000Z",
+      "consumption_mw": 10488.6,
+      "production_mw": 11054,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T11:00:00.000000Z",
+      "consumption_mw": 10494.2,
+      "production_mw": 11092.2,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T11:15:00.000000Z",
+      "consumption_mw": 10479.3,
+      "production_mw": 11218.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T11:30:00.000000Z",
+      "consumption_mw": 10449.9,
+      "production_mw": 11233.8,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T11:45:00.000000Z",
+      "consumption_mw": 10477,
+      "production_mw": 11236.6,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T12:00:00.000000Z",
+      "consumption_mw": 10478,
+      "production_mw": 11350,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T12:15:00.000000Z",
+      "consumption_mw": 10436.5,
+      "production_mw": 11658.1,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T12:30:00.000000Z",
+      "consumption_mw": 10373.6,
+      "production_mw": 11763.8,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T12:45:00.000000Z",
+      "consumption_mw": 10383.2,
+      "production_mw": 11749,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T13:00:00.000000Z",
+      "consumption_mw": 10407.4,
+      "production_mw": 11862.2,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T13:15:00.000000Z",
+      "consumption_mw": 10447,
+      "production_mw": 11824.6,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T13:30:00.000000Z",
+      "consumption_mw": 10519.3,
+      "production_mw": 11590.4,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T13:45:00.000000Z",
+      "consumption_mw": 10516.7,
+      "production_mw": 11594,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T14:00:00.000000Z",
+      "consumption_mw": 10482,
+      "production_mw": 11709.5,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T14:15:00.000000Z",
+      "consumption_mw": 10455.5,
+      "production_mw": 11729.2,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T14:30:00.000000Z",
+      "consumption_mw": 10466,
+      "production_mw": 11809,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T14:45:00.000000Z",
+      "consumption_mw": 10539,
+      "production_mw": 11673.5,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T15:00:00.000000Z",
+      "consumption_mw": 10644.2,
+      "production_mw": 11537,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T15:15:00.000000Z",
+      "consumption_mw": 10752.9,
+      "production_mw": 11567.1,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T15:30:00.000000Z",
+      "consumption_mw": 10770.7,
+      "production_mw": 11604.9,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T15:45:00.000000Z",
+      "consumption_mw": 10788.9,
+      "production_mw": 11658.8,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T16:00:00.000000Z",
+      "consumption_mw": 10800,
+      "production_mw": 11598.1,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T16:15:00.000000Z",
+      "consumption_mw": 10785.2,
+      "production_mw": 11581,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T16:30:00.000000Z",
+      "consumption_mw": 10761.1,
+      "production_mw": 11685.3,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T16:45:00.000000Z",
+      "consumption_mw": 10728.7,
+      "production_mw": 11513.9,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T17:00:00.000000Z",
+      "consumption_mw": 10708.1,
+      "production_mw": 11270.3,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T17:15:00.000000Z",
+      "consumption_mw": 10613.7,
+      "production_mw": 11206.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T17:30:00.000000Z",
+      "consumption_mw": 10493.8,
+      "production_mw": 11075,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T17:45:00.000000Z",
+      "consumption_mw": 10408,
+      "production_mw": 10869.1,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T18:00:00.000000Z",
+      "consumption_mw": 10279.4,
+      "production_mw": 10701.4,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T18:15:00.000000Z",
+      "consumption_mw": 10172,
+      "production_mw": 10631.3,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T18:30:00.000000Z",
+      "consumption_mw": 10078.3,
+      "production_mw": 10619.3,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T18:45:00.000000Z",
+      "consumption_mw": 10158.8,
+      "production_mw": 10574.6,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T19:00:00.000000Z",
+      "consumption_mw": 10241.2,
+      "production_mw": 10510.9,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T19:15:00.000000Z",
+      "consumption_mw": 10216.6,
+      "production_mw": 10587.9,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T19:30:00.000000Z",
+      "consumption_mw": 10083,
+      "production_mw": 10769.3,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T19:45:00.000000Z",
+      "consumption_mw": 10051.3,
+      "production_mw": 10790.5,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T20:00:00.000000Z",
+      "consumption_mw": 9945.79,
+      "production_mw": 10957,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T20:15:00.000000Z",
+      "consumption_mw": 9737.98,
+      "production_mw": 10849.5,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T20:30:00.000000Z",
+      "consumption_mw": 9586.39,
+      "production_mw": 10801,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T20:45:00.000000Z",
+      "consumption_mw": 9491.48,
+      "production_mw": 10804.6,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T21:00:00.000000Z",
+      "consumption_mw": 9411.44,
+      "production_mw": 10992.8,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T21:15:00.000000Z",
+      "consumption_mw": 9313.98,
+      "production_mw": 11051.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T21:30:00.000000Z",
+      "consumption_mw": 9222.64,
+      "production_mw": 10802.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T21:45:00.000000Z",
+      "consumption_mw": 9280.36,
+      "production_mw": 10774.7,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T22:00:00.000000Z",
+      "consumption_mw": 9168.63,
+      "production_mw": 10824.8,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T22:15:00.000000Z",
+      "consumption_mw": 9034.15,
+      "production_mw": 10618,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T22:30:00.000000Z",
+      "consumption_mw": 8921.06,
+      "production_mw": 10488.9,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T22:45:00.000000Z",
+      "consumption_mw": 8935.74,
+      "production_mw": 10687.8,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T23:00:00.000000Z",
+      "consumption_mw": 8910.05,
+      "production_mw": 10594.3,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T23:15:00.000000Z",
+      "consumption_mw": 8917.55,
+      "production_mw": 10375.1,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T23:30:00.000000Z",
+      "consumption_mw": 8921.22,
+      "production_mw": 10484.2,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-15T23:45:00.000000Z",
+      "consumption_mw": 8969.45,
+      "production_mw": 10721,
+      "consumption_retrieved_at": "2026-10-18T12:04:37.352687Z",
+      "production_retrieved_at": "2026-10-18T12:04:38.209807Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T00:00:00.000000Z",
+      "consumption_mw": 9021.4,
+      "production_mw": 10628.9,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T00:15:00.000000Z",
+      "consumption_mw": 8958.47,
+      "production_mw": 10557.2,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T00:30:00.000000Z",
+      "consumption_mw": 8928.45,
+      "production_mw": 10555.3,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T00:45:00.000000Z",
+      "consumption_mw": 8862.3,
+      "production_mw": 10516.4,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T01:00:00.000000Z",
+      "consumption_mw": 8914.26,
+      "production_mw": 10483.6,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T01:15:00.000000Z",
+      "consumption_mw": 8962.19,
+      "production_mw": 10621.1,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T01:30:00.000000Z",
+      "consumption_mw": 8927.19,
+      "production_mw": 10667.1,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T01:45:00.000000Z",
+      "consumption_mw": 8894.27,
+      "production_mw": 10645.3,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T02:00:00.000000Z",
+      "consumption_mw": 8926.15,
+      "production_mw": 10595.4,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T02:15:00.000000Z",
+      "consumption_mw": 9008.26,
+      "production_mw": 10354.4,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T02:30:00.000000Z",
+      "consumption_mw": 9074.67,
+      "production_mw": 10207,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T02:45:00.000000Z",
+      "consumption_mw": 9183.18,
+      "production_mw": 10539.5,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T03:00:00.000000Z",
+      "consumption_mw": 9294.46,
+      "production_mw": 10653.6,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T03:15:00.000000Z",
+      "consumption_mw": 9449.66,
+      "production_mw": 10545.5,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T03:30:00.000000Z",
+      "consumption_mw": 9552.59,
+      "production_mw": 10625.7,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T03:45:00.000000Z",
+      "consumption_mw": 9612.58,
+      "production_mw": 10826.1,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T04:00:00.000000Z",
+      "consumption_mw": 9724.27,
+      "production_mw": 11004.8,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T04:15:00.000000Z",
+      "consumption_mw": 9786.14,
+      "production_mw": 11006.2,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T04:30:00.000000Z",
+      "consumption_mw": 9848.33,
+      "production_mw": 10905.5,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T04:45:00.000000Z",
+      "consumption_mw": 9874.36,
+      "production_mw": 10855.6,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T05:00:00.000000Z",
+      "consumption_mw": 9884.2,
+      "production_mw": 10822.8,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T05:15:00.000000Z",
+      "consumption_mw": 9899.24,
+      "production_mw": 10741.9,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T05:30:00.000000Z",
+      "consumption_mw": 9919.17,
+      "production_mw": 10498.8,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T05:45:00.000000Z",
+      "consumption_mw": 9947.57,
+      "production_mw": 10168.8,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T06:00:00.000000Z",
+      "consumption_mw": 9835.97,
+      "production_mw": 9883.82,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T06:15:00.000000Z",
+      "consumption_mw": 9749.3,
+      "production_mw": 9654.37,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T06:30:00.000000Z",
+      "consumption_mw": 9601.07,
+      "production_mw": 9526.12,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T06:45:00.000000Z",
+      "consumption_mw": 9583.24,
+      "production_mw": 9371.7,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T07:00:00.000000Z",
+      "consumption_mw": 9556.82,
+      "production_mw": 9229.18,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T07:15:00.000000Z",
+      "consumption_mw": 9522.19,
+      "production_mw": 9219.08,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T07:30:00.000000Z",
+      "consumption_mw": 9444.9,
+      "production_mw": 9140.07,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T07:45:00.000000Z",
+      "consumption_mw": 9547.16,
+      "production_mw": 8913.99,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T08:00:00.000000Z",
+      "consumption_mw": 9594.7,
+      "production_mw": 8754.83,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T08:15:00.000000Z",
+      "consumption_mw": 9538.8,
+      "production_mw": 8739.43,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T08:30:00.000000Z",
+      "consumption_mw": 9464.27,
+      "production_mw": 8644.11,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T08:45:00.000000Z",
+      "consumption_mw": 9406.93,
+      "production_mw": 8561.39,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T09:00:00.000000Z",
+      "consumption_mw": 9305.49,
+      "production_mw": 8453.02,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T09:15:00.000000Z",
+      "consumption_mw": 9223.71,
+      "production_mw": 8366.48,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T09:30:00.000000Z",
+      "consumption_mw": 9212.26,
+      "production_mw": 8337.92,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T09:45:00.000000Z",
+      "consumption_mw": 9265.71,
+      "production_mw": 8286.42,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T10:00:00.000000Z",
+      "consumption_mw": 9237.7,
+      "production_mw": 8230.7,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T10:15:00.000000Z",
+      "consumption_mw": 9166.49,
+      "production_mw": 8286.04,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T10:30:00.000000Z",
+      "consumption_mw": 9180.41,
+      "production_mw": 8252.7,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T10:45:00.000000Z",
+      "consumption_mw": 9187.27,
+      "production_mw": 8179.05,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T11:00:00.000000Z",
+      "consumption_mw": 9121.49,
+      "production_mw": 8071.02,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T11:15:00.000000Z",
+      "consumption_mw": 9118.71,
+      "production_mw": 8008.29,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T11:30:00.000000Z",
+      "consumption_mw": 9093.68,
+      "production_mw": 7996.34,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T11:45:00.000000Z",
+      "consumption_mw": 9243.41,
+      "production_mw": 7989.33,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T12:00:00.000000Z",
+      "consumption_mw": 9202.04,
+      "production_mw": 7988.71,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T12:15:00.000000Z",
+      "consumption_mw": 9126.36,
+      "production_mw": 7993.97,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T12:30:00.000000Z",
+      "consumption_mw": 9114.03,
+      "production_mw": 8035.97,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T12:45:00.000000Z",
+      "consumption_mw": 9042.09,
+      "production_mw": 8065.03,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T13:00:00.000000Z",
+      "consumption_mw": 9011.24,
+      "production_mw": 8094.96,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T13:15:00.000000Z",
+      "consumption_mw": 8996.32,
+      "production_mw": 8189.78,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T13:30:00.000000Z",
+      "consumption_mw": 8949.49,
+      "production_mw": 8325.5,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T13:45:00.000000Z",
+      "consumption_mw": 8934.19,
+      "production_mw": 8530.34,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T14:00:00.000000Z",
+      "consumption_mw": 9023.74,
+      "production_mw": 8758.97,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T14:15:00.000000Z",
+      "consumption_mw": 9114.53,
+      "production_mw": 8891.94,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T14:30:00.000000Z",
+      "consumption_mw": 9311.85,
+      "production_mw": 8958.53,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T14:45:00.000000Z",
+      "consumption_mw": 9473.87,
+      "production_mw": 8935.32,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T15:00:00.000000Z",
+      "consumption_mw": 9536.89,
+      "production_mw": 8968.09,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T15:15:00.000000Z",
+      "consumption_mw": 9647.04,
+      "production_mw": 9046.92,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T15:30:00.000000Z",
+      "consumption_mw": 9668.26,
+      "production_mw": 9060.38,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T15:45:00.000000Z",
+      "consumption_mw": 9589.91,
+      "production_mw": 9040.49,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T16:00:00.000000Z",
+      "consumption_mw": 9492.24,
+      "production_mw": 8965.6,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T16:15:00.000000Z",
+      "consumption_mw": 9540.62,
+      "production_mw": 8975.34,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T16:30:00.000000Z",
+      "consumption_mw": 9502.17,
+      "production_mw": 8947.17,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T16:45:00.000000Z",
+      "consumption_mw": 9510.51,
+      "production_mw": 8866.69,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T17:00:00.000000Z",
+      "consumption_mw": 9453.95,
+      "production_mw": 8756.54,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T17:15:00.000000Z",
+      "consumption_mw": 9318.54,
+      "production_mw": 8695.55,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T17:30:00.000000Z",
+      "consumption_mw": 9210,
+      "production_mw": 8638.84,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T17:45:00.000000Z",
+      "consumption_mw": 9082,
+      "production_mw": 8524.79,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T18:00:00.000000Z",
+      "consumption_mw": 9030.44,
+      "production_mw": 8420.31,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T18:15:00.000000Z",
+      "consumption_mw": 8938.11,
+      "production_mw": 8361.7,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T18:30:00.000000Z",
+      "consumption_mw": 8994.19,
+      "production_mw": 8259.76,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T18:45:00.000000Z",
+      "consumption_mw": 8932.25,
+      "production_mw": 8130.77,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T19:00:00.000000Z",
+      "consumption_mw": 8914.83,
+      "production_mw": 8055.14,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T19:15:00.000000Z",
+      "consumption_mw": 8844.57,
+      "production_mw": 7936.66,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T19:30:00.000000Z",
+      "consumption_mw": 8831.41,
+      "production_mw": 7861.27,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T19:45:00.000000Z",
+      "consumption_mw": 8705.25,
+      "production_mw": 7804.9,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T20:00:00.000000Z",
+      "consumption_mw": 8594.77,
+      "production_mw": 7691.05,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T20:15:00.000000Z",
+      "consumption_mw": 8455.68,
+      "production_mw": 7588.86,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T20:30:00.000000Z",
+      "consumption_mw": 8308.75,
+      "production_mw": 7521.15,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T20:45:00.000000Z",
+      "consumption_mw": 8268.46,
+      "production_mw": 7427.85,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T21:00:00.000000Z",
+      "consumption_mw": 8179.12,
+      "production_mw": 7403.74,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T21:15:00.000000Z",
+      "consumption_mw": 8129.73,
+      "production_mw": 7328.56,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T21:30:00.000000Z",
+      "consumption_mw": 8120.26,
+      "production_mw": 7289.62,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T21:45:00.000000Z",
+      "consumption_mw": 8049.1,
+      "production_mw": 7208.32,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T22:00:00.000000Z",
+      "consumption_mw": 7971.13,
+      "production_mw": 7119.64,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T22:15:00.000000Z",
+      "consumption_mw": 7945.63,
+      "production_mw": 7013.37,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T22:30:00.000000Z",
+      "consumption_mw": 8032.49,
+      "production_mw": 6944.41,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T22:45:00.000000Z",
+      "consumption_mw": 7926.93,
+      "production_mw": 6877.02,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T23:00:00.000000Z",
+      "consumption_mw": 7829.4,
+      "production_mw": 6830.72,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T23:15:00.000000Z",
+      "consumption_mw": 7854.8,
+      "production_mw": 6835.08,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T23:30:00.000000Z",
+      "consumption_mw": 7924.9,
+      "production_mw": 6847.13,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    },
+    {
+      "timestamp_utc": "2026-10-16T23:45:00.000000Z",
+      "consumption_mw": 7930.69,
+      "production_mw": 6892.76,
+      "consumption_retrieved_at": "2026-10-19T14:42:27.236288Z",
+      "production_retrieved_at": "2026-10-19T14:42:27.783792Z"
+    }
+  ]
+}

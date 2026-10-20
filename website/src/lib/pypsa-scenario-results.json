@@ -1,0 +1,5 @@
+{
+  "status": "awaiting_verified_solver_output",
+  "scenarios": [],
+  "note": "Do not publish scenario dispatch statistics until the PyPSA 1.4 + HiGHS CI job passes and numerical results are verified."
+}
