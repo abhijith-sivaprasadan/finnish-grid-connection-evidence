@@ -1,0 +1,46 @@
+name: One-time Fingrid authentic May 2025 irregular interval diagnosis
+on:
+  push:
+    branches: [source-runs/fingrid-2025-resume-batch-05]
+    paths: [".github/workflows/diagnose-fingrid-2025-05.yml"]
+permissions:
+  contents: read
+jobs:
+  inspect-real-cadence:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 65111e9ff69e1cac78214b5a74d78b5f7163062b
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: At most two bounded original-source reads, no automatic retries or writes
+        run: |
+          python - <<'PY'
+          from src.ingest.fingrid import fetch
+          from src.models.recover_fingrid_gaps import NoRetryPacedClient
+          from datetime import datetime,timedelta
+          from collections import Counter
+          def dt(t):return datetime.fromisoformat(t.replace('Z','+00:00'))
+          client=NoRetryPacedClient(spacing=5.)
+          for dataset_id in (124,74):
+              rows=fetch(dataset_id,'2025-05-07T00:00:00Z','2025-05-14T00:00:00Z',client=client)
+              bad=[]
+              for r in rows:
+                  a,b=dt(r.timestamp_utc),dt(r.interval_end_utc)
+                  duration=int((b-a).total_seconds())
+                  if a.minute%15 or a.second or a.microsecond or duration!=900 or not(dt('2025-05-07T00:00:00Z')<=a<b<=dt('2025-05-14T00:00:00Z')):
+                      bad.append({'source_start':r.timestamp_utc,'source_end':r.interval_end_utc,'duration_s':duration})
+              print('MAY2025_ACTUAL_SOURCE_CADENCE_JSON=',{
+                'dataset_id':dataset_id,'original_rows':len(rows),'incompatible_rows':len(bad),
+                'native_durations_s':dict(Counter(x['duration_s'] for x in bad)),
+                'first_anomalous_originals':bad[:10],
+                'last_anomalous_originals':bad[-4:]})
+          PY
