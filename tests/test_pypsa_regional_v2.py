@@ -1,4 +1,6 @@
 """Run independently in pandas 3 / PyPSA 1.4 with source-pinned 2026 observations."""
+import pytest
+pytest.importorskip("pypsa")
 from src.models.ac_cross_solver_reference import pypsa_case
 from src.models.fi_regional_pypsa_v2 import run
 from src.models.finland import INPUT_PATH
