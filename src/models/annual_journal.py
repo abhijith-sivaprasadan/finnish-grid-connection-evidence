@@ -166,6 +166,87 @@ def report(directory:Path)->dict:
     }
 
 
+def daily_coverage(directory:Path)->dict:
+    """Explicit observed/unknown/missing/paired source status for every UTC day.
+
+    No amount of stored data can transform a missing interval into a 0 MW value.
+    Only source-complete days in *both* datasets are eligible for PyPSA windows.
+    """
+    source_by_day={}
+    for dataset_id in DATASET_IDS:
+        cursor=START
+        while cursor<END:
+            key=cursor.date().isoformat()
+            source_by_day.setdefault(key,{})
+            cursor+=timedelta(days=1)
+        for start,stop in windows():
+            path=directory/(chunk_key(dataset_id,start,stop)+".json")
+            if not path.exists():
+                cursor=start
+                while cursor<stop:
+                    source_by_day[cursor.date().isoformat()][str(dataset_id)]={
+                        "status":"not_downloaded","observed_original_intervals":None,
+                        "expected_intervals":96,"missing_source_utc":None}
+                    cursor+=timedelta(days=1)
+                continue
+            chunk=load_chunk(path,dataset_id,start,stop)
+            by_date={}
+            for row in chunk["original_rows"]:
+                day=row["timestamp_utc"][:10]
+                by_date.setdefault(day,[]).append(row["timestamp_utc"])
+            cursor=start
+            while cursor<stop:
+                day=cursor.date().isoformat()
+                actual=by_date.get(day,[])
+                observed=set(actual)
+                expected=[(cursor+timedelta(minutes=15*i)).strftime("%Y-%m-%dT%H:%M:%S.%fZ") for i in range(96)]
+                missing=[ts for ts in expected if ts not in observed]
+                source_by_day[day][str(dataset_id)]={
+                    "status":"source_complete" if not missing else "original_missing_at_capture",
+                    "observed_original_intervals":len(actual),
+                    "expected_intervals":96,
+                    "missing_source_utc":missing
+                }
+                cursor+=timedelta(days=1)
+    results=[]
+    runs=[]
+    first=None
+    for day,ids in sorted(source_by_day.items()):
+        consumption=ids["124"]
+        production=ids["74"]
+        if "not_downloaded" in (consumption["status"],production["status"]):
+            state="unknown_not_downloaded"
+        elif "original_missing_at_capture" in (consumption["status"],production["status"]):
+            state="known_source_gap"
+        else:
+            state="paired_complete"
+        if state=="paired_complete":
+            if first is None: first=day
+        elif first is not None:
+            end=date.fromisoformat(day)
+            runs.append({"start_utc":first+"T00:00:00Z","end_utc_exclusive":end.isoformat()+"T00:00:00Z",
+                         "consecutive_complete_days":(end-date.fromisoformat(first)).days})
+            first=None
+        results.append({"date_utc":day,"paired_status":state,
+                        "consumption_124":consumption,"production_74":production})
+    if first is not None:
+        runs.append({"start_utc":first+"T00:00:00Z","end_utc_exclusive":"2026-01-01T00:00:00Z",
+                     "consecutive_complete_days":(END.date()-date.fromisoformat(first)).days})
+    counts={state:sum(1 for x in results if x["paired_status"]==state)
+            for state in ("paired_complete","known_source_gap","unknown_not_downloaded")}
+    counts["all_calendar_days"]=len(results)
+    if len(results)!=365 or sum(counts[x] for x in ("paired_complete","known_source_gap","unknown_not_downloaded"))!=365:
+        raise AssertionError("Annual daily coverage partition is inconsistent")
+    return {"source_period":"2025 calendar UTC",
+            "data_kind":"observed_source_completeness_only",
+            "paired_day_counts":counts,
+            "complete_contiguous_source_day_runs":sorted(runs,key=lambda r:(-r["consecutive_complete_days"],r["start_utc"])),
+            "daily_status":results,
+            "all_2025_days_verified":counts["paired_complete"]==365,
+            "missing_not_zero":True,
+            "unknown_not_infeasible":True}
+
+
 def collect(directory:Path, *,execute=False,max_chunks=8,getter=None,client=None)->dict:
     if not 0<=max_chunks<=16:
         raise ValueError("Limit each manual annual download run to at most 16 source chunks")
@@ -174,8 +255,11 @@ def collect(directory:Path, *,execute=False,max_chunks=8,getter=None,client=None
     client=client or NoRetryPacedClient(spacing=5.0)
     num=0
     deferred=False
-    for dataset_id in DATASET_IDS:
-        for a,b in windows():
+    # Collect by *time window*, not by whole dataset. This permits early paired
+    # source coverage verification without waiting for all 124 chunks before 74.
+    # Journals written by the previous dataset-major collector still resume.
+    for a,b in windows():
+        for dataset_id in DATASET_IDS:
             path=directory/(chunk_key(dataset_id,a,b)+".json")
             if path.exists():
                 load_chunk(path,dataset_id,a,b)
@@ -194,6 +278,13 @@ def collect(directory:Path, *,execute=False,max_chunks=8,getter=None,client=None
             num+=1
         if deferred:break
     state=report(directory)
+    coverage=daily_coverage(directory)
+    state["paired_calendar_day_counts"]=coverage["paired_day_counts"]
+    state["complete_contiguous_source_day_runs"]=coverage["complete_contiguous_source_day_runs"]
+    # This separate compact-source-status artifact never claims a full year of
+    # 15-minute observations if any day was not downloaded or was source-missing.
+    directory.mkdir(parents=True,exist_ok=True)
+    (directory/"annual_2025_day_coverage.json").write_text(json.dumps(coverage,indent=2)+"\n",encoding="utf-8")
     state["new_original_source_chunks_saved_this_run"]=num
     state["rate_limit_or_access_deferred"]=deferred
     state["collection_status"]=("full_year_source_verified" if state["full_calendar_2025_source_verified"]
