@@ -1,0 +1,87 @@
+name: Extended Fingrid historical PyPSA sensitivity
+on:
+  # No branch-push trigger: Fingrid previously returned HTTP 429.
+  # Historical source fetching requires deliberate manual opt-in.
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "Historical UTC start date"
+        required: true
+        default: "2025-09-15"
+        type: string
+      end:
+        description: "Exclusive end date"
+        required: true
+        default: "2025-10-15"
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: pypsa-extended-study
+  cancel-in-progress: false
+jobs:
+  source-and-solver:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/long-horizon-pypsa-sensitivity'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+      WINDOW_START: ${{ inputs.start || '2025-09-15' }}
+      WINDOW_END: ${{ inputs.end || '2025-10-15' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install isolated PyPSA and authenticated source client
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Verify 2-day source and solver contracts
+        run: python -m pytest -q tests/test_long_history_sweep.py
+      - name: Verify credential exists without printing it
+        shell: bash
+        run: |
+          if [ -z "${FINGRID_API_KEY:-}" ]; then
+            echo "::error::FINGRID_API_KEY repository secret unavailable; longer historical study cannot run."
+            exit 1
+          fi
+      - name: Retrieve complete historical Fingrid observations
+        shell: bash
+        run: |
+          mkdir -p /tmp/fingrid-study
+          python -m src.models.history --start "$WINDOW_START" --end "$WINDOW_END" --out /tmp/fingrid-study/finland_observed_15min.csv
+      - name: Solve 12 combinations (3 ceilings x 2 flex widths x 2 storage sizes)
+        shell: bash
+        run: |
+          python -m src.models.sweep --input /tmp/fingrid-study/finland_observed_15min.csv --output /tmp/fingrid-study/pypsa_sensitivity.json --limits 1000,1500,2000 --flex-spans 0,50 --battery-powers 0,100
+      - name: Verify source checksum, 30-day coverage and solver outputs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path("/tmp/fingrid-study")
+          m=json.loads((p/"finland_observed_15min.manifest.json").read_text())
+          s=json.loads((p/"pypsa_sensitivity.json").read_text())
+          assert m["status"]=="source_complete"
+          assert m["source_intervals"]==m["complete_days"]*96
+          assert m["csv_sha256"]==hashlib.sha256((p/"finland_observed_15min.csv").read_bytes()).hexdigest()
+          assert s["observed_input_sha256"]==m["csv_sha256"]
+          assert s["data_kind"]=="model_scenario"
+          assert len(s["results"])==12
+          assert len(s["baselines"])==3
+          assert all(r["solver_status"]=="ok" and r["solver_termination"]=="optimal" and r["max_balance_error_mw"]<1e-5 for r in s["results"])
+          assert all(r["added_load_energy_mwh"]==m["complete_days"]*24*100 for r in s["results"])
+          print("VERIFIED_LONG_STUDY_JSON="+json.dumps({
+            "days":m["complete_days"],"source_rows":m["source_intervals"],
+            "source_hash":m["csv_sha256"],"cases":s["results"]
+          },separators=(",",":")))
+          PY
+      - name: Upload original complete historical data and sensitivity findings
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-fingrid-long-horizon-pypsa
+          path: /tmp/fingrid-study/
+          retention-days: 30

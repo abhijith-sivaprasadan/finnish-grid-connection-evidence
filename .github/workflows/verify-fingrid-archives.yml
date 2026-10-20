@@ -1,0 +1,81 @@
+name: Verify archived Fingrid observations (NO API)
+on:
+  push:
+    branches: [feature/long-horizon-pypsa-sensitivity]
+    paths:
+      - "src/models/archived_source_coverage.py"
+      - "tests/test_archived_source_coverage.py"
+      - ".github/workflows/verify-fingrid-archives.yml"
+  pull_request:
+    paths:
+      - "src/models/archived_source_coverage.py"
+      - "tests/test_archived_source_coverage.py"
+      - ".github/workflows/verify-fingrid-archives.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-archive-verification:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install offline archive verification dependencies
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Test provenance, numeric overlap and source-gap handling offline
+        run: python -m pytest -q tests/test_archived_source_coverage.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-fingrid-long-horizon-pypsa
+          run-id: 39391985966
+          github-token: ${{ github.token }}
+          path: /tmp/fingrid-source-bank/autumn30
+      - uses: actions/download-artifact@v4
+        with:
+          name: audited-fingrid-matched-seasons-2025
+          run-id: 39396079522
+          github-token: ${{ github.token }}
+          path: /tmp/fingrid-source-bank/season14
+      - name: Verify four original CSV fingerprints and observed 2025 day coverage
+        run: |
+          python -m src.models.archived_source_coverage \
+            --autumn-30 /tmp/fingrid-source-bank/autumn30 \
+            --seasons-14 /tmp/fingrid-source-bank/season14 \
+            --output /tmp/fingrid-source-bank/result/archived_source_coverage_2025.json
+      - name: Confirm no claimed annual results or invented source values
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          a=json.loads(Path("/tmp/fingrid-source-bank/result/archived_source_coverage_2025.json").read_text())
+          assert a["status"]=="verified_archive_coverage_only"
+          assert a["verified_covered_days"]==58
+          assert a["distinct_verified_paired_quarter_hours"]==5568
+          assert a["calendar_day_counts"]["paired_original_archived_complete"]==58
+          assert a["calendar_day_counts"]["known_missing_in_separate_operator_recheck"]==2
+          assert a["calendar_day_counts"]["not_covered_by_imported_archives"]==305
+          assert a["calendar_day_counts"]["partial_archived_day_not_model_eligible"]==0
+          assert not a["complete_calendar_year_source_verified"]
+          assert not a["complete_year_pypsa_performed"]
+          assert [r["days"] for r in a["contiguous_original_source_runs"]]==[14,14,30]
+          print("ARCHIVED_SOURCE_BANK_JSON="+json.dumps({
+            "days":a["verified_covered_days"],
+            "paired_intervals":a["distinct_verified_paired_quarter_hours"],
+            "states":a["calendar_day_counts"],
+            "source_windows":a["contiguous_original_source_runs"]
+          },separators=(",",":")))
+          PY
+      - name: Preserve verified source coverage and original archive captures
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-reused-fingrid-2025-source-bank
+          path: /tmp/fingrid-source-bank/result/
+          retention-days: 30

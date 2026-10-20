@@ -70,13 +70,15 @@ def load_observed(path: Path = INPUT_PATH) -> pd.DataFrame:
     return data
 
 
-def additional_load(data: pd.DataFrame, scenario: str) -> pd.Series:
-    if scenario not in SCENARIOS:
+def additional_load(data: pd.DataFrame, scenario: str, *, flex_span_mw: float = 50.0) -> pd.Series:
+    if scenario not in (*SCENARIOS, "flexible_100mw_with_battery"):
         raise ValueError(f"Unsupported scenario: {scenario}")
+    if not np.isfinite(flex_span_mw) or not 0<=flex_span_mw<=100:
+        raise ValueError("Hypothetical flexible-load half-span must be 0..100 MW")
     extra = pd.Series(0.0, index=data.index)
     if scenario == "observed_reference":
         return extra
-    if scenario != "flexible_100mw":
+    if not scenario.startswith("flexible_"):
         return pd.Series(100.0, index=data.index)
     residual = data["consumption_mwh_per_hour"] - data["production_mwh_per_hour"]
     # 48 lower-residual intervals per UTC day get 150 MW, other 48 get 50 MW.
@@ -87,8 +89,8 @@ def additional_load(data: pd.DataFrame, scenario: str) -> pd.Series:
             raise ValueError("Incomplete day cannot support the daily energy-neutral flexibility rule")
         values = residual.iloc[positions].to_numpy()
         lowest = positions[np.argsort(values, kind="stable")[:48]]
-        extra.iloc[positions] = 50.0
-        extra.iloc[lowest] = 150.0
+        extra.iloc[positions] = 100.0-flex_span_mw
+        extra.iloc[lowest] = 100.0+flex_span_mw
         if abs(float(extra.iloc[positions].sum()) - 9600.0) > 1e-8:
             raise AssertionError("Flexible demand failed equal daily energy constraint")
     return extra
@@ -100,7 +102,12 @@ def stress_cost_proxy(data: pd.DataFrame) -> pd.Series:
     return 1.0 + residual / scale
 
 
-def build_network(data: pd.DataFrame, scenario: str):
+def build_network(data: pd.DataFrame, scenario: str, *, balancing_limit_mw: float = 1500.0,
+                  flex_span_mw: float = 50.0, battery_power_mw:float = 100.0,
+                  battery_hours:float = 4.0):
+    for k,v in {"balancing_limit_mw":balancing_limit_mw,"battery_power_mw":battery_power_mw,"battery_hours":battery_hours}.items():
+        if not np.isfinite(v) or v<=0:
+            raise ValueError(f"{k} must be finite and positive")
     try:
         import pypsa
     except ImportError as exc:
@@ -111,14 +118,14 @@ def build_network(data: pd.DataFrame, scenario: str):
     n.add("Bus", "FI_aggregate")
     generation = data["production_mwh_per_hour"].astype(float)
     consumption = data["consumption_mwh_per_hour"].astype(float)
-    addition = additional_load(data, scenario)
+    addition = additional_load(data, scenario,flex_span_mw=flex_span_mw)
     max_gen = float(generation.max()) + 1.0
     fraction = (generation / max_gen).rename("observed_generation")
     n.add("Generator", "observed_generation", bus="FI_aggregate", p_nom=max_gen,
           p_min_pu=fraction, p_max_pu=fraction, marginal_cost=0.0)
     n.add("Load", "observed_consumption", bus="FI_aggregate", p_set=consumption)
     n.add("Load", "assumed_new_load", bus="FI_aggregate", p_set=addition)
-    n.add("Generator", "hypothetical_balancing_supply", bus="FI_aggregate", p_nom=1500.0,
+    n.add("Generator", "hypothetical_balancing_supply", bus="FI_aggregate", p_nom=balancing_limit_mw,
           marginal_cost=1.0)
     # This is a source-independent stress-weighted optimisation COST INDEX, not €
     n.generators_t.marginal_cost["hypothetical_balancing_supply"] = stress_cost_proxy(data)
@@ -131,17 +138,21 @@ def build_network(data: pd.DataFrame, scenario: str):
           p_nom=float(generation.max()+1000),
           p_min_pu=-1.0, p_max_pu=0.0,
           marginal_cost=-0.01)
-    if scenario == "flat_100mw_with_battery":
+    if scenario.endswith("_with_battery"):
         n.add("StorageUnit", "hypothetical_battery", bus="FI_aggregate",
-              p_nom=100.0, max_hours=4.0,
+              p_nom=battery_power_mw, max_hours=battery_hours,
               efficiency_store=float(np.sqrt(0.90)),
               efficiency_dispatch=float(np.sqrt(0.90)),
               cyclic_state_of_charge=True, marginal_cost=0.01)
     return n
 
 
-def solve_case(data: pd.DataFrame, scenario: str) -> tuple[dict, list[dict]]:
-    network = build_network(data, scenario)
+def solve_case(data: pd.DataFrame, scenario: str, *, balancing_limit_mw:float=1500.0,
+               flex_span_mw:float=50.0, battery_power_mw:float=100.0,
+               battery_hours:float=4.0) -> tuple[dict, list[dict]]:
+    network = build_network(data,scenario,balancing_limit_mw=balancing_limit_mw,
+                            flex_span_mw=flex_span_mw,battery_power_mw=battery_power_mw,
+                            battery_hours=battery_hours)
     status, termination = network.optimize(solver_name="highs", log_to_console=False)
     if status != "ok" or termination != "optimal":
         raise RuntimeError(f"PyPSA/HiGHS did not yield an optimal solution for {scenario}")
@@ -150,9 +161,9 @@ def solve_case(data: pd.DataFrame, scenario: str) -> tuple[dict, list[dict]]:
     shortfall = gen["model_unserved_relaxation"].astype(float)
     sink = gen["hypothetical_surplus_sink"].astype(float)
     observed_prod = gen["observed_generation"].astype(float)
-    added = additional_load(data, scenario)
+    added = additional_load(data, scenario,flex_span_mw=flex_span_mw)
     obs_load = data["consumption_mwh_per_hour"].astype(float)
-    if scenario == "flat_100mw_with_battery":
+    if scenario.endswith("_with_battery"):
         unit = network.storage_units_t
         store = unit.p_store["hypothetical_battery"].astype(float)
         dispatch = unit.p_dispatch["hypothetical_battery"].astype(float)
@@ -182,7 +193,7 @@ def solve_case(data: pd.DataFrame, scenario: str) -> tuple[dict, list[dict]]:
     }
     if scenario!="observed_reference" and abs(summary["new_demand_mwh"]-100*len(data)*interval)>1e-6:
         raise AssertionError("Scenario changed total 100 MW equivalent demand energy")
-    if (shortfall < -1e-6).any() or (support > 1500.0+1e-6).any():
+    if (shortfall < -1e-6).any() or (support > balancing_limit_mw+1e-6).any():
         raise AssertionError("Dispatch crossed imposed hypothetical constraint")
     detail=[]
     for i,t in enumerate(data.index):

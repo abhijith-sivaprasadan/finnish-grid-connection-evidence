@@ -1,0 +1,30 @@
+name: Fingrid original-source audit unit tests (no network)
+on:
+  push:
+    branches: [feature/long-horizon-pypsa-sensitivity]
+    paths:
+      - "src/models/annual_journal.py"
+      - "src/models/recover_fingrid_gaps.py"
+      - "tests/test_annual_journal.py"
+      - ".github/workflows/fingrid-source-audit-tests.yml"
+  pull_request:
+    paths:
+      - "src/models/annual_journal.py"
+      - "src/models/recover_fingrid_gaps.py"
+      - "tests/test_annual_journal.py"
+      - ".github/workflows/fingrid-source-audit-tests.yml"
+permissions:
+  contents: read
+jobs:
+  offline-source-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - run: python -m pytest -q tests/test_annual_journal.py tests/test_recover_fingrid_gaps.py

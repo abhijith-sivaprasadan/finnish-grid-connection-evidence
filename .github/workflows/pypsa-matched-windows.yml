@@ -1,0 +1,79 @@
+name: Fingrid real gap audit and matched-season PyPSA
+on:
+  # Authenticated Fingrid runs are manual only after the 2026-10-20
+  # rate-limit response. Never retry automatically on branch pushes.
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: fi-2025-matched-season-audit
+  cancel-in-progress: false
+jobs:
+  audit-and-match:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && (github.event_name == 'push' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install isolated solver and historical Fingrid API client
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Test source-gap detection and fair matched-window selection
+        run: python -m pytest -q tests/test_pypsa_matched_windows.py tests/test_pypsa_seasons.py
+      - name: Check authenticated operator-source credential
+        run: |
+          if [ -z "${FINGRID_API_KEY:-}" ]; then
+            echo "::error::FINGRID_API_KEY unavailable."
+            exit 1
+          fi
+      - name: Retrieve three real 30-day source blocks, publish gap table and solve only common complete days
+        run: |
+          mkdir -p /tmp/fi-matched-2025
+          python -m src.models.observed_windows --output-dir /tmp/fi-matched-2025 --min-days 3 --max-days 30
+      - name: Check exact source hashes, equal window lengths and 36 mathematical solves
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          base=Path("/tmp/fi-matched-2025")
+          result=json.loads((base/"matched_windows_report.json").read_text())
+          assert result["status"]=="three_seasons_source_and_solver_verified"
+          assert result["annual_coverage_confirmed"] is False
+          days=result["equal_comparison_days"]
+          assert 3<=days<=30
+          assert len(result["matched_season_solutions"])==3
+          assert len(result["parameter_comparison"])==12
+          assert len({x["complete_contiguous_days"] for x in result["matched_season_solutions"]})==1
+          for r in result["matched_season_solutions"]:
+            assert r["original_fingrid_15min_pairs"]==96*days
+            source=base/("fi_"+r["season"]+"_matched_2025.csv")
+            assert hashlib.sha256(source.read_bytes()).hexdigest()==r["source_input_sha256"]
+            assert len(r["scenarios"])==12
+            assert all(x["solver_status"]=="ok" and x["solver_termination"]=="optimal" and
+               x["max_balance_error_mw"]<1e-5 and x["added_load_energy_mwh"]==days*24*100
+               for x in r["scenarios"])
+          for r in result["parameter_comparison"]:
+            assert set(r["incremental_modelled_penalty_shortfall_mwh_by_season"])=={"winter","summer","autumn"}
+          print("MATCHED_SEASONS_JOB_VERIFIED_JSON="+json.dumps({
+            "equal_observed_contiguous_days_per_season":days,
+            "matched_pairs_per_season":days*96,
+            "modelled_combinations_across_seasons":36,
+            "run_status":result["status"]
+          }))
+          PY
+      - name: Always upload original coverage table and any fully verified model outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audited-fingrid-matched-seasons-2025
+          path: /tmp/fi-matched-2025/
+          if-no-files-found: ignore
+          retention-days: 30

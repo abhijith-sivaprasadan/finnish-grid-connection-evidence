@@ -36,6 +36,31 @@ check 200 "/api/v1/capacity?direction=production&year=2030"
 grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/coverage"
 grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
+check 200 "/analysis/source-coverage"
+grep -q "What history" /tmp/grid-smoke-response.json
+check 200 "/api/v1/observed/coverage/2025"
+grep -q '"distinct_original_paired_intervals":12283' /tmp/grid-smoke-response.json
+grep -q '"not_covered_by_archives_days":236' /tmp/grid-smoke-response.json
+grep -q '"is_calendar_year_source_complete":false' /tmp/grid-smoke-response.json
+check 200 "/analysis/borders-2025"
+grep -q "Observed" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/winter-2025"
+grep -q '"scenario_count_all_caps":48' /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/borders-2025"
+grep -q '"observed_quarter_hour_count":2880' /tmp/grid-smoke-response.json
+grep -q '"guaranteed_import_rights":false' /tmp/grid-smoke-response.json
+check 200 "/analysis/seasons"
+grep -q "Three seasons" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/seasons"
+grep -q '"modelled_days_per_season":14' /tmp/grid-smoke-response.json
+grep -q '"annual_2025_verified_complete":false' /tmp/grid-smoke-response.json
+grep -q '"model_feasibility_claim":false' /tmp/grid-smoke-response.json
+check 200 "/analysis/sensitivity"
+grep -q "30 days" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/sensitivity"
+grep -q '"source_intervals":2880' /tmp/grid-smoke-response.json
+grep -q '"data_kind":"model_scenario"' /tmp/grid-smoke-response.json
+grep -q '"operator_confirmed_grid_capacity":false' /tmp/grid-smoke-response.json
 check 200 "/analysis"
 grep -q "What changes when" /tmp/grid-smoke-response.json
 grep -q "1,500 MW" /tmp/grid-smoke-response.json

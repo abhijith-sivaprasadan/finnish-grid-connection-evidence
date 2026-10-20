@@ -1,0 +1,79 @@
+name: Independently verified Finland winter summer autumn PyPSA
+on:
+  push:
+    branches: [feature/long-horizon-pypsa-sensitivity]
+    paths:
+      - "src/models/season_blocks.py"
+      - "tests/test_pypsa_season_blocks.py"
+      - ".github/workflows/pypsa-season-blocks.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pypsa-season-independent-2025
+  cancel-in-progress: false
+jobs:
+  source-seasons:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && (github.event_name == 'push' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install isolated PyPSA model and original Fingrid source dependencies
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Test honest partial source coverage and fail-closed behavior
+        run: python -m pytest -q tests/test_pypsa_season_blocks.py tests/test_pypsa_seasons.py tests/test_long_history_sweep.py
+      - name: Check existing authenticated Fingrid source configuration
+        run: |
+          if [ -z "${FINGRID_API_KEY:-}" ]; then
+            echo "::error::No FINGRID_API_KEY secret; independent source retrieval unavailable."
+            exit 1
+          fi
+      - name: Download independently validated 30-day winter summer and autumn source
+        run: |
+          mkdir -p /tmp/seasonal-fi-2025
+          python -m src.models.season_blocks --output-dir /tmp/seasonal-fi-2025
+      - name: Audit each accepted source hash and full optimization
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path("/tmp/seasonal-fi-2025")
+          d=json.loads((root/"audited_independent_seasons_2025.json").read_text())
+          assert d["annual_2025_complete"] is False
+          assert len(d["historical_seasons"])==3
+          assert d["valid_season_count"]+d["rejected_season_count"]==3
+          assert len(d["parameter_comparisons"])==12
+          for s in d["historical_seasons"]:
+            if not s["source_complete"]:
+              assert s["status"]=="source_incomplete_or_incompatible" and not s["solver_run"]
+              continue
+            assert s["status"]=="source_and_solver_verified" and s["solver_run"]
+            f=root/("fingrid_"+s["season"]+"_2025_15min.csv")
+            assert s["source_sha256"]==hashlib.sha256(f.read_bytes()).hexdigest()
+            assert s["source_manifest"]["source_intervals"]==2880
+            assert len(s["scenarios"])==12
+            assert all(c["solver_status"]=="ok" and c["solver_termination"]=="optimal" and
+               c["max_balance_error_mw"]<1e-5 and c["added_load_energy_mwh"]==72000
+               for c in s["scenarios"])
+          print("SOURCE_VALIDATED_SEASONS_JSON="+json.dumps({
+            "status":d["publication_state"],
+            "valid":[{"season":s["season"],"hash":s["source_sha256"]} for s in d["historical_seasons"] if s["source_complete"]],
+            "invalid":[{"season":s["season"],"reason":s["diagnostic"]} for s in d["historical_seasons"] if not s["source_complete"]],
+          }))
+          PY
+      - name: Upload original source CSV and model JSON per valid season
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-independent-fi-seasonal-2025
+          path: /tmp/seasonal-fi-2025/
+          retention-days: 30

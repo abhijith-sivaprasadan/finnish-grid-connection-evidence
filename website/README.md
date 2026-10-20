@@ -6,6 +6,20 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis/borders-2025` — original 2025 27-day winter/late-winter PyPSA source and HiGHS solver, plus observed signed commercial Swedish border flows and remaining intraday market capacity (38/39) with strictly conditional additional-project modelling; not total physical transfer capability
+- `/api/v1/model/finland/winter-2025` and `/api/v1/model/finland/borders-2025` — read-only, source-provenance-pinned original data and separate hypothetical models, no confirmed 2030 grid connectability
+
+
+- `/analysis/source-coverage` — original Fingrid 2025 historical 58-day source coverage from independent verified archive captures, not an annual simulation; explicitly 2 days with known missing source intervals and 305 dates not present in reused archives
+- `/api/v1/observed/coverage/2025` — original-source evidence summary with source fingerprints and explicit non-annual status; no substation/2030 feasibility inference
+
+
+- `/analysis/seasons` — three source-audited matched 14-day winter/summer/autumn 2025 PyPSA studies, 36 actual optimized project cases; missing original source intervals and unverified annual coverage explicitly shown
+- `/api/v1/model/finland/seasons` — read-only seasonal model-scenario summaries with original source hashes and GitHub solver artifact; no inferred 2030 connectivity
+
+
+- `/analysis/sensitivity` — independently solver-verified 30-day **historical 2025** Fingrid PyPSA assumption sweep; 12 model scenarios, 2,880 original paired observations, never guaranteed import capacity or outages
+- `/api/v1/model/finland/sensitivity` — read-only source-attributed model sensitivity data with original job, input hash and scientific limitations
 - `/analysis` — 48-hour **historical 2026** PyPSA Finland one-bus analysis; source-linked real Fingrid consumption/production, hypothetical balancing constraint, four model scenarios; NOT site-level connection capacity
 - `/api/v1/model/finland` — solver-verified historical model results and assumptions as model_scenario data, **not live observations or grid feasibility**
 
