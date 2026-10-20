@@ -42,7 +42,7 @@ def pypsa_case():
  import pypsa
  import pandas as pd
  n=pypsa.Network()
- n.set_snapshots(pd.DatetimeIndex(["2026-10-20T00:00:00Z"]))
+ n.set_snapshots(pd.DatetimeIndex(["2026-10-20T00:00:00"]))
  for bus in BUS_PQ:n.add("Bus",bus,v_nom=V_KV)
  n.add("Generator","reference_slack",bus="A",control="Slack",p_nom=500.,p_set=0.)
  for bus,(p,q) in BUS_PQ.items():
