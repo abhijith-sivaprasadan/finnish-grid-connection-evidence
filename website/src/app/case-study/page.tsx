@@ -3,7 +3,6 @@ import Link from "next/link";
 import archive from "@/lib/fingrid-archive-coverage-2025.json";
 import winter from "@/lib/pypsa-long-winter-2025.json";
 import model from "@/lib/pypsa-scenario-results.json";
-import review from "@/lib/grid-scope-audit.json";
 
 export const metadata:Metadata={
  title:"Grid analyst portfolio case study",
