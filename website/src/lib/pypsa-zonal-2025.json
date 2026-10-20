@@ -1,0 +1,205 @@
+{
+  "status": "verified_original_source_market_constrained_three_bus_pypsa",
+  "source_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39446265111",
+  "source_artifact_id": 12276291483,
+  "scenario_count": 24,
+  "source_window_utc": [
+    "2025-09-15T00:00:00Z",
+    "2025-10-15T00:00:00Z"
+  ],
+  "original_source_intervals": 2880,
+  "graph_nodes": [
+    "SE1 abstract supplier",
+    "SE3 abstract supplier",
+    "FI abstract new-load market"
+  ],
+  "edge_constraints": [
+    {
+      "edge": "SE1→FI",
+      "fingrid_dataset_id": 38,
+      "source_meaning": "15-min remaining intraday commercial import MW after day-ahead",
+      "min_mw": 0,
+      "median_mw": 0,
+      "max_mw": 2114.7
+    },
+    {
+      "edge": "SE3→FI",
+      "fingrid_dataset_id": 39,
+      "source_meaning": "15-min remaining intraday commercial import MW after day-ahead",
+      "min_mw": 0,
+      "median_mw": 391.35,
+      "max_mw": 2400
+    }
+  ],
+  "original_border_csv_sha256": "659092a40ac298a256ba79cf6f7361f999ac9cfb8ed38e4dbcdb7cc4aee5097d",
+  "original_national_csv_sha256": "3093f704484848919d83feb6c133c2e2abf2299566d5bd02a109e01b7fdec2e0",
+  "original_market_datasets": [
+    31,
+    32,
+    38,
+    39
+  ],
+  "original_national_datasets": [
+    124,
+    74
+  ],
+  "study_type": "conditional_two_market_border_links_NOT_physical_electrical_DC_or_AC_network",
+  "real_operator_substation_connection_capacity": false,
+  "real_line_impedance_and_security_constraints": false,
+  "actual_intraday_access_secured": false,
+  "actual_customer_outages": false,
+  "scenarios": [
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 0,
+      "modelled_project_relaxation_mwh": 22052.15
+    },
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 2,
+      "modelled_project_relaxation_mwh": 18346.6584
+    },
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 4,
+      "modelled_project_relaxation_mwh": 15624.4102
+    },
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 8,
+      "modelled_project_relaxation_mwh": 12349.3702
+    },
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 0,
+      "modelled_project_relaxation_mwh": 18294.725
+    },
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 2,
+      "modelled_project_relaxation_mwh": 14525.8401
+    },
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 4,
+      "modelled_project_relaxation_mwh": 12836.2951
+    },
+    {
+      "corridors_allowed": "SE1+SE3",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 8,
+      "modelled_project_relaxation_mwh": 10868.4018
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 0,
+      "modelled_project_relaxation_mwh": 49107.825
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 2,
+      "modelled_project_relaxation_mwh": 46005.2709
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 4,
+      "modelled_project_relaxation_mwh": 43737.641
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 8,
+      "modelled_project_relaxation_mwh": 40189.491
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 0,
+      "modelled_project_relaxation_mwh": 45280.925
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 2,
+      "modelled_project_relaxation_mwh": 42056.0209
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 4,
+      "modelled_project_relaxation_mwh": 39897.3935
+    },
+    {
+      "corridors_allowed": "SE1_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 8,
+      "modelled_project_relaxation_mwh": 36424.9335
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 0,
+      "modelled_project_relaxation_mwh": 24557
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 2,
+      "modelled_project_relaxation_mwh": 19916.4401
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 4,
+      "modelled_project_relaxation_mwh": 16838.1969
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 0,
+      "battery_duration_hours_assumed": 8,
+      "modelled_project_relaxation_mwh": 13146.7735
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 0,
+      "modelled_project_relaxation_mwh": 20541.625
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 2,
+      "modelled_project_relaxation_mwh": 16040.2993
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 4,
+      "modelled_project_relaxation_mwh": 13971.1809
+    },
+    {
+      "corridors_allowed": "SE3_only",
+      "flex_half_span_mw_assumed": 50,
+      "battery_duration_hours_assumed": 8,
+      "modelled_project_relaxation_mwh": 11613.5427
+    }
+  ],
+  "limitations": [
+    "The optimization has three ABSTRACT commercial bidding-zone buses and two independent capacity-constrained market links, NOT a real Finnish transmission graph, AC/DC line electrical load flow or verified site connection capacity.",
+    "Fingrid 38 and 39 report remaining commercial SE1/SE3→FI intraday trading capacity AFTER day-ahead. This is not actual physical NTC, a thermal line rating or a project's rights to import.",
+    "SE1 and SE3 generation is assumed available. Real generating unit availability, market contracts, bids, import deliverability, electrical losses and dynamic stability are not represented.",
+    "The model enforces actual original time-varying market-space caps separately for each corridor and tests losing either corridor. Optimized per-corridor allocation is not the measured physical or commercial transfer.",
+    "All project penalty relaxation is mathematical, never measured outages. No site, 2030 or national full-year feasibility conclusion.",
+    "Fingrid's internal P1 measured flows (dataset 30) and ended historical capacity datasets 28/29 require independent 2025 source audits before any physical north-south cut model. Their limits must not be guessed."
+  ]
+}

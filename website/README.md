@@ -6,6 +6,10 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis/corridors-2025` — source-authentic 15-minute Swedish–Finnish **intraday MARKET space** (Fingrid 38/39) on two independently capped PyPSA market links across three ABSTRACT bidding-zone buses; 24 optimal sensitivity cases. **Not a physical transmission grid or verified 2030 headroom.**
+- `/api/v1/model/finland/corridors-2025` — source fingerprint and scenario terms/limits; market-only zonal model, not physical network power-flow
+
+
 - `/analysis/borders-2025` — genuine published Fingrid 31/32 commercial Swedish flows and 38/39 post-day-ahead unused intraday market capacity, plus 48 source-verified original 27-day winter project PyPSA scenarios and a separate 8-case conditional border-market access model. **No verified physical substation headroom.**
 - `/api/v1/model/finland/winter-2025` and `/api/v1/model/finland/borders-2025` — read-only source-provenance-pinned historic model summaries. Not an annual model or actual import rights.
 
