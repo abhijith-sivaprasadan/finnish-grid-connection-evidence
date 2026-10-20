@@ -23,7 +23,7 @@ test("original archive bank publishes exactly 125 unique verified source days, n
  assert.equal(status.filter(x=>x==="verified").length,125);
  assert.equal(status.filter(x=>x==="known_source_gap").length,4);
  assert.equal(status.filter(x=>x==="unknown_not_in_archives").length,236);
- assert.equal(new Set(report.original_source_windows.map(w=>w.start)).size,3);
+ assert.equal(new Set(report.original_source_windows.map(w=>w.start)).size,6);
  assert.equal(report.original_source_windows.reduce((sum,w)=>sum+w.days,0),125);
  assert.ok(report.original_source_windows.every(w=>w.original_capture_sha256.length===64));
  assert.equal(report.independent_autumn_overlap_original_sha256.length,64);
