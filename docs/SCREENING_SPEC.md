@@ -35,6 +35,6 @@ This feature is a **pilot source-evidence triage**, not a load-flow model, elect
 - Automated tests cover baseline 2/3 classification, exact-year and exact-direction matching, inclusive threshold, unknown/null, MVA incompatibility, unreviewed/latest-snapshot behavior, duplicate conflict, param rejection and filtered zero-point scope.
 - The source URL, snapshot UTC, evidence category and the non-feasibility disclaimer are included in machine-readable exports.
 - Engineering follow-up needs site coordinates, planned service date, load profile, reactive power and power factor, flexibility requirements, system/reinforcement context and an operator-led grid-connection study.
-- Dependencies: PR #32 evidence-first UI and PR #34 station archive are both **draft** branches. The screening branch combines their UI changes for evaluation; production still requires reviewed integration and deployment.
+- Implementation status (20 October 2026): **screening PR #36 and historical station-archive PR #34 have merged to main**. Alternative site-design PR #32 remains draft and should not be confused with the merged research pages. Confirm Vercel's current production commit separately rather than treating a GitHub merge as proof of deployment.
 
 Feature tracking: https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/issues/35
