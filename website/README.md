@@ -6,6 +6,10 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis/source-coverage` — real 2025 original Fingrid 124/74 source bank with 125 verified UTC days, 4 known source-gap dates and 236 dates outside the captured bank. No annual total or confirmed transmission headroom
+- `/api/v1/observed/coverage/2025` — immutable-provenance, read-only 2025 source coverage and unresolved evidence classifications
+
+
 - `/analysis` — 48-hour **historical 2026** PyPSA Finland one-bus analysis; source-linked real Fingrid consumption/production, hypothetical balancing constraint, four model scenarios; NOT site-level connection capacity
 - `/api/v1/model/finland` — solver-verified historical model results and assumptions as model_scenario data, **not live observations or grid feasibility**
 

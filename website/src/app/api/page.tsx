@@ -3,6 +3,7 @@ export const metadata:Metadata={title:"REST API"};
 const endpoints=[
  ["GET","/api/v1/health","Database health; 200 or 503"],
  ["GET","/api/v1/overview","Stored evidence counters and source freshness"],
+ ["GET","/api/v1/observed/coverage/2025","Actual original Fingrid 2025 15-min source archive: 125 paired complete days; missing versus not imported distinct; NOT grid capacity"],
  ["GET","/api/v1/model/finland","Verified PyPSA single-zone model scenario results; historical 2026 sensitivities, not 2030 forecasts or substation headroom"],
  ["GET","/api/v1/screening?demand_mw=100&year=2030&direction=consumption&voltage=all","Evidence-only 100 MW / 2030 screening; no feasibility conclusion"],
  ["GET","/api/v1/points","Paginated list of sampled connection points"],
