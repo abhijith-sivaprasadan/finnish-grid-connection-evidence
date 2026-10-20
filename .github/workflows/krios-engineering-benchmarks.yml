@@ -8,6 +8,8 @@ on:
       - 'src/models/ac_comparison_validate.py'
       - 'src/models/fi_regional_pypsa_v2.py'
       - 'src/models/fi_osm_uncertainty_2024.py'
+      - 'src/audit_osm_map.py'
+      - 'website/src/lib/osm-2024-proxy-map-odbl.ts'
       - 'tests/test_pandapower_lab.py'
       - 'tests/test_pypsa_regional_v2.py'
       - 'tests/test_ac_comparison_validate.py'
@@ -109,6 +111,8 @@ jobs:
       - name: Recheck five native Zenodo source CSVs and ODbL licence
         run: |
           python -m src.models.osm_finland_topology_audit --download --source-dir /tmp/fi-original --output-dir /tmp/fi-verified
+      - name: Independently match every published map node and edge to original ODbL source
+        run: python -m src.audit_osm_map --source-dir /tmp/fi-verified
       - name: Source-voltage template uncertainty without false 2025 calibration
         run: |
           python -m src.models.fi_osm_uncertainty_2024 --extracted-dir /tmp/fi-verified --out /tmp/fi-odbl/osm-rating-sensitivity-2024.json
