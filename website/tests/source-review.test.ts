@@ -34,4 +34,9 @@ test("PostgreSQL fractional UTC timestamp formatting does not invalidate origina
  const base=snapshotCapacities[0];
  assert.equal(sourceReviewStatus({...base,source_observed_at:"2026-10-17T18:46:43.000000Z"}).status,"screenshot_match");
  assert.equal(sourceReviewStatus({...base,source_observed_at:"invalid timestamp"}).status,"not_audited");
+ // Date.parse() rounds/truncates to milliseconds. These genuinely different
+ // UTC instants MUST not inherit the original screenshot-review evidence.
+ assert.equal(sourceReviewStatus({...base,source_observed_at:"2026-10-17T18:46:43.000001Z"}).status,"not_audited");
+ assert.equal(sourceReviewStatus({...base,source_observed_at:"2026-10-17T18:46:43.000999Z"}).status,"not_audited");
+ assert.equal(sourceReviewStatus({...base,source_observed_at:"2026-10-17T18:46:43.000000+00:00"}).status,"not_audited");
 });
