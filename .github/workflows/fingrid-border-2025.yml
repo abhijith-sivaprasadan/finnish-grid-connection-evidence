@@ -1,0 +1,80 @@
+name: Verified 2025 Fingrid border market flows and conditional import model
+on:
+  push:
+    branches: [feature/long-horizon-pypsa-sensitivity]
+    paths:
+      - "src/models/verified_border_market.py"
+      - "src/ingest/fingrid.py"
+      - "tests/test_border_market.py"
+      - ".github/workflows/fingrid-border-2025.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: fingrid-source-recovery-limited
+  cancel-in-progress: false
+jobs:
+  original-operator-border-market:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install isolated physical source parser and PyPSA HiGHS
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Test signs, UTC original source and capacity interpretation offline
+        run: python -m pytest -q tests/test_border_market.py tests/test_long_windows.py
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 39391985966
+          name: verified-fingrid-long-horizon-pypsa
+          github-token: ${{ github.token }}
+          path: /tmp/fi-autumn-observed/
+      - name: Retrieve genuine Fingrid 31/32 flows and 38/39 post-day-ahead capacity
+        run: |
+          if [ -z "${FINGRID_API_KEY:-}" ];then echo "Fingrid key unavailable";exit 1;fi
+          python -m src.models.verified_border_market \
+            --autumn-csv /tmp/fi-autumn-observed/finland_observed_15min.csv \
+            --outdir /tmp/verified-border-market-2025
+      - name: Verify provenance and solver safety before publication
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path("/tmp/verified-border-market-2025")
+          f=root/"verified_market_bound_model.json"
+          d=json.loads(f.read_text())
+          assert d["status"]=="source_verified_empirical_market_availability_counterfactual"
+          assert d["data_kind"]=="historical_operator_data_plus_model_scenario"
+          assert set(d["historical_source_datasets"])=={124,74,31,32,38,39}
+          assert d["selected_days"]>=14
+          assert len(d["scenarios"])==8
+          assert all(x["solver_status"]=="ok" and x["solver_termination"]=="optimal" and
+              x["max_power_balance_error_mw"]<1e-5 for x in d["scenarios"])
+          for id in (31,32,38,39):
+            file=root/("fingrid_"+str(id)+"_border_market_2025.csv")
+            assert hashlib.sha256(file.read_bytes()).hexdigest()==d["source_manifest"]["source_csv_sha256"][str(id)]
+          assert d["source_manifest"]["published_market_capacity_is_not_physical_connection_headroom"]
+          print("BORDER_SOURCE_AND_PYPSA_VALID_JSON="+json.dumps({
+             "days":d["selected_days"],"cases":len(d["scenarios"]),
+             "market_capacity_median_mw":d["observed_commercial_flow_statistics"]["intraday_capacity_2_sweden_borders_mw_median"]
+          },sort_keys=True))
+          PY
+      - name: Preserve original border source readings and modelled counterfactual
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-2025-border-market-and-conditional-pypsa
+          path: /tmp/verified-border-market-2025/
+          if-no-files-found: ignore
+          retention-days: 30
