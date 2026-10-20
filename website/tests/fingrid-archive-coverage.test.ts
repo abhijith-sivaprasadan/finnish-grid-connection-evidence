@@ -10,34 +10,36 @@ const status=dates.map(day=>
   report.original_source_windows.some(w=>inWindow(day,w.start,w.end_exclusive))?"verified":
   known.has(day)?"known_source_gap":"unknown_not_in_archives");
 
-test("original archive bank publishes exactly 58 unique verified source days, not 365",()=>{
+test("original archive bank publishes exactly 125 unique verified source days, not 365",()=>{
  assert.equal(report.status,"verified_original_archive_coverage_only");
- assert.equal(report.distinct_original_paired_intervals,5568);
- assert.equal(report.verified_complete_days,58);
- assert.equal(report.known_missing_source_days,2);
- assert.equal(report.not_covered_by_archives_days,305);
+ assert.equal(report.distinct_original_paired_intervals,12283);
+ assert.equal(report.verified_complete_days,125);
+ assert.equal(report.known_missing_source_days,4);
+ assert.equal(report.not_covered_by_archives_days,236);
  assert.equal(report.source_year_complete,false);
  assert.equal(report.annual_pypsa_solved,false);
  assert.equal(report.site_grid_connection_feasible,null);
  assert.deepEqual(report.dataset_ids,[124,74]);
- assert.equal(status.filter(x=>x==="verified").length,58);
- assert.equal(status.filter(x=>x==="known_source_gap").length,2);
- assert.equal(status.filter(x=>x==="unknown_not_in_archives").length,305);
+ assert.equal(status.filter(x=>x==="verified").length,125);
+ assert.equal(status.filter(x=>x==="known_source_gap").length,4);
+ assert.equal(status.filter(x=>x==="unknown_not_in_archives").length,236);
  assert.equal(new Set(report.original_source_windows.map(w=>w.start)).size,3);
- assert.equal(report.original_source_windows.reduce((sum,w)=>sum+w.days,0),58);
- assert.ok(report.original_source_windows.every(w=>w.original_csv_sha256.length===64));
+ assert.equal(report.original_source_windows.reduce((sum,w)=>sum+w.days,0),125);
+ assert.ok(report.original_source_windows.every(w=>w.original_capture_sha256.length===64));
  assert.equal(report.independent_autumn_overlap_original_sha256.length,64);
- assert.match(report.validation_run,/\/actions\/runs\/39412085922$/);
+ assert.match(report.validation_run,/\/actions\/runs\/39418640253$/);
 });
 
 test("source gap timeline uses true UTC interval observations, not zeros or site capacity",()=>{
  assert.deepEqual(report.known_missing_original_124_intervals_utc,[
-  "2025-01-17T17:00:00Z","2025-01-17T17:45:00Z","2025-07-11T16:15:00Z"]);
+  "2025-01-17T17:00:00Z","2025-01-17T17:45:00Z",
+  "2025-02-14T17:00:00Z","2025-02-14T17:45:00Z",
+  "2025-03-14T17:00:00Z","2025-07-11T16:15:00Z"]);
  assert.equal(status[16],"known_source_gap");
- assert.equal(status[0],"unknown_not_in_archives");
+ assert.equal(status[0],"verified");
  assert.equal(status[17],"verified");
  assert.equal(status[196],"unknown_not_in_archives");
- assert.ok(report.boundaries.some(x=>/365-day complete dataset|365-day/i.test(x)));
+ assert.ok(report.boundaries.some(x=>/365 source-complete annual observations|365/i.test(x)));
 });
 
 test("coverage page and API are classified as source audit, not 2030 scenario",()=>{
