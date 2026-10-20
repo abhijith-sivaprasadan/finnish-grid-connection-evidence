@@ -1,0 +1,83 @@
+name: Krios engineering benchmarks (CIGRE AC, PyPSA AC reference, regional v2)
+on:
+  push:
+    branches: [main, feature/krios-engineering-lab-pandapower-pypsa]
+    paths:
+      - 'src/models/cigre_engineering_lab.py'
+      - 'src/models/ac_cross_solver_reference.py'
+      - 'src/models/fi_regional_pypsa_v2.py'
+      - 'src/models/fi_osm_uncertainty_2024.py'
+      - 'tests/test_engineering_benchmarks.py'
+      - 'requirements-engineering-lab.txt'
+      - '.github/workflows/krios-engineering-benchmarks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  electrical-benchmarks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-engineering-lab.txt
+      - name: Install distinct verified engineering solver environment
+        run: python -m pip install -r requirements-engineering-lab.txt
+      - name: Run two actual CIGRE networks, independent 3-bus AC parity and real-source Finland v2
+        run: python -m pytest -q tests/test_engineering_benchmarks.py
+      - name: Solve AC/N-1 HV, limited MV, cross-library AC and regional hypothetical v2
+        run: |
+          python -m src.models.cigre_engineering_lab --out /tmp/krios-engineering/cigre_ac_n1.json
+          python -m src.models.ac_cross_solver_reference --out /tmp/krios-engineering/identical_3bus_AC.json
+          python -m src.models.fi_regional_pypsa_v2 --out /tmp/krios-engineering/finland_region_assumptions_v2.json
+      - name: Assert real solver provenance and no operator approved MW claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("/tmp/krios-engineering")
+          a=json.loads((root/"cigre_ac_n1.json").read_text())
+          b=json.loads((root/"identical_3bus_AC.json").read_text())
+          c=json.loads((root/"finland_region_assumptions_v2.json").read_text())
+          assert a["operator_approved_connection_mw"] is None
+          assert b["cross_solver_consistent_within_declared_tolerance"]
+          assert c["scenario_count"]==4 and c["operator_verified_location_specific_capacity_mw"] is None
+          print("SOLVERS_VERIFIED_AC_HV_MV_N1_CROSS_LIB_REGIONAL_PROXY")
+          PY
+      - name: Publish dated solver-results artifact, no site MW forecasts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: krios-engineering-benchmark-verified-source-and-solver-results
+          path: /tmp/krios-engineering/*.json
+          retention-days: 60
+  osm-template-uncertainty:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify original OSM Zenodo checksum sources without third-party GIS
+        run: |
+          python -m src.models.osm_finland_topology_audit --download --source-dir /tmp/fi-original --output-dir /tmp/fi-verified
+      - name: Calculate 2024 standard-rating input uncertainty (NOT calibrated AC flows)
+        run: |
+          python -m src.models.fi_osm_uncertainty_2024 --extracted-dir /tmp/fi-verified --out /tmp/fi-odbl/osm-rating-sensitivity-2024.json
+      - name: ODbL derived licence attribution
+        run: |
+          printf '%s\n' '© OpenStreetMap contributors; PyPSA-Eur OSM v0.6, DOI 10.5281/zenodo.14144752' 'ODbL 1.0 derived adapted metrics; no Fingrid calibration or 2025 electrical validation.' > /tmp/fi-odbl/DATA_LICENSE_ODBL.txt
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: finland-osm-2024-input-uncertainty-ODbL-no-operator-calibration
+          path: /tmp/fi-odbl/*
+          retention-days: 45
