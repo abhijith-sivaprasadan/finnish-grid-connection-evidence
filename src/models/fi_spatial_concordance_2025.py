@@ -144,8 +144,8 @@ def prepare_pairs(osm_rows: list[dict], fcg_features: list[dict]):
         if voltage not in VOLTAGES:
             raise ValueError("Unexpected 110 or 500 kV feature in 220/400-only query")
         geometry = to_projected(shape(feature.get("geometry")),crs)
-        if geometry.geom_type not in ("LineString","MultiLineString") or geometry.is_empty or geometry.length < 10:
-            raise ValueError("Invalid hosted feature geometry")
+        if geometry.geom_type not in ("LineString","MultiLineString") or geometry.is_empty or geometry.length <= 0:
+            raise ValueError(f"Invalid hosted feature geometry: type={geometry.geom_type}, empty={geometry.is_empty}, length_nonpositive={geometry.length<=0}")
         comparison[voltage].append(geometry)
     if any(not osm[x] or not comparison[x] for x in VOLTAGES):
         raise ValueError("Both 220/400kV source types must have valid features")
