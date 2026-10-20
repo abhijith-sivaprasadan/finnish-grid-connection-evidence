@@ -21,7 +21,7 @@ const byId = new Map(audit.map(record=>[record.observation_id,record]));
  * attribution. Current database timestamps are canonical UTC Z.
  */
 export function sourceUtcMicroseconds(value:string):string|null {
- const match=/^(\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d)(?:\\.(\\d{1,6}))?Z$/.exec(value);
+ const match=/^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)(?:\.(\d{1,6}))?Z$/.exec(value);
  if(!match || !Number.isFinite(Date.parse(match[1]+"Z")))return null;
  return match[1]+"."+(match[2]??"").padEnd(6,"0")+"Z";
 }
