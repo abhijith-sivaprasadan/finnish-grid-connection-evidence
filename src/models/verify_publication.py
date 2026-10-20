@@ -40,6 +40,31 @@ def verify(published:dict, solved:dict)->None:
         raise ValueError("Published geographic/model scope changed")
 
 
+def verify_observed_projection(path:Path)->None:
+    """Web source chart must be an exact projection of the original attributed CSV."""
+    from src.models.finland import load_observed
+    original=load_observed()
+    web=json.loads(path.read_text(encoding="utf-8"))
+    if web.get("data_kind")!="observed_fingrid_national_aggregate":
+        raise ValueError("Website input is not identified as observed Finnish national context")
+    if [x.get("id") for x in web.get("source_datasets",[])]!=["124","74"]:
+        raise ValueError("Website lost Fingrid 124/74 source attribution")
+    records=web.get("time_series",[])
+    if len(records)!=len(original):
+        raise ValueError("Website observed record count diverges from CSV")
+    for i,(_,src) in enumerate(original.iterrows()):
+        rec=records[i]
+        for field,old in [
+            ("timestamp_utc",src["timestamp_utc"]),
+            ("consumption_retrieved_at",src["consumption_retrieved_at"]),
+            ("production_retrieved_at",src["production_retrieved_at"]),
+            ("consumption_mw",src["consumption_mwh_per_hour"]),
+            ("production_mw",src["production_mwh_per_hour"])
+        ]:
+            if rec.get(field)!=old:
+                raise ValueError(f"Website observed {field} diverges at 15-minute row {i}")
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--solved",required=True,type=Path)
@@ -47,6 +72,7 @@ def main():
     a=p.parse_args()
     verify(json.loads(a.published.read_text(encoding="utf-8")),
            json.loads(a.solved.read_text(encoding="utf-8")))
+    verify_observed_projection(ROOT/"website/src/lib/finland-observed.json")
     print("PASS: 4 site-published PyPSA summaries match actual optimal solver output, original input hash and source limitations.")
 
 

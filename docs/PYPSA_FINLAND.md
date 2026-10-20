@@ -46,7 +46,7 @@ python -m src.models.verify_publication --solved data/model_outputs/finland_pyps
 
 The full output file includes all four × 192 optimized 15-minute results. Generated model files are not needed in the main dashboard database. The published website embeds a small **solver-verified summary** with the source SHA-256; the live source CSV and model code remain reviewable.
 
-GitHub Actions workflow `.github/workflows/pypsa-study.yml` installs the isolated modelling dependencies, reruns the four optimizations, checks the site publication against the fresh optimizer output, and uploads complete scenario results as a downloadable artifact. Reproducibility is enforced, not merely claimed.
+GitHub Actions workflow `.github/workflows/pypsa-study.yml` installs the isolated modelling dependencies, reruns the four optimizations, checks the site publication against the fresh optimizer output AND proves the website’s observed chart is an exact projection of the original timestamped CSV, and uploads complete scenario results as a downloadable artifact. Reproducibility is enforced, not merely claimed.
 
 Site: `/analysis`, data API `/api/v1/model/finland`. No database/schema mutation or write credential is required.
 

@@ -8,6 +8,7 @@ on:
       - "tests/test_finland_model.py"
       - "src/models/verify_publication.py"
       - "website/src/lib/pypsa-scenario-results.json"
+      - "website/src/lib/finland-observed.json"
       - ".github/workflows/pypsa-study.yml"
   pull_request:
     paths:
@@ -15,6 +16,9 @@ on:
       - "data/model_inputs/**"
       - "requirements-model.txt"
       - "tests/test_finland_model.py"
+      - "src/models/verify_publication.py"
+      - "website/src/lib/pypsa-scenario-results.json"
+      - "website/src/lib/finland-observed.json"
       - ".github/workflows/pypsa-study.yml"
   workflow_dispatch:
 permissions:
