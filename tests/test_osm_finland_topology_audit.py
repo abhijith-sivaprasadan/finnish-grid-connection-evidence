@@ -32,6 +32,11 @@ def test_source_boundary_inventory_no_invented_thermal_ratings():
     assert report["electrical_parameter_inventory_ac_lines"]["s_nom"]["missing"] == 1
     assert report["operator_verified_physical_network"] is False
     assert report["approved_site_connection_headroom_mw"] is None
+    topology = report["proxy_topology_and_template_diagnostics"]
+    assert topology["ac_only_connected_component_sizes"] == [2]
+    assert topology["ac_plus_source_transformer_component_sizes"] == [2]
+    assert topology["domestic_line_route_km_by_voltage"] == {"400": 0.055}
+    assert topology["source_conductor_rating_templates"][0]["count"] == 1
 
 
 def test_missing_or_invalid_impedance_remains_missing():
