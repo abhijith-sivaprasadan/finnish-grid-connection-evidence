@@ -51,3 +51,23 @@ The exported JSON records original-source SHA-256, the electrical template audit
 ## Highest-value next decision
 
 Do not yet start a claim-bearing Finnish power-flow or site-feasibility run. Instead, select a regional corridor with identifiable operator-labelled 400/220-kV substations; reconcile the 2024 OSM source IDs, topology and chronology against licensed Fingrid maps; source actual circuit and transformer properties or retain explicitly uncertain alternatives. Only then build a *separately labelled exploratory* DC/AC simulation, record regional injection provenance, and compare modeled aggregate P1 against Fingrid 2025 measured P1. The current source check is valuable primarily because it shows exactly which apparently precise numbers are assumptions.
+
+
+## Operator-based 2025 *time-varying* grid state (separate from ODbL proxy)
+
+The pinned OSM v0.6 topology is a **September 2024** extraction, not a dated year-2025 operator switching model. Fingrid's own later reports demonstrate that a single static 2024 network would be factually wrong for parts of the 2025 study year:
+
+| Documented project or availability | Fingrid evidence | Consequence for study time |
+| --- | --- | --- |
+| **Aurora Line** FI–SE1 400 kV cross-border AC connection | [29 Oct 2025 commissioning announcement](https://www.fingrid.fi/en/news/news/2025/aurora-line-power-transmission-connection-to-be-commissioned-on-november-13/) targeted **13 Nov 2025**; Fingrid's [2025 annual statement](https://www.fingrid.fi/en/news/news/2026/fingrid-oyjs-financial-statements-bulletin-januarydecember-2025/) confirms commissioning in **Nov 2025** | Do not energize in winter/September 2025 cases; source-specific terminals and series compensation still need identification, not inferred from a trade MW figure |
+| **Huittinen–Forssa**, 400+110 kV reinforcement and related 110 kV changes | [Fingrid January–September 2025 management review](https://www.fingrid.fi/en/news/news/2025/fingrid-group--managements-review-1.1.30.9.2025/) confirms completion; annual report places it in **Q3 2025** | Exact in-service timestamp cannot be inferred from these reports; do not use one unchanged OSM graph for early/late 2025 |
+| **Alajärvi–Lestijärvi 400 kV, 55 km** | [29 Jan 2025 operator announcement](https://www.fingrid.fi/en/news/news/2025/transmission-line-for-a-wind-power-hub-in-central-ostrobothnia-acquired-as-part-of-the-main-grid/) says line was built in **2024**, acquired by Fingrid in **2025** | Change of grid ownership is **not** proof that a *new conductor* was built in 2025; historic OSM source-ID match unknown |
+| **EstLink 2 FI–EE HVDC** | [Fingrid first-half 2025 report](https://www.fingrid.fi/en/news/news/2025/fingrid-groups-half-year-report-1.1.30.6.2025/) notes link damaged **25 Dec 2024** and restored to commercial use **20 Jun 2025** | A static always-available HVDC link would be false over early 2025; daily status and converter modelling separate from AC topology |
+| **Lowlands Line 400 kV Alajärvi–Hausjärvi** | [September 2025 Fingrid release](https://www.fingrid.fi/en/news/news/2025/new-two-circuit-transmission-line-supports-increased-electricity-consumption-in-southern-finland/) projects **2028–29** completion | **Never** add to an observed 2025 model or infer 2025 headroom from future-reinforcement MW figures |
+
+A documented, machine-readable operator event ledger is saved at 'data/reference/fi_2025_operator_asset_chronology.json' (the **Fingrid documentary records have their own attribution**, and are kept distinct from OSM's ODbL-derived network). A fail-closed date checker 'src/models/fi_2025_operator_chronology.py' has two reproducible illustrative snapshots:
+
+    python -m src.models.fi_2025_operator_chronology --snapshot 2025-09-15
+    python -m src.models.fi_2025_operator_chronology --snapshot 2025-12-01
+
+The checker NEVER auto-matches a source OSM line ID to a named Fingrid project and NEVER injects an electrically specified new branch. September 15 must flag Aurora as not yet in service and Q3 Huittinen–Forssa completion as **date-uncertain**; December 1 flags late-2025 commissioning but leaves all electrical component matching unresolved. Operator asset-documentary sources are intentionally only a selective chronology, **not a 2025 as-built source model**.
