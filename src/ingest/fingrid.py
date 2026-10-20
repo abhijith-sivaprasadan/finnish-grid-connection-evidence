@@ -6,7 +6,18 @@ from src.schema import OperationalRecord, now, utc
 from .http import HttpClient, SourceError
 
 # Units preserved verbatim from the operator's dataset pages.
-DATASETS = {124: ("electricity_consumption", "MWh/h"), 74: ("electricity_production", "MWh/h")}
+DATASETS = {
+    124: ("electricity_consumption", "MWh/h"),
+    74: ("electricity_production", "MWh/h"),
+    # Genuine historical cross-border MARKET evidence; never a substation capacity value.
+    # Dataset 31/32 signed: positive FI export, negative import. Never clamp to zero.
+    31: ("commercial_flow_FI_SE1", "MW"),
+    32: ("commercial_flow_FI_SE3", "MW"),
+    # Unused intraday import-market space AFTER day-ahead allocation, not total
+    # transmission rights, physical import capability, or dispatchable supply.
+    38: ("intraday_capacity_SE1_FI", "MW"),
+    39: ("intraday_capacity_SE3_FI", "MW"),
+}
 
 
 def integer_number(value, name, minimum=0):
