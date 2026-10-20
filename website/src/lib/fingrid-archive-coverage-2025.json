@@ -7,21 +7,21 @@
     74
   ],
   "native_source_units": "MWh/h (native mean MW over each 15-minute interval)",
-  "validation_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39447129155",
+  "validation_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39452882772",
   "source_year_complete": false,
   "annual_pypsa_solved": false,
   "site_grid_connection_feasible": null,
-  "distinct_original_paired_intervals": 14966,
-  "verified_complete_days": 150,
-  "known_missing_source_days": 7,
-  "not_covered_by_archives_days": 208,
+  "distinct_original_paired_intervals": 17640,
+  "verified_complete_days": 171,
+  "known_missing_source_days": 14,
+  "not_covered_by_archives_days": 180,
   "original_source_windows": [
     {
       "label": "Jan 1–16 verified",
       "start": "2025-01-01",
       "end_exclusive": "2025-01-17",
       "days": 16,
-      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
       "archive_kind": "journal_chunks_124_74"
     },
     {
@@ -29,7 +29,7 @@
       "start": "2025-01-18",
       "end_exclusive": "2025-02-14",
       "days": 27,
-      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
       "archive_kind": "journal_chunks_124_74"
     },
     {
@@ -37,7 +37,7 @@
       "start": "2025-02-15",
       "end_exclusive": "2025-03-14",
       "days": 27,
-      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
       "archive_kind": "journal_chunks_124_74"
     },
     {
@@ -45,7 +45,7 @@
       "start": "2025-03-15",
       "end_exclusive": "2025-03-30",
       "days": 15,
-      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
       "archive_kind": "journal_chunks_124_74"
     },
     {
@@ -53,7 +53,7 @@
       "start": "2025-03-31",
       "end_exclusive": "2025-04-11",
       "days": 11,
-      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
       "archive_kind": "journal_chunks_124_74"
     },
     {
@@ -61,7 +61,39 @@
       "start": "2025-04-12",
       "end_exclusive": "2025-04-22",
       "days": 10,
-      "original_capture_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "Apr 23–May 5 verified",
+      "start": "2025-04-23",
+      "end_exclusive": "2025-05-06",
+      "days": 13,
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "May 7 verified",
+      "start": "2025-05-07",
+      "end_exclusive": "2025-05-08",
+      "days": 1,
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "May 9–11 verified",
+      "start": "2025-05-09",
+      "end_exclusive": "2025-05-12",
+      "days": 3,
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
+      "archive_kind": "journal_chunks_124_74"
+    },
+    {
+      "label": "May 17–20 verified",
+      "start": "2025-05-17",
+      "end_exclusive": "2025-05-21",
+      "days": 4,
+      "original_capture_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
       "archive_kind": "journal_chunks_124_74"
     },
     {
@@ -82,16 +114,16 @@
     }
   ],
   "independent_autumn_overlap_original_sha256": "a38d703c23037bae75370e6414ff4b0034eb64b9832ea15167e40141c44235be",
-  "journal_original_zip_sha256": "5a548bfc746e03b0b504d1a8ea67017795604316d1287edb13ef378ae4192974",
-  "journal_run": 39447129155,
-  "journal_artifact_id": 12276347617,
+  "journal_original_zip_sha256": "3570602836b1d2f5f002550b3d8046f25de5503ea2376b1b7b8d55ad3416d6f9",
+  "journal_run": 39452882772,
+  "journal_artifact_id": 12279058480,
   "journal_utc_window": {
     "start": "2025-01-01",
-    "end_exclusive": "2025-04-23",
-    "source_complete_days": 106,
-    "source_gap_days": 6,
-    "original_paired_intervals": 10742,
-    "source_chunks_saved": 32
+    "end_exclusive": "2025-05-21",
+    "source_complete_days": 127,
+    "source_gap_days": 13,
+    "original_paired_intervals": 13416,
+    "source_chunks_saved": 40
   },
   "verified_overlap_pair_count": 1344,
   "known_missing_original_124_intervals_utc": [
@@ -105,12 +137,28 @@
     "2025-04-11T17:15:00Z",
     "2025-04-11T17:45:00Z",
     "2025-04-22T17:00:00Z",
+    "2025-05-06T06:45:00Z",
+    "2025-05-08T11:30:00Z",
+    "2025-05-08T11:45:00Z",
+    "2025-05-12T11:30:00Z",
+    "2025-05-12T16:15:00Z",
+    "2025-05-12T17:45:00Z",
+    "2025-05-12T22:00:00Z",
+    "2025-05-12T23:45:00Z",
+    "2025-05-13T06:45:00Z",
+    "2025-05-13T07:00:00Z",
+    "2025-05-14T06:15:00Z",
+    "2025-05-15T09:15:00Z",
+    "2025-05-16T06:30:00Z",
+    "2025-05-16T16:15:00Z",
     "2025-07-11T16:15:00Z"
   ],
-  "partial_original_paired_interval_count": 566,
-  "known_gap_days_in_journal": 6,
+  "partial_original_paired_interval_count": 1224,
+  "known_gap_days_in_journal": 13,
   "missing_recheck_run": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39406458886",
   "archived_source_runs": [
+    39452882772,
+    39447129155,
     39418640253,
     39416081929,
     39413812083,
@@ -121,13 +169,13 @@
     "https://data.fingrid.fi/en/datasets/124",
     "https://data.fingrid.fi/en/datasets/74"
   ],
-  "provenance": "Actual 2025 original 124 and 74 source chunks and earlier original CSV archives; prior original journal hashes rechecked, 1,344 matching paired winter overlap values, not filled.",
+  "provenance": "Original 2025 Fingrid 124/74 40-chunk journal authenticated by batch-05 checks; 127 complete days plus separately source-verified Jun 15–28 (14) and Sep 15–Oct 14 (30), disjoint dates. 13 journal source-gap days, earlier independently confirmed Jul 11 gap; missing data never filled.",
   "boundaries": [
-    "150 source-complete UTC dates are selected historical original observations, not verified 2025 calendar completeness.",
-    "Eleven original consumption quarter-hours are missing across seven UTC dates; the 2025-03-30 slot has a nonstandard 10:45:02 source row retained in quarantine, never snapped to 10:45:00.",
-    "208 remaining dates are outside captured source coverage and are NOT evidence that Fingrid never published them.",
-    "Do not concatenate separated periods into a continuous 365-day battery model or annualize sample source totals.",
-    "Neither these national original series nor commercial-border market observations prove substation physical capacity, line reactance, operator import rights or 2030 project feasibility."
+    "171 source-complete 2025 UTC dates do not constitute a 365-day annual record.",
+    "Twenty-five 15-minute consumption slots are missing across fourteen distinct UTC dates; 24 captured journal gaps plus independently known Jul 11. Do not interpolate or treat missing as zero.",
+    "An authentic 30-minute May 8 dataset-124 record is preserved as original source, but neither 11:30 nor 11:45 is counted as an observed 15-minute pair. A March 30 off-grid 10:45:02 reading is also preserved.",
+    "180 additional 2025 dates fall outside these archived original observations, not evidence the operator lacks them.",
+    "No uninterrupted annual 2025 PyPSA study, national outage claims, physical substation headroom, or modelled connection eligibility is implied."
   ],
   "authentic_off_grid_quarantined_source_intervals": [
     {
@@ -141,6 +189,15 @@
       "start_utc": "2025-03-30T10:45:02Z",
       "end_utc_exclusive": "2025-03-30T11:00:02Z",
       "status": "original_source_preserved_but_not_quarterhour_aligned"
+    }
+  ],
+  "authentic_irregular_native_interval_quarantined_source_intervals": [
+    {
+      "dataset_id": 124,
+      "start_utc": "2025-05-08T11:30:00Z",
+      "end_utc_exclusive": "2025-05-08T12:00:00Z",
+      "duration_seconds": 1800,
+      "status": "original_native_30minute_record_quarantined_not_interpolated"
     }
   ]
 }
