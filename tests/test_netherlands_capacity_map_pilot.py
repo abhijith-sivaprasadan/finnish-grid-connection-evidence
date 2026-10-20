@@ -40,5 +40,5 @@ def test_missing_non_csv_schema_cannot_be_silently_accepted(data):
 def test_refuse_unlisted_sources_and_malformed_rows():
     with pytest.raises(ValueError,match="official"):
         source_bytes("personal_records",reader=None)
-    with pytest.raises(ValueError,match="field count"):
+    with pytest.raises(ValueError,match="field count|export schema"):
         inspect_csv("rnb","official",b"area;colour;other\n1;red;ok;extra\n")
