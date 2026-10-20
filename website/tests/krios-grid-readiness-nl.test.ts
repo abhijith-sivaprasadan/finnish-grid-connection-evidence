@@ -20,6 +20,7 @@ test("Netherlands historical categorical values are not interpreted as connectio
  const r=data.original_csvs[1];
  assert.ok("original_label_counts" in r);
  const codes=r.original_label_counts;
+ if(!codes)throw new Error("Official code counts missing");
  assert.deepEqual(codes.afname,{"0":11,"1":70,"3":190});
  assert.deepEqual(codes.opwek,{"0":67,"1":6,"3":198});
  assert.equal(Object.values(codes.afname).reduce((a,b)=>a+b,0),r.row_count);
