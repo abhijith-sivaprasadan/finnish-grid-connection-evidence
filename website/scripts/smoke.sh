@@ -36,6 +36,12 @@ check 200 "/api/v1/capacity?direction=production&year=2030"
 grep -q '"capacity_status":"published_indicative"' /tmp/grid-smoke-response.json
 check 200 "/api/v1/coverage"
 grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
+check 200 "/analysis/sensitivity"
+grep -q "30 days" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/sensitivity"
+grep -q '"source_intervals":2880' /tmp/grid-smoke-response.json
+grep -q '"data_kind":"model_scenario"' /tmp/grid-smoke-response.json
+grep -q '"operator_confirmed_grid_capacity":false' /tmp/grid-smoke-response.json
 check 200 "/analysis"
 grep -q "What changes when" /tmp/grid-smoke-response.json
 grep -q "1,500 MW" /tmp/grid-smoke-response.json

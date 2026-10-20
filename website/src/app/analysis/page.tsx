@@ -13,6 +13,7 @@ export default function Analysis(){
    <p>A source-grounded 48-hour national electricity-system sensitivity, solved with PyPSA and HiGHS. Actual Fingrid 2026 observations anchor the historical baseline; balancing limits, storage and flexible demand are clearly stated <strong>hypothetical assumptions</strong>.</p>
    <div className="an-hero-meta"><span>15–16 OCT 2026 UTC</span><span>192 × 15-MINUTE INTERVALS</span><span>ONE AGGREGATED BUS</span><span>4 SOLVED SCENARIOS</span></div>
   </header>
+  <div className="dashboard-archive-link"><div><strong>New · 30-day PyPSA sensitivity study</strong><span>2,880 actual paired Fingrid intervals · 12 optimized combinations · hypothetical 1,000–2,000 MW balancing ceilings</span></div><Link href="/analysis/sensitivity">Compare verified results ↗</Link></div>
   <div className="an-warning" role="note"><strong>Not a connection-capacity estimate.</strong> This model cannot determine whether a 100 MW project can connect at Seinäjoki, Uusnivala or any other named point. A modelled shortfall under an assumed balancing ceiling is <em>not</em> an observed Finnish blackout or actual transmission-grid limitation. These two days are not a 2030 forecast.</div>
   <AnalysisWorkbench observed={observed} model={scenario}/>
   <section className="an-reference">

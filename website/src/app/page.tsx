@@ -31,7 +31,8 @@ export default async function Home(){
    </header>
    <div className="dashboard-archive-link"><div><strong>Historical main-grid station archive</strong><span>128 source-listed rows · printed 127 · table heading 1.1.2020 · not a current capacity register</span></div><Link href="/stations">Explore source names ↗</Link></div>
    <div className="dashboard-archive-link"><div><strong>NEW · PyPSA Finland historical demand sensitivity</strong><span>192 real source intervals · 4 HiGHS-optimal scenarios · hypothetical 1,500 MW balancing cap, not grid availability</span></div><Link href="/analysis">Explore system model ↗</Link></div>
-   <section className="df-home-stats" aria-label="Recorded data summary">
+   <div className="dashboard-archive-link"><div><strong>30-day historical PyPSA sensitivity</strong><span>Verified 2025 national source data · 12 assumed-case optimizations · not a station connection study</span></div><Link href="/analysis/sensitivity">Explore sensitivity ↗</Link></div>
+  <section className="df-home-stats" aria-label="Recorded data summary">
     <div><span>Substations in this dataset</span><strong>{summary?.points??"—"}</strong><small>Not a national catalogue</small></div>
     <div><span>Recorded indicative values</span><strong>{summary?.capacity_observations??"—"}</strong><small>Dated Fingrid transcriptions</small></div>
     <div><span>Not captured in sample</span><strong>{counts?.missing_in_compiled_capture??"—"}</strong><small>Unknown, not zero MW</small></div>

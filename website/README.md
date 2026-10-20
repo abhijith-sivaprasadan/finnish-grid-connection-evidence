@@ -6,6 +6,8 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis/sensitivity` — independently solver-verified 30-day **historical 2025** Fingrid PyPSA assumption sweep; 12 model scenarios, 2,880 original paired observations, never guaranteed import capacity or outages
+- `/api/v1/model/finland/sensitivity` — read-only source-attributed model sensitivity data with original job, input hash and scientific limitations
 - `/analysis` — 48-hour **historical 2026** PyPSA Finland one-bus analysis; source-linked real Fingrid consumption/production, hypothetical balancing constraint, four model scenarios; NOT site-level connection capacity
 - `/api/v1/model/finland` — solver-verified historical model results and assumptions as model_scenario data, **not live observations or grid feasibility**
 
