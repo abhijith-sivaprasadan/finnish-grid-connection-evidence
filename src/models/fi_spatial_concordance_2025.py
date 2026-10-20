@@ -73,6 +73,16 @@ def check_metadata(item: dict, layer: dict) -> dict:
     }
 
 
+def canonical_feature_sha256(features: list[dict]) -> str:
+    """Fingerprint geometry in memory; output never contains raw feature bytes."""
+    hasher = hashlib.sha256()
+    for feature in features:
+        hasher.update(json.dumps(feature, sort_keys=True, separators=(",",":"),
+                                 ensure_ascii=False, allow_nan=False).encode("utf-8"))
+        hasher.update(b"\n")
+    return hasher.hexdigest()
+
+
 def acquire_fc_geometry(*, item: dict | None = None, layer: dict | None = None) -> tuple[dict, list[dict]]:
     if item is None: item = get_json(ITEM_URL, {"f": "json"})
     if layer is None: layer = get_json(SERVICE, {"f": "json"})
@@ -98,13 +108,7 @@ def acquire_fc_geometry(*, item: dict | None = None, layer: dict | None = None) 
         raise ValueError("Missing/duplicate third-party feature IDs")
     # Keep a non-reversible canonical checksum so a later mutable hosted
     # map update is detectable. Never save its raw geometry or feature IDs.
-    hasher = hashlib.sha256()
-    for feature in features:
-        hasher.update(json.dumps(
-            feature, sort_keys=True, separators=(",",":"), ensure_ascii=False,
-            allow_nan=False).encode("utf-8"))
-        hasher.update(b"\n")
-    provenance["ephemeral_canonical_220_400_geojson_sha256"] = hasher.hexdigest()
+    provenance["ephemeral_canonical_220_400_geojson_sha256"] = canonical_feature_sha256(features)
     provenance["hash_scope"] = "468-style voltage-filtered ordered features; GeoJSON FID/geometry/attributes hashed in memory but NOT distributed"
     provenance["hosted_item_modified_utc"] = (
         datetime.fromtimestamp(item["modified"]/1000, tz=timezone.utc).isoformat()
