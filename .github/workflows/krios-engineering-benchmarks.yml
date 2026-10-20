@@ -1,22 +1,26 @@
-name: Krios engineering benchmarks (CIGRE AC, PyPSA AC reference, regional v2)
+name: Krios engineering lab (isolated pandapower, PyPSA and cross-check)
 on:
   push:
     branches: [main, feature/krios-engineering-lab-pandapower-pypsa]
     paths:
       - 'src/models/cigre_engineering_lab.py'
       - 'src/models/ac_cross_solver_reference.py'
+      - 'src/models/ac_comparison_validate.py'
       - 'src/models/fi_regional_pypsa_v2.py'
       - 'src/models/fi_osm_uncertainty_2024.py'
-      - 'tests/test_engineering_benchmarks.py'
-      - 'requirements-engineering-lab.txt'
+      - 'tests/test_pandapower_lab.py'
+      - 'tests/test_pypsa_regional_v2.py'
+      - 'tests/test_ac_comparison_validate.py'
+      - 'requirements-pandapower-lab.txt'
+      - 'requirements-model.txt'
       - '.github/workflows/krios-engineering-benchmarks.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  electrical-benchmarks:
+  pandapower-ac:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,36 +29,72 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: requirements-engineering-lab.txt
-      - name: Install distinct verified engineering solver environment
-        run: python -m pip install -r requirements-engineering-lab.txt
-      - name: Run two actual CIGRE networks, independent 3-bus AC parity and real-source Finland v2
-        run: python -m pytest -q tests/test_engineering_benchmarks.py
-      - name: Solve AC/N-1 HV, limited MV, cross-library AC and regional hypothetical v2
+          cache-dependency-path: requirements-pandapower-lab.txt
+      - name: Install pandapower 3.5.6 with required pandas 2.3
+        run: python -m pip install -r requirements-pandapower-lab.txt
+      - name: Actual CIGRE HV/MV benchmark + N-1 tests
+        run: python -m pytest -q tests/test_pandapower_lab.py
+      - name: Solve CIGRE HV/MV and independent pandapower AC reference
         run: |
-          python -m src.models.cigre_engineering_lab --out /tmp/krios-engineering/cigre_ac_n1.json
-          python -m src.models.ac_cross_solver_reference --out /tmp/krios-engineering/identical_3bus_AC.json
-          python -m src.models.fi_regional_pypsa_v2 --out /tmp/krios-engineering/finland_region_assumptions_v2.json
-      - name: Assert real solver provenance and no operator approved MW claims
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root=Path("/tmp/krios-engineering")
-          a=json.loads((root/"cigre_ac_n1.json").read_text())
-          b=json.loads((root/"identical_3bus_AC.json").read_text())
-          c=json.loads((root/"finland_region_assumptions_v2.json").read_text())
-          assert a["operator_approved_connection_mw"] is None
-          assert b["cross_solver_consistent_within_declared_tolerance"]
-          assert c["scenario_count"]==4 and c["operator_verified_location_specific_capacity_mw"] is None
-          print("SOLVERS_VERIFIED_AC_HV_MV_N1_CROSS_LIB_REGIONAL_PROXY")
-          PY
-      - name: Publish dated solver-results artifact, no site MW forecasts
-        uses: actions/upload-artifact@v4
-        if: success()
+          python -m src.models.cigre_engineering_lab --out /tmp/pp-out/cigre_ac_n1.json
+          python -m src.models.ac_cross_solver_reference --solver pandapower --out /tmp/pp-out/pandapower_threebus_ac.json
+      - uses: actions/upload-artifact@v4
         with:
-          name: krios-engineering-benchmark-verified-source-and-solver-results
-          path: /tmp/krios-engineering/*.json
+          name: krios-pandapower-cigre-and-3bus
+          path: /tmp/pp-out/*.json
+          retention-days: 60
+  pypsa-regional:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install existing PyPSA 1.4 pandas 3 and HiGHS env
+        run: python -m pip install -r requirements-model.txt
+      - name: Test actual PyPSA full AC and checksum-pinned regional FI model
+        run: python -m pytest -q tests/test_pypsa_regional_v2.py
+      - name: Run PyPSA regional 192 real national intervals and AC 3bus
+        run: |
+          python -m src.models.fi_regional_pypsa_v2 --out /tmp/pypsa-out/finland_region_assumptions_v2.json
+          python -m src.models.ac_cross_solver_reference --solver pypsa --out /tmp/pypsa-out/pypsa_threebus_ac.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: krios-pypsa-v2-and-3bus
+          path: /tmp/pypsa-out/*.json
+          retention-days: 60
+  independently-compare-ac-solvers:
+    needs: [pandapower-ac, pypsa-regional]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest==8.4.2
+      - run: python -m pytest -q tests/test_ac_comparison_validate.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: krios-pandapower-cigre-and-3bus
+          path: /tmp/input-pp/
+      - uses: actions/download-artifact@v4
+        with:
+          name: krios-pypsa-v2-and-3bus
+          path: /tmp/input-pypsa/
+      - name: Compare independently solved, identically parameterized full AC power flow
+        run: |
+          python -m src.models.ac_comparison_validate --pandapower /tmp/input-pp/pandapower_threebus_ac.json --pypsa /tmp/input-pypsa/pypsa_threebus_ac.json --out /tmp/ac-verified/independent_ac_comparison.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: krios-two-engine-ac-cross-validation
+          path: /tmp/ac-verified/independent_ac_comparison.json
           retention-days: 60
   osm-template-uncertainty:
     runs-on: ubuntu-latest
@@ -66,17 +106,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify original OSM Zenodo checksum sources without third-party GIS
+      - name: Recheck five native Zenodo source CSVs and ODbL licence
         run: |
           python -m src.models.osm_finland_topology_audit --download --source-dir /tmp/fi-original --output-dir /tmp/fi-verified
-      - name: Calculate 2024 standard-rating input uncertainty (NOT calibrated AC flows)
+      - name: Source-voltage template uncertainty without false 2025 calibration
         run: |
           python -m src.models.fi_osm_uncertainty_2024 --extracted-dir /tmp/fi-verified --out /tmp/fi-odbl/osm-rating-sensitivity-2024.json
-      - name: ODbL derived licence attribution
+      - name: ODbL attribution
         run: |
-          printf '%s\n' '© OpenStreetMap contributors; PyPSA-Eur OSM v0.6, DOI 10.5281/zenodo.14144752' 'ODbL 1.0 derived adapted metrics; no Fingrid calibration or 2025 electrical validation.' > /tmp/fi-odbl/DATA_LICENSE_ODBL.txt
+          printf '%s\n' '© OpenStreetMap contributors; PyPSA-Eur OSM v0.6, DOI 10.5281/zenodo.14144752' 'ODbL 1.0 derived metrics, NOT actual Fingrid electrical calibration.' > /tmp/fi-odbl/DATA_LICENSE_ODBL.txt
       - uses: actions/upload-artifact@v4
-        if: success()
         with:
           name: finland-osm-2024-input-uncertainty-ODbL-no-operator-calibration
           path: /tmp/fi-odbl/*
