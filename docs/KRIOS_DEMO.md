@@ -16,6 +16,12 @@ Open the [portfolio case study](https://finnish-grid-atlas.vercel.app/case-study
 
 Click a [source-linked capacity row](https://finnish-grid-atlas.vercel.app/connections). Show unit, direction, effective year, source capture time and the operator URL. Do not add a station's production MW to its consumption MW, or interpolate between 2026/2030/2035.
 
+## High-ROI addition: actual voltage-pathway decision (15 seconds)
+
+"Both indicative 2030 capacity thresholds match for a 100 MW project, but each point in this sample is labelled 400 kV. Fingrid's nominal **400 kV switchyard range begins at 250 MW**, whereas less than 250 MW normally uses 110/220 kV switchyards. I therefore flag the exact connection route for review rather than quietly calling a 400 kV connection feasible. Direct 400/220 kV *line* connections are not permitted. The new readiness brief lists what engineering evidence and network-operator enquiry must follow."
+
+For international transfer: [the Netherlands pilot](https://finnish-grid-atlas.vercel.app/netherlands) ingests three authentic Netbeheer Nederland CSV exports, 896 rows in the **20 Oct 2026** snapshot. It separates congestion labels for afname and opwek but deliberately does not infer Dutch site MW from raw codes. See [source evidence and caveats](KRIOS_CONNECTION_READINESS_AND_NL_PILOT.md).
+
 ## Part 2: prove source engineering (about 35 seconds)
 
 "The [national operations](https://finnish-grid-atlas.vercel.app/operations) and [data-quality](https://finnish-grid-atlas.vercel.app/quality) workbenches pull authenticated Fingrid datasets 124 and 74, plus ENTSO-E A65 actual load. They retain native measurement units, exact UTC time intervals, retrieved source provenance, missing intervals and revisions in SQLite or hosted Neon. The dashboard is read-only; scheduled ingestion uses separate private credentials."
