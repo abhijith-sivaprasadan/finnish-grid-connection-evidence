@@ -99,7 +99,7 @@ def runs(complete_dates:list[date])->list[list[date]]:
     return sorted(groups,key=lambda g:(-len(g),g[0]))
 
 
-def selected_block(audits:dict[str,dict],*,max_days=14,min_days=3)->dict[str,list[date]]:
+def selected_block(audits:dict[str,dict],*,max_days=30,min_days=3)->dict[str,list[date]]:
     if not 1<=min_days<=max_days<=30:
         raise ValueError("Specify min/max matched window length 1..30")
     lengths={label:len(runs(audit["complete_dates"])[0]) if runs(audit["complete_dates"]) else 0
@@ -131,7 +131,7 @@ def paired_series(audit:dict,dates:list[date])->list[dict]:
     return selected
 
 
-def study(output_dir:Path,*,getter=None,min_days=3,max_days=14)->dict:
+def study(output_dir:Path,*,getter=None,min_days=3,max_days=30)->dict:
     output_dir.mkdir(parents=True,exist_ok=True)
     audits={label:audit_window(*bounds,getter=getter) for label,bounds in SEASON_WINDOWS.items()}
     coverage={
@@ -202,7 +202,7 @@ def study(output_dir:Path,*,getter=None,min_days=3,max_days=14)->dict:
                      "https://data.fingrid.fi/en/datasets/74"],
       "study_year":2025,
       "annual_coverage_confirmed":False,
-      "sample_selection":"Longest complete consecutive-day run in each predeclared 30-day season; common equal-length prefix capped at 14 days, minimum 3; source gaps never filled.",
+      "sample_selection":"Longest complete consecutive-day run in each predeclared 30-day season; common equal-length prefix capped at 30 days, minimum 3; source gaps never filled.",
       "equal_comparison_days":len(selected["winter"]),
       "coverage":coverage,"matched_season_solutions":records,"parameter_comparison":comparison,
       "limitations":[
@@ -235,7 +235,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--output-dir",required=True,type=Path)
     p.add_argument("--min-days",type=int,default=3)
-    p.add_argument("--max-days",type=int,default=14)
+    p.add_argument("--max-days",type=int,default=30)
     a=p.parse_args()
     study(a.output_dir,min_days=a.min_days,max_days=a.max_days)
 

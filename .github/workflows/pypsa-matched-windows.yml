@@ -41,7 +41,7 @@ jobs:
       - name: Retrieve three real 30-day source blocks, publish gap table and solve only common complete days
         run: |
           mkdir -p /tmp/fi-matched-2025
-          python -m src.models.observed_windows --output-dir /tmp/fi-matched-2025 --min-days 3 --max-days 14
+          python -m src.models.observed_windows --output-dir /tmp/fi-matched-2025 --min-days 3 --max-days 30
       - name: Check exact source hashes, equal window lengths and 36 mathematical solves
         run: |
           python - <<'PY'
@@ -52,7 +52,7 @@ jobs:
           assert result["status"]=="three_seasons_source_and_solver_verified"
           assert result["annual_coverage_confirmed"] is False
           days=result["equal_comparison_days"]
-          assert 3<=days<=14
+          assert 3<=days<=30
           assert len(result["matched_season_solutions"])==3
           assert len(result["parameter_comparison"])==12
           assert len({x["complete_contiguous_days"] for x in result["matched_season_solutions"]})==1

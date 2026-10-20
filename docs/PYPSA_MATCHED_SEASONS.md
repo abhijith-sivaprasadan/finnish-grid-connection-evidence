@@ -16,7 +16,7 @@ all 96 paired source intervals present.
 
 For fair comparison it chooses a common **equal number of consecutive
 source-complete UTC days**, using the earliest portion of the longest
-complete-day run in each season (min 3, capped at 14). This changes the
+complete-day run in each season (min 3, capped at 30). This changes the
 study's effective sample length. It is NOT an assertion that an entire
 30-day season is complete. The exact selected dates, coverage exclusions
 and source hashes are part of the model output.
