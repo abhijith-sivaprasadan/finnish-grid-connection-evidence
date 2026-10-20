@@ -40,7 +40,7 @@ jobs:
       - name: Check out immutable, tested research implementation (not an arbitrary PR ref)
         uses: actions/checkout@v4
         with:
-          ref: f9fa6630318e5c8cea426b82a6c847cd88dc9ff5
+          ref: 33b2b5ce5e29790288c34b77e56f97405ebaec43
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
