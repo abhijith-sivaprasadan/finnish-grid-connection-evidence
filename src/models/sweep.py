@@ -19,6 +19,8 @@ def csv_list(text:str,*,allow_zero:bool=False)->list[float]:
     if not re.fullmatch(r"\d+(?:\.\d+)?(?:,\d+(?:\.\d+)?)*",text):
         raise ValueError("Parameter grid must contain comma-separated finite nonnegative numbers")
     values=[float(s) for s in text.split(",")]
+    if any(v>10000 for v in values):
+        raise ValueError("Parameter exceeded 10,000; no unbounded model runs")
     if len(values)>5 or len(set(values))!=len(values):
         raise ValueError("Use up to five distinct values per parameter")
     if any(v<0 if allow_zero else v<=0 for v in values):

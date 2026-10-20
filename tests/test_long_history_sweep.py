@@ -68,7 +68,7 @@ def test_sweep_planning_is_bounded_and_full_factorial():
     assert csv_list("0,50",allow_zero=True)==[0,50]
     for item in ("-1","NaN","1,,2","1,1","100000000000000000000000000000000"):
         with pytest.raises((ValueError,OverflowError)):
-            csv_list(item) if item!="1,1" else make_plan((1,1),(),())
+            csv_list(item)
 
 
 def test_day_neutrality_also_supports_custom_flexible_half_span():
