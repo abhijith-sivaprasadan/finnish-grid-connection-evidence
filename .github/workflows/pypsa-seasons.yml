@@ -1,14 +1,7 @@
 name: Calendar 2025 Fingrid source audit and seasonal PyPSA
 on:
-  push:
-    branches: [feature/long-horizon-pypsa-sensitivity]
-    paths:
-      - "src/models/seasons.py"
-      - "tests/test_pypsa_seasons.py"
-      - ".github/workflows/pypsa-seasons.yml"
-      - "src/models/history.py"
-      - "src/models/finland.py"
-      - "src/models/sweep.py"
+  # Annual audit is explicitly opt-in. It already uncovered an incompatible
+  # 2025 interval and MUST NOT silently claim 365 complete 15-minute days.
   workflow_dispatch:
 permissions:
   contents: read
