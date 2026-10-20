@@ -1,0 +1,76 @@
+name: Verify and optimize original 27-day winter Fingrid source windows
+on:
+  push:
+    branches: [feature/long-horizon-pypsa-sensitivity]
+    paths:
+      - "src/models/long_windows.py"
+      - "tests/test_long_windows.py"
+      - ".github/workflows/pypsa-long-winter-2025.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-verified-continuous-optimization:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 48
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install PyPSA HiGHS source parser (no Fingrid API key)
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Tests for exact continuity of source windows
+        run: python -m pytest -q tests/test_long_windows.py tests/test_annual_journal.py
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 39418640253
+          name: fingrid-original-2025-recovery
+          github-token: ${{ github.token }}
+          path: /tmp/pypsa-long-winter-input/
+      - name: Optimize independently Jan18-Feb13 and Feb15-Mar13 original 15-min history
+        run: |
+          python -m src.models.long_windows --journal /tmp/pypsa-long-winter-input/chunks \
+            --outdir /tmp/pypsa-verified-winter-2025
+      - name: Strict source and solver audit before results artifact
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path("/tmp/pypsa-verified-winter-2025")
+          data=json.loads((root/"verified_long_windows_2025.json").read_text())
+          assert data["publication_status"]=="source_and_optimization_verified"
+          assert data["full_2025_source_complete"] is False
+          assert len(data["long_windows"])==2
+          for window in data["long_windows"]:
+            assert window["complete_days"]==27
+            assert window["verified_original_pair_count"]==2592
+            assert window["solver_completed"]
+            assert len(window["model_baselines"])==3
+            assert len(window["model_results"])==24
+            path=root/(window["window"]+"_original_fingrid.csv")
+            assert hashlib.sha256(path.read_bytes()).hexdigest()==window["source_sha256"]
+            assert all(x["solver_status"]=="ok" and x["solver_termination"]=="optimal" and
+                       x["max_balance_error_mw"]<1e-5 and
+                       x["project_energy_mwh"]==64800
+                       for x in window["model_results"])
+          print("VERIFIED_27DAY_SOURCE_AND_SOLVER_JSON="+json.dumps({
+           "windows":[{"name":r["window"],"sha256":r["source_sha256"]} for r in data["long_windows"]],
+           "total_project_solutions":48,"baseline_solutions":6,
+           "annual_complete":False
+          },sort_keys=True))
+          PY
+      - name: Preserve actual source CSV, provenance and 54 solved model reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-fingrid-27day-winter-pypsa-duration-sensitivity
+          path: /tmp/pypsa-verified-winter-2025/
+          if-no-files-found: ignore
+          retention-days: 30
