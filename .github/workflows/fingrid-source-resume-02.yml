@@ -1,0 +1,108 @@
+name: One-time Fingrid 2025 paired-source resume batch 02
+on:
+  push:
+    branches: [source-runs/fingrid-2025-resume-batch-02]
+    paths: [".github/workflows/fingrid-source-resume-02.yml"]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: fingrid-source-recovery-limited
+  cancel-in-progress: false
+jobs:
+  verified-paired-batch:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && github.ref == 'refs/heads/source-runs/fingrid-2025-resume-batch-02'
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+    steps:
+      - name: Checkout immutable tested Fingrid source journal
+        uses: actions/checkout@v4
+        with:
+          ref: 33b2b5ce5e29790288c34b77e56f97405ebaec43
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install isolated study environment
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Test source identity, source journal and source coverage with NO external requests
+        run: python -m pytest -q tests/test_annual_journal.py tests/test_recover_fingrid_gaps.py tests/test_pypsa_matched_windows.py
+      - name: Resume only the successful previous 8-chunk original-source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: fingrid-original-2025-recovery
+          run-id: 39413812083
+          github-token: ${{ github.token }}
+          path: /tmp/fingrid-recovery
+      - name: Audit previous source journal and verify no bytes were replaced
+        shell: bash
+        run: |
+          python - <<'PY'
+          from src.models.annual_journal import report,daily_coverage
+          from pathlib import Path
+          path=Path('/tmp/fingrid-recovery/chunks')
+          a=report(path)
+          d=daily_coverage(path)
+          assert a["dataset_audit"]["124"]["chunks_persisted"]==4
+          assert a["dataset_audit"]["74"]["chunks_persisted"]==4
+          assert a["confirmed_original_paired_slots_captured"]==2686
+          assert d["paired_day_counts"]["paired_complete"]==27
+          assert d["paired_day_counts"]["known_source_gap"]==1
+          assert a["full_calendar_2025_source_verified"] is False
+          print("PREVIOUS_JOURNAL_SOURCE_AUDIT_OK=8 original chunks, 2686 pairs")
+          PY
+      - name: Confirm private operator key is available without printing it
+        shell: bash
+        run: |
+          if [ -z "${FINGRID_API_KEY:-}" ]; then
+            echo "::error::FINGRID_API_KEY not available; original-source collection blocked."
+            exit 1
+          fi
+      - name: Capture at most 8 NEW original Fingrid chunks, interleaved 124 and 74
+        shell: bash
+        run: |
+          python -m src.models.annual_journal --execute --max-new-chunks 8 --dir /tmp/fingrid-recovery/chunks
+      - name: Independently recheck saved manifests, source pairs and annual incompleteness
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from src.models.annual_journal import report,daily_coverage
+          folder=Path('/tmp/fingrid-recovery/chunks')
+          audit=json.loads((folder/'annual_2025_journal_audit.json').read_text())
+          reread=report(folder)
+          days=daily_coverage(folder)
+          assert audit['full_calendar_2025_source_verified'] is False
+          assert audit['annual_energy_total_verified'] is False
+          assert audit['new_original_source_chunks_saved_this_run'] <= 8
+          assert days['paired_day_counts']['all_calendar_days']==365
+          assert reread['confirmed_original_paired_slots_captured']==audit['confirmed_original_paired_slots_captured']
+          assert reread['dataset_audit']['124']['chunks_persisted']>=4
+          assert reread['dataset_audit']['74']['chunks_persisted']>=4
+          assert reread['confirmed_original_paired_slots_captured']>=2686
+          assert days['paired_day_counts']['known_source_gap']>=1
+          assert days['paired_day_counts']['unknown_not_downloaded']>0
+          print('VERIFIED_BATCH_02_JSON='+json.dumps({
+             'collection_status':audit['collection_status'],
+             'additional_chunks':audit['new_original_source_chunks_saved_this_run'],
+             'total_chunks_124':reread['dataset_audit']['124']['chunks_persisted'],
+             'total_chunks_74':reread['dataset_audit']['74']['chunks_persisted'],
+             'paired_source_intervals':reread['confirmed_original_paired_slots_captured'],
+             'paired_day_counts':days['paired_day_counts'],
+             'rate_limit_or_source_error_deferred':audit['rate_limit_or_access_deferred'],
+             'is_complete_2025':audit['full_calendar_2025_source_verified']
+          },separators=(',',':')))
+          PY
+      - name: Always retain ALL original-source chunks and updated resumable journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fingrid-original-2025-recovery
+          path: /tmp/fingrid-recovery/
+          if-no-files-found: ignore
+          retention-days: 30
