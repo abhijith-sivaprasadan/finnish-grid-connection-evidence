@@ -1,7 +1,7 @@
 name: Krios engineering lab (isolated pandapower, PyPSA and cross-check)
 on:
   push:
-    branches: [main, feature/krios-engineering-lab-pandapower-pypsa]
+    branches: [main, feature/krios-engineering-lab-pandapower-pypsa, audit/2026-10-20-data-integrity-and-release-gates]
     paths:
       - 'src/models/cigre_engineering_lab.py'
       - 'src/models/ac_cross_solver_reference.py'
