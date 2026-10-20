@@ -20,7 +20,15 @@ The original 17 October [MVP plan](KRIOS_PORTFOLIO_RELEASE.md) ends at **Phase 3
 - **Original historic Fingrid data:** **171** independently source-complete paired UTC 2025 calendar dates, 14 identified gap dates and 180 outside archived coverage; 17,640 authentic paired quarter-hours including partial days. Archive is incomplete; any missing/irregular native intervals are not invented or resampled. See [source batch #5](FINGRID_2025_COLLECTION_BATCH_05.md).
 - **Physical proxy research:** OpenStreetMap/PyPSA-Eur 2024 ODbL Finnish candidate with **107 Finland-labelled buses**, **137 domestic 220/400-kV lines**, a separate transformer/HVDC inventory, R/X/B template audit, 22 single-edge *graph-only* disconnections and a licence-qualified February 2025 geographical comparison with 468 third-party GIS segments. Map similarity is not operator-verified equipment, switching state, actual electrical N−1, or project connection headroom. The third-party GIS map has **no documented redistribution permission**, and raw GIS shapes were not published. See [physical-network proxy](FINLAND_OSM_V06_SOURCE_AUDIT_RESULTS.md), [structural N−1 boundaries](FINLAND_OSM_V06_STANDARD_IMPEDANCE_AND_N1.md), and [map provenance](FI_2025_GEOMETRIC_CONCORDANCE_RIGHTS_AUDIT.md).
 
+## 20 October engineering-laboratory extension — separate benchmark tier
+
+A separately source- and solver-verified Krios engineering workstream adds **13-bus CIGRE HV nonlinear AC and 15-outage N−1 cases** per reference/50/100 MW scenario, **15-bus CIGRE MV feeder 0/0.5/1/2 MW cases**, **an independently solved synthetic 110-kV three-bus pandapower/PyPSA nonlinear AC comparison**, **four optimized 2026 Finnish national-data/two-region assumed corridors**, and **ODbL 2024 source line-template sensitivity**. A new 107-source-node 2024 OSM coordinate graph is independently visualizable but not cross-matched to named Grid Scope substations.
+
+Scientific stop: no **operator-grade Finnish 2025 physical network calibration**, actual branch ratings, Dutch DSO equipment, site MW approval or real electrical grid-security N−1 evaluation. Source [full reproducibility](KRIOS_ENGINEERING_LAB_RELEASE.md), [engineering lab](https://finnish-grid-atlas.vercel.app/engineering), [proxy coordinate map](https://finnish-grid-atlas.vercel.app/network-map).
+
 ## Unfinished or deliberately excluded
+
+
 
 - **Operator-grade Finnish connection assessment**: zero confirmed capacity approvals, missing 2025 as-built audited 110/220/400-kV network, site-level R/X/B, thermal ratings, Q/P limits, switch schedules, queue terms, dynamic grid reinforcement effects and AC/N−1 validation. There is **no** defensible site-specific MW derived from PyPSA or geometry.
 - **Current Grid Scope refresh:** the original screenshot comparison verifies a dated Oct 17 source transcription, not today's figures; a new dated reviewer snapshot must be collected before treating numbers as present-day.

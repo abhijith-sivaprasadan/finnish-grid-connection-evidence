@@ -54,6 +54,13 @@ grep -q '"scenario_count_all_caps":48' /tmp/grid-smoke-response.json
 check 200 "/api/v1/model/finland/borders-2025"
 grep -q '"observed_quarter_hour_count":2880' /tmp/grid-smoke-response.json
 grep -q '"guaranteed_import_rights":false' /tmp/grid-smoke-response.json
+check 200 "/engineering"
+grep -q "power-system physics" /tmp/grid-smoke-response.json
+grep -q "Hypothetical data-centre connection" /tmp/grid-smoke-response.json
+check 200 "/network-map"
+grep -q "Explore the network" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/engineering"
+grep -q '"operator_approved_site_mw":null' /tmp/grid-smoke-response.json
 check 200 "/case-study"
 grep -q "From grid data to" /tmp/grid-smoke-response.json
 grep -q "Four reproducible outputs" /tmp/grid-smoke-response.json

@@ -69,7 +69,15 @@ The Finland [screening tool](https://finnish-grid-atlas.vercel.app/screening) no
 
 A separately licensed-conservative [Netherlands source audit](https://finnish-grid-atlas.vercel.app/netherlands) covers **three real original Netbeheer Nederland capacity-map CSV schemas, 896 dated source rows**, source SHA-256 and aggregate TenneT consumption/feed-in codes. It is NOT a Dutch project capacity estimator or a current grid-connection right, and no original location-level Dutch rows are redistributed. [Audit and boundaries](docs/KRIOS_CONNECTION_READINESS_AND_NL_PILOT.md).
 
-## Reproducible optional model scenario import
+## Engineering laboratory (isolated solvers, verified reports)
+
+The optional **[interactive engineering lab](https://finnish-grid-atlas.vercel.app/engineering)** adds nonlinear pandapower CIGRE HV/MV AC power flows, source-accounted HV N−1 contingencies, a common synthetic three-bus independent pandapower/PyPSA nonlinear-AC agreement test, two-region *assumption-bound* Finnish PyPSA v2, and licence-verified 2024 OSM line-template input uncertainty. See [complete engineering methods and reproducibility](docs/KRIOS_ENGINEERING_LAB_RELEASE.md).
+
+The **[interactive OSM proxy coordinate map](https://finnish-grid-atlas.vercel.app/network-map)** displays 104 high-voltage AC virtual source buses and 137 reconstructed source links from a 2024 ODbL-derived network candidate. These 104 points are **NOT** known operator substations or matches for the five source-reviewed Grid Scope points. No approved connection MW, certified 2025 physical network calibration or true Finnish N−1 engineering compliance is claimed.
+
+pandapower 3.5.6 requires pandas 2.3 while PyPSA 1.4 requires pandas 3+. The dedicated Actions workflow builds each solver **in its own pinned environment**, exports JSON and compares solved results separately. Do not force both into the app's ingestion environment.
+
+
 
 After the normal manual capacity import, run `python -m src.cli import-verified-model` to load **12** source-hash-verified solver metrics from the already-published four 48-hour PyPSA cases into the **local SQLite scenario_result table**, not into the capacity-observation table. Reruns are idempotent. This command does **not** write Neon or update the hosted capacity API. PyPSA model inputs and outputs are additional historical sensitivity evidence only. See [reproduction and acceptance](docs/KRIOS_PORTFOLIO_RELEASE.md).
 

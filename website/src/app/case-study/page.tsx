@@ -60,6 +60,8 @@ export default function CaseStudy(){
   <section className="section"><div className="wrap">
    <div className="section-intro"><p className="eyebrow">Reproducibility and transparency</p><h2>Review the source and the limitations.</h2></div>
    <div className="source-links">
+    <Link href="/engineering">Independent electrical engineering lab <span>CIGRE HV/MV nonlinear AC, N−1, PyPSA parity and regional v2 →</span></Link>
+    <Link href="/network-map">Interactive 2024 OSM proxy geography <span>104 high-voltage AC source nodes; not the five named Grid Scope points →</span></Link>
     <Link href="/netherlands">Netherlands official congestion-data pilot <span>Source-verified 896 records, metadata only →</span></Link>
     <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence" target="_blank" rel="noreferrer">Source repository <span>Python / Next.js / SQLite / Neon / tests ↗</span></a>
     <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/blob/main/docs/KRIOS_DEMO.md" target="_blank" rel="noreferrer">Short interview demonstration <span>Source observations, screening and models ↗</span></a>

@@ -30,7 +30,17 @@ For international transfer: [the Netherlands pilot](https://finnish-grid-atlas.v
 
 At demonstration time, first inspect actual freshness and health. If a live source is not available, say "last source interval unavailable" or explicitly describe a historical snapshot. Never claim current operational freshness from a passing unit test.
 
-## Part 3: explain PyPSA without overclaiming (about 35 seconds)
+## Engineering laboratory extension (optional 30-second deep dive)
+
+Use [the model comparison page](https://finnish-grid-atlas.vercel.app/engineering) if the interviewer asks about physical analysis. Explain that a standard 13-bus CIGRE high-voltage network has been solved with an additional 0/50/100 MW load, including 15 individual branch/transformer outage cases at each load. Under 100 MW additional demand, the **CIGRE reference** minimum voltage was 0.9122 pu, and simulated network losses 72.63 MW versus 53.37 MW before new load. Ten of fifteen N−1 cases did not converge: these are unresolved, never compliant-by-default.
+
+For the Netherlands modelling conversation, show the separate 15-bus CIGRE MV benchmark using **only 0–2 MW** hypothetical feeder loads. For reproducible numerical assurance, a small identically specified synthetic three-bus full AC power flow was solved by pandapower and PyPSA separately with agreeing source metrics at published precision. Do not claim the entire CIGRE HV was cross-validated in PyPSA.
+
+[Finland's OSM proxy map](https://finnish-grid-atlas.vercel.app/network-map) has 2024-source coordinates but **no verified matching IDs** to the five named Grid Scope points. Regional Finnish PyPSA v2 uses 192 actual Fingrid national measurements with **invented** geographic splits and transfer ratings, not measured Finnish branch loading. See [full qualified report](KRIOS_ENGINEERING_LAB_RELEASE.md).
+
+## Part 3: explain PyPSA without overclaiming
+
+ (about 35 seconds)
 
 "The [PyPSA analysis](https://finnish-grid-atlas.vercel.app/analysis) has **four verified 48-hour historical national cases**. A hypothetical 100-MW new load is compared with flexible demand and storage, bounded by an *assumed* balancing ceiling. A further two noncontiguous 27-day winters contain **54 optimal model solves**, and a three-market-bus Swedish corridor study contains **24 scenarios** using authentic commercial-flow/headroom source data."
 
