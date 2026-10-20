@@ -4,7 +4,7 @@ import { BadInput } from "./params";
 import { sourceReviewStatus, type ScreenshotStatus } from "./verification";
 
 export type ScreeningInput={
- demand_mw:number; year:number; direction:"consumption"; voltage:"all"|110|220|400
+ demand_mw:number; year:number; direction:"consumption"; voltage:"all"|110|220|400; connection_type:"switchyard"|"line"|"unspecified"
 };
 export type EvidenceStatus=
  "indicative_threshold_met"|"indicative_below_request"|
@@ -18,6 +18,13 @@ export type ScreeningRow={
  validity_notes:string|null;source_review:"screenshot_match"|"not_audited"|"none";
  source_review_grade:string|null;source_review_date:string|null;
  evidence_count:number;
+ connection_pathway:"nominal_switchyard_guidance_consistent"|"review_lower_voltage_switchyard"|
+ "review_400kv_switchyard"|"line_220_400_prohibited"|"line_110_case_by_case"|
+ "connection_type_unspecified"|"station_voltage_unknown";
+ pathway_note:string; pathway_source_url:string;
+ timing_evidence:"exact_year_capture"|"no_exact_year_capture";
+ verified_reinforcement_for_this_point:false;
+ next_actions:string[];
 };
 const statuses:EvidenceStatus[]=[
  "indicative_threshold_met","indicative_below_request","unknown_not_captured",
@@ -28,12 +35,14 @@ const caution=[
  "Fingrid Grid Scope provides conditional indicative estimates for selected substations, not guaranteed capacity.",
  "Unknown means not captured in the research sample; it never means zero or physically infeasible.",
  "Do not interpolate between effective years, substitute production for consumption, convert MVA to MW without documented assumptions, subtract demand to claim spare MW, or add across connection points.",
- "The 128-row historical designation list is an unscreened archive, not part of this five-point evidence sample."
+ "The 128-row historical designation list is an unscreened archive, not part of this five-point evidence sample.",
+ "Fingrid standard switchyard voltage/power guidance is not an actual voltage-bay offer; a 400 kV labelled source point may have a separate 110/220 kV arrangement not represented in this five-point sample.",
+ "No project-specific reinforcement, connection queue, commissioning permission or operator-approved voltage design is documented in this dataset."
 ];
 
 export function parseScreening(q:URLSearchParams):ScreeningInput{
  for(const key of q.keys()){
-  if(!["demand_mw","year","direction","voltage"].includes(key))
+  if(!["demand_mw","year","direction","voltage","connection_type"].includes(key))
    throw new BadInput(key,"unrecognized screening parameter");
   if(q.getAll(key).length!==1)throw new BadInput(key,"duplicate parameter");
  }
@@ -51,7 +60,36 @@ export function parseScreening(q:URLSearchParams):ScreeningInput{
  const rawVoltage=q.get("voltage")??"all";
  if(!["all","110","220","400"].includes(rawVoltage))
   throw new BadInput("voltage","choose all, 110, 220 or 400");
- return {demand_mw,year,direction:"consumption",voltage:rawVoltage==="all"?"all":Number(rawVoltage) as 110|220|400};
+ const connection_type=q.get("connection_type")??"switchyard";
+ if(!["switchyard","line","unspecified"].includes(connection_type))
+  throw new BadInput("connection_type","choose switchyard, line or unspecified");
+ return {demand_mw,year,direction:"consumption",voltage:rawVoltage==="all"?"all":Number(rawVoltage) as 110|220|400,
+ connection_type:connection_type as ScreeningInput["connection_type"]};
+}
+
+export const FINGRID_CONNECTION_PATHWAY_SOURCE="https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/";
+/** Separate the source station voltage from the customer's *actual* planned bay.
+ * This is a planning-rule prompt, NEVER operator confirmation of a connection.
+ */
+export function assessConnectionPathway(input:ScreeningInput, stationVoltage:number|null){
+ const v=stationVoltage;
+ const actions=["Ask Fingrid to assess exact site coordinates, load profile, commissioning date, connection configuration, grid queue and technical limits."];
+ const result=(status:ScreeningRow["connection_pathway"],note:string)=>({
+  connection_pathway:status,pathway_note:note,pathway_source_url:FINGRID_CONNECTION_PATHWAY_SOURCE,
+  next_actions:[...actions]});
+ if(input.connection_type==="unspecified")
+  return result("connection_type_unspecified","Select and verify a proposed switchyard or transmission-line connection before assuming a viable route.");
+ if(v===null || ![110,220,400].includes(v))
+  return result("station_voltage_unknown","No source-supported nominal switchyard voltage: obtain the operator's actual connection arrangement.");
+ if(input.connection_type==="line"){
+  if(v!==110)return result("line_220_400_prohibited","Fingrid does not permit direct 220/400 kV transmission-line connections for system-security reasons. Consider an operator-approved switchyard configuration.");
+  return result("line_110_case_by_case","110 kV line connections are case-by-case and limited by technical criteria; the transformer nominal rating limit is 40 MVA, which is not directly interchangeable with MW.");
+ }
+ if(input.demand_mw<250 && v===400)
+  return result("review_lower_voltage_switchyard","Fingrid's published standard switchyard range for less than 250 MW is 110/220 kV. A 400-kV-labelled station does not prove a suitable 110/220 kV bay exists.");
+ if(input.demand_mw>=250 && v!==400)
+  return result("review_400kv_switchyard","Fingrid's published standard switchyard range at 250 MW or more is 400 kV; do not assume this 110/220 kV point can serve the request.");
+ return result("nominal_switchyard_guidance_consistent","The nominal station voltage and requested MW fit Fingrid's published switchyard planning range only. Feasibility, exact bay availability and network security remain unassessed.");
 }
 
 type ReviewFn=(observation:Capacity)=>ScreenshotStatus;
@@ -70,10 +108,12 @@ export function screenRecords(
    o.capacity_status==="published_indicative");
   const basic={
    connection_point_id:p.connection_point_id,name:p.name,operator:p.operator,voltage_kv:p.voltage_kv,
-   feasibility:"not_assessed" as const
+   feasibility:"not_assessed" as const,
+   ...assessConnectionPathway(input,p.voltage_kv)
   };
   const blank=(status:EvidenceStatus):ScreeningRow=>({
-   ...basic,evidence_status:status,capacity_value:null,capacity_unit:null,
+   ...basic,timing_evidence:"no_exact_year_capture",verified_reinforcement_for_this_point:false,
+   evidence_status:status,capacity_value:null,capacity_unit:null,
    observation_id:null,source_url:null,source_observed_at:null,validity_notes:null,
    source_review:"none",source_review_grade:null,source_review_date:null,evidence_count:evidence.length
   });
@@ -95,6 +135,7 @@ export function screenRecords(
   const grade=review(freshest);
   const source={
    ...basic,
+   timing_evidence:"exact_year_capture" as const,verified_reinforcement_for_this_point:false as const,
    observation_id:freshest.observation_id,
    source_url:freshest.source_url,
    source_observed_at:freshest.source_observed_at,
