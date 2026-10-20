@@ -1,0 +1,80 @@
+name: Audited 3-bus historical Swedish-Finnish market corridor PyPSA (NO operator API)
+on:
+  push:
+    branches: [feature/source-grounded-2025-zonal-branch-limits]
+    paths:
+      - "src/models/zonal_market_network_2025.py"
+      - "tests/test_zonal_market_network_2025.py"
+      - ".github/workflows/pypsa-zonal-market-2025.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-verified-zonal-model:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-model.txt
+      - name: Install PyPSA HiGHS and old source parser dependencies
+        run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Validate source checksum fail-closed behavior OFFLINE
+        run: python -m pytest -q tests/test_zonal_market_network_2025.py
+      - name: Read existing verified Fingrid Swedish market source artifact, no API calls
+        uses: actions/download-artifact@v4
+        with:
+          name: verified-2025-border-market-and-conditional-pypsa
+          run-id: 39420079414
+          github-token: ${{ github.token }}
+          path: /tmp/verified-existing-border/
+      - name: Read existing verified original national source artifact, no API calls
+        uses: actions/download-artifact@v4
+        with:
+          name: verified-fingrid-long-horizon-pypsa
+          run-id: 39391985966
+          github-token: ${{ github.token }}
+          path: /tmp/verified-existing-national/
+      - name: Solve 3-bus with each independent original SE1 and SE3 market corridor ceiling
+        run: |
+          python -m src.models.zonal_market_network_2025 \
+            --border-joined /tmp/verified-existing-border/verified_border_source_15min.csv \
+            --national-30days /tmp/verified-existing-national/finland_observed_15min.csv \
+            --outdir /tmp/validated-market-topology/
+      - name: Reject missing source, non-optimal solver or pretend physical capacity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('/tmp/validated-market-topology/verified_zonal_market_topology_2025.json')
+          d=json.loads(p.read_text())
+          assert d['status']=='verified_original_source_market_constrained_three_bus_pypsa'
+          assert d['not_real_ac_dc_physical_grid_flow']
+          assert not d['operator_confirmed_project_import_rights']
+          assert not d['operator_confirmed_FI_point_connectability']
+          assert d['observed_original_source_rows']==2880
+          assert len(d['buses'])==3 and len(d['independent_market_limited_links'])==2
+          assert len(d['cases'])==24
+          assert all(c['solver_status']=='ok' and c['solver_termination']=='optimal' and
+            c['max_fi_bus_balance_error_mw']<1e-5 for c in d['cases'])
+          print('VERIFIED_THREE_ZONE_SCENARIO_JSON='+json.dumps({
+            'cases':len(d['cases']),
+            'source_rows':d['observed_original_source_rows'],
+            'source_market_constraints':'Fingrid 38/39 per border',
+            'physical_transfer_rights_confirmed':False},sort_keys=True))
+          PY
+      - name: Archive verified source-based graph and complete optimized case outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-2025-three-zone-intraday-market-link-model
+          path: /tmp/validated-market-topology/
+          if-no-files-found: ignore
+          retention-days: 30
