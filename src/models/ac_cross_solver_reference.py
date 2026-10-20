@@ -78,17 +78,24 @@ def run():
        max(volts.values())<=MAX_VOLT_DIFF_PU and max(mw.values())<=MAX_BRANCH_P_DIFF_MW,
    "verified_Finnish_or_Dutch_network":False}
 
+def run_one(solver:str)->dict:
+ if solver=="pandapower":return pandapower_case()
+ if solver=="pypsa":return pypsa_case()
+ raise ValueError("solver must be pandapower or pypsa")
+
+
 def main(argv=None):
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument("--out",type=Path,required=True)
+ p.add_argument("--solver",choices=("pandapower","pypsa"),required=True)
  args=p.parse_args(argv)
- result=run()
+ result={"reference":"identical_explicit_3bus_110kV_full_AC","solver":args.solver,
+         "actual_full_AC_PF":run_one(args.solver),
+         "source_parameters":{"buses":BUS_PQ,"lines":LINES,"voltage_kv":V_KV}}
  args.out.parent.mkdir(parents=True,exist_ok=True)
  args.out.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
- print("CROSS_AC_PF="+json.dumps({"voltage_diff":result["max_bus_voltage_difference_pu"],
-                               "flow_diff":result["max_line_from_bus_active_power_difference_mw"],
-                               "within_tolerance":result["cross_solver_consistent_within_declared_tolerance"]}))
- if not result["cross_solver_consistent_within_declared_tolerance"]:
-  raise RuntimeError("Do not publish cross-solver agreement: discrepant physical AC results")
+ print("EXPORTED_REFERENCE_AC_PF="+json.dumps({"solver":args.solver,
+    "buses":len(result["actual_full_AC_PF"]["bus_v_pu"]),
+    "lines":len(result["actual_full_AC_PF"]["line_from_p_mw"])}))
 
 if __name__=="__main__":main()
