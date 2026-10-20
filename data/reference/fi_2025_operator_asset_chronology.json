@@ -1,0 +1,93 @@
+{
+  "title": "Fingrid documented 2025 transmission changes - chronology evidence only",
+  "retrieved_on": "2026-10-20",
+  "source_license": "Fingrid open data general CC BY 4.0; individual news pages are cited as documents, not assumed machine-readable or ODbL",
+  "scope": "Dated operator statements used as screening facts, not georeferenced technical network asset geometry",
+  "source_model": "2024 OSM PyPSA-Eur prebuilt v0.6 https://doi.org/10.5281/zenodo.14144752",
+  "all_osm_source_ids_reconciled": false,
+  "events": [
+    {
+      "id": "aurora_400kv_fi_se1_2025",
+      "name": "Aurora Line FI-SE1 400kV",
+      "event_type": "new_cross_border_ac_connection",
+      "source_start": "2025-11-01",
+      "source_end_exclusive": "2025-12-01",
+      "date_precision": "operator later confirmed November 2025; 29 October press release specified expected 13 November",
+      "source_confirmed_operational_month": true,
+      "consequence": "2024 prebuilt snapshot cannot be assumed to contain energized late-2025 Aurora Line; series compensation commissioning phased",
+      "sources": [
+        "https://www.fingrid.fi/en/news/news/2025/aurora-line-power-transmission-connection-to-be-commissioned-on-november-13/",
+        "https://www.fingrid.fi/en/news/news/2026/fingrid-oyjs-financial-statements-bulletin-januarydecember-2025/"
+      ],
+      "osm_asset_id_verified": null,
+      "eligible_for_auto_addition": false
+    },
+    {
+      "id": "huittinen_forssa_2025",
+      "name": "Huittinen-Forssa 400+110kV",
+      "event_type": "new_reinforcement_and_110kv_replacement",
+      "source_start": "2025-07-01",
+      "source_end_exclusive": "2025-10-01",
+      "date_precision": "completed in Q3 2025 according to Fingrid annual accounts; earlier reports confirm before Sept 30",
+      "source_confirmed_operational_month": false,
+      "consequence": "2024 high-voltage proxy predates Q3 2025 reinforcement; also excludes 110kV alterations",
+      "sources": [
+        "https://www.fingrid.fi/en/news/news/2025/fingrid-group--managements-review-1.1.30.9.2025/",
+        "https://www.fingrid.fi/en/news/news/2022/fingrid-to-increase-the-transmission-capacity-from-the-west-coast-to-southern-finland/"
+      ],
+      "osm_asset_id_verified": null,
+      "eligible_for_auto_addition": false
+    },
+    {
+      "id": "alajarvi_lestijarvi_2025_ownership",
+      "name": "Alajarvi-Lestijarvi 55 km 400kV ownership",
+      "event_type": "ownership_change_of_2024_built_line",
+      "source_start": "2025-01-01",
+      "source_end_exclusive": "2025-02-01",
+      "date_precision": "acquisition announced 29 January 2025; exact transfer date not specified",
+      "source_confirmed_operational_month": false,
+      "consequence": "Ownership transfer is not a new physical 2025 line; existence in Sep 2024 OSM is unknown until identified",
+      "sources": [
+        "https://www.fingrid.fi/en/news/news/2025/transmission-line-for-a-wind-power-hub-in-central-ostrobothnia-acquired-as-part-of-the-main-grid/"
+      ],
+      "osm_asset_id_verified": null,
+      "eligible_for_auto_addition": false
+    },
+    {
+      "id": "estlink2_2025_restoration",
+      "name": "EstLink 2 FI-EE HVDC restored",
+      "event_type": "existing_hvdc_link_operational_restoration",
+      "source_start": "2025-06-20",
+      "source_end_exclusive": "2025-06-21",
+      "date_precision": "20 June 2025 according to Fingrid half-year report",
+      "source_confirmed_operational_month": true,
+      "consequence": "Link existence and operational availability differ: damaged 25 Dec 2024; restored to commercial use 20 Jun 2025; HVDC needs separate model and published availability",
+      "sources": [
+        "https://www.fingrid.fi/en/news/news/2025/fingrid-groups-half-year-report-1.1.30.6.2025/"
+      ],
+      "osm_asset_id_verified": null,
+      "eligible_for_auto_addition": false
+    },
+    {
+      "id": "lowlands_alajarvi_hausjarvi_future",
+      "name": "Lowlands Line Alajarvi-Hausjarvi future reinforced 400kV",
+      "event_type": "planned_future_grid_reinforcement_not_present_in_2025",
+      "source_start": "2028-01-01",
+      "source_end_exclusive": "2030-01-01",
+      "date_precision": "operator forecast completion during 2028–2029; not an observed energization date",
+      "source_confirmed_operational_month": false,
+      "consequence": "Do not insert this forecast 400-kV reinforcement into 2025 physical simulations",
+      "sources": [
+        "https://www.fingrid.fi/en/news/news/2025/new-two-circuit-transmission-line-supports-increased-electricity-consumption-in-southern-finland/"
+      ],
+      "osm_asset_id_verified": null,
+      "eligible_for_auto_addition": false
+    }
+  ],
+  "nonclaims": [
+    "No original OSM line ID matched to any operator-identified asset",
+    "No operator as-built bus or full branch table available in these cited statements",
+    "No line r/x/b, thermal MVA, 2025 dispatch, actual switching or physical grid N-1 inferred",
+    "Calendar windows are conservative uncertainty bounds, not exact switching events unless separately stated"
+  ]
+}

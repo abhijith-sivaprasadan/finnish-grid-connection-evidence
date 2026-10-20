@@ -1,0 +1,44 @@
+name: Finland 2024 proxy line-template and topology N-1 audit
+on:
+  push:
+    branches: [main, feature/fi-osm-template-topology-n1]
+    paths:
+      - 'src/models/osm_finland_topology_audit.py'
+      - 'src/models/fi_proxy_n1_audit.py'
+      - 'tests/test_fi_proxy_n1_audit.py'
+      - 'tests/test_fi_2025_operator_chronology.py'
+      - 'src/models/fi_2025_operator_chronology.py'
+      - 'data/reference/fi_2025_operator_asset_chronology.json'
+      - '.github/workflows/fi-proxy-topology-n1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-derived-structural-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run synthetic source-template and multi-edge N-1 tests
+        run: |
+          python -m pip install pytest==8.4.2
+          python -m pytest -q tests/test_fi_proxy_n1_audit.py tests/test_fi_2025_operator_chronology.py
+      - name: Re-download and verify original ODbL 2024 records from Zenodo
+        run: |
+          python -m src.models.osm_finland_topology_audit --download --source-dir /tmp/osm-v06-source --output-dir /tmp/osm-v06-finland
+      - name: Verify standard line assumptions and exact single-edge N-1 topology
+        run: |
+          python -m src.models.fi_proxy_n1_audit --extracted-dir /tmp/osm-v06-finland --output-dir /tmp/osm-v06-n1
+      - name: Enforce date-specific Fingrid 2025 changes as unmapped noncertified events
+        run: |
+          python -m src.models.fi_2025_operator_chronology --snapshot 2025-09-15 --output /tmp/osm-v06-n1/fi-operator-events-2025-09-15.json
+          python -m src.models.fi_2025_operator_chronology --snapshot 2025-12-01 --output /tmp/osm-v06-n1/fi-operator-events-2025-12-01.json
+      - name: Preserve ODbL derived evidence including audit and source checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: fi-osm-2024-standard-template-n1-ODbL
+          path: /tmp/osm-v06-n1/
+          retention-days: 90
