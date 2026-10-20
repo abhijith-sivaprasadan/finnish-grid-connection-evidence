@@ -17,6 +17,7 @@ def main(argv=None):
     manual = commands.add_parser("import-manual")
     manual.add_argument("--directory", type=Path, default=ROOT / "data" / "manual")
     commands.add_parser("quality")
+    commands.add_parser("import-verified-model")
     for name in ("fingrid", "entsoe"):
         cmd = commands.add_parser(name)
         cmd.add_argument("--start", required=True, help="ISO 8601 timestamp with timezone")
@@ -29,6 +30,9 @@ def main(argv=None):
     try:
         if args.command == "import-manual":
             result = ingest(args.directory, args.db)
+        elif args.command == "import-verified-model":
+            from src.ingest.verified_model_scenarios import run as import_model
+            result = import_model(args.db)
         elif args.command in {"init", "quality"}:
             with connect(args.db) as conn:
                 result = report(conn)
