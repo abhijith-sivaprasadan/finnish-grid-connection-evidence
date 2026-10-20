@@ -2,10 +2,12 @@
  *  This certifies transcription correspondence, NOT physical grid capacity.
  */
 import audit from "./grid-scope-audit.json";
+import { SNAPSHOT_ORIGIN } from "./snapshot";
 
 export type AuditableCapacity = {
  observation_id:string; connection_point_id:string; direction:string;
  effective_year:number|null; capacity_value:number; capacity_unit:string; source_observed_at:string;
+ source_url:string;
 };
 export type ScreenshotGrade = "exact_tooltip"|"explicit_panel_number";
 export type ScreenshotStatus = {status:"screenshot_match"|"not_audited";grade:ScreenshotGrade|null;review_date:string|null};
@@ -35,6 +37,7 @@ export function sourceReviewStatus(value:AuditableCapacity):ScreenshotStatus {
  if(!match || match.connection_point_id!==value.connection_point_id ||
    match.direction!==value.direction || match.effective_year!==value.effective_year ||
    match.capacity_value!==Number(value.capacity_value) || match.capacity_unit!==value.capacity_unit ||
+   value.source_url!==SNAPSHOT_ORIGIN ||
    !originalInstant || originalInstant!==reviewedInstant ||
    match.shown_value!==match.capacity_value || match.shown_unit!==match.capacity_unit)
   return {status:"not_audited",grade:null,review_date:null};
