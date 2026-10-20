@@ -1,0 +1,45 @@
+name: One-time diagnosis of original Fingrid March 2025 quarter-hour anomaly
+on:
+  push:
+    branches: [source-runs/fingrid-2025-resume-batch-04]
+    paths: [".github/workflows/diagnose-fingrid-2025-03-quarterhour.yml"]
+permissions:
+  contents: read
+jobs:
+  original-source-timestamp-diagnostic:
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FINGRID_API_KEY: ${{ secrets.FINGRID_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 33b2b5ce5e29790288c34b77e56f97405ebaec43
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-model.txt requests==2.34.2
+      - name: Single exact original-source check per dataset, no archive writes or retry
+        run: |
+          python - <<'PY'
+          from collections import Counter
+          from src.ingest.fingrid import fetch
+          from src.models.recover_fingrid_gaps import NoRetryPacedClient
+          from src.models.history import canonical
+          from datetime import datetime,timedelta
+          client=NoRetryPacedClient(spacing=5)
+          for ds in (124,74):
+              rows=fetch(ds,'2025-03-26T00:00:00Z','2025-04-02T00:00:00Z',client=client)
+              bad=[]
+              for r in rows:
+                  dt=datetime.fromisoformat(canonical(r.timestamp_utc).replace('Z','+00:00'))
+                  end=datetime.fromisoformat(canonical(r.interval_end_utc).replace('Z','+00:00'))
+                  if dt.minute%15 or dt.second or dt.microsecond or end-dt!=timedelta(minutes=15):
+                      bad.append({'start':r.timestamp_utc,'end':r.interval_end_utc,
+                        'seconds':int((end-dt).total_seconds())})
+              print('FINGRID_MARCH_ORIGINAL_DIAGNOSTIC=',{
+                'dataset':ds,'raw_rows':len(rows),'invalid_interval_count':len(bad),
+                'sample_invalids':bad[:12], 'invalid_duration_histogram':dict(Counter(x['seconds'] for x in bad))})
+          PY
