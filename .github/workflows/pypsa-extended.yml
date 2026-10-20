@@ -1,12 +1,7 @@
 name: Extended Fingrid historical PyPSA sensitivity
 on:
-  push:
-    branches: [feature/long-horizon-pypsa-sensitivity]
-    paths:
-      - "src/models/**"
-      - "tests/test_long_history_sweep.py"
-      - "requirements-model.txt"
-      - ".github/workflows/pypsa-extended.yml"
+  # No branch-push trigger: Fingrid previously returned HTTP 429.
+  # Historical source fetching requires deliberate manual opt-in.
   workflow_dispatch:
     inputs:
       start:
@@ -26,7 +21,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   source-and-solver:
-    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && (github.event_name == 'push' || github.ref == 'refs/heads/main')
+    if: github.repository == 'abhijith-sivaprasadan/finnish-grid-connection-evidence' && (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/long-horizon-pypsa-sensitivity'))
     runs-on: ubuntu-latest
     timeout-minutes: 55
     env:

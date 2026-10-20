@@ -62,3 +62,11 @@ The source-verifiable 14-day matched three-season comparison is already
 published in draft PR #38 with source hashes and 36 optimal PyPSA cases.
 The attempted 26-day run hit HTTP 429 and HAS NO verified result.
 Do not merge or claim a new annual optimization from source-recovery code alone.
+
+## Source pairing and day-by-day coverage update (20 October 2026)
+
+The annual journal now downloads **both Fingrid datasets for each time window first**, rather than all consumption history before any production. This yields immediately usable pairs of *actual original readings* and supports verified contiguous-day analysis even when the full year remains incomplete. Existing immutable prior dataset-major chunks remain compatible and are never re-downloaded.
+
+Every manual batch also uploads `chunks/annual_2025_day_coverage.json`: for **each calendar date** it records dataset 124/74 counts, exact genuinely missing timestamps in captured chunks (or null for not-yet-downloaded chunks), and one of `paired_complete`, `known_source_gap`, or `unknown_not_downloaded`. The output lists exact UTC boundaries of maximal contiguous fully supported periods. It does **not** annualize partial observations or treat gaps as zeros.
+
+The earlier `pypsa-extended.yml` source workflow has been changed to **manual-only**; routine model updates must never automatically trigger additional operator requests. The separate main-branch manual bootstrap workflow also needs its pinned source SHA updated to use this improved, tested journal before new batches.
