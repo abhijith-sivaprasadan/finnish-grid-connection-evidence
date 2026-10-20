@@ -8,6 +8,7 @@ type Status = {mode:"neon"|"compiled_snapshot"|"unavailable"; latest:string|null
 const nav = [
   {href:"/",label:"Overview",hint:"Workspace",icon:"overview",group:"EXPLORE"},
   {href:"/screening",label:"Connection screening",hint:"Evidence triage",icon:"nodes",group:"EXPLORE"},
+  {href:"/netherlands",label:"Netherlands source pilot",hint:"Congestion evidence",icon:"chart",group:"EXPLORE"},
   {href:"/stations",label:"Station inventory",hint:"Historical names",icon:"nodes",group:"EXPLORE"},
   {href:"/connections",label:"Connection outlook",hint:"Capacity evidence",icon:"nodes",group:"EXPLORE"},
   {href:"/operations",label:"System operations",hint:"National time series",icon:"chart",group:"EXPLORE"},
