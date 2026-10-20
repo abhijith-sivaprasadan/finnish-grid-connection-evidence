@@ -16,7 +16,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from src.models.finland import load_observed,additional_load
-from src.models.history import canonical
+from datetime import datetime,timezone
+
+def canonical(value:str)->str:
+    dt=datetime.fromisoformat(value.replace("Z","+00:00"))
+    if dt.tzinfo is None:raise ValueError("Source timestamp requires UTC offset")
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 SOURCE_JOIN_SHA="659092a40ac298a256ba79cf6f7361f999ac9cfb8ed38e4dbcdb7cc4aee5097d"
 ORIGINAL_NATIONAL_SHA="3093f704484848919d83feb6c133c2e2abf2299566d5bd02a109e01b7fdec2e0"
