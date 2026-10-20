@@ -45,7 +45,7 @@ return <section className="vse-page">
 </section>
 <section className="vse-panel vse-limitations"><p className="vse-kicker">04 / EVIDENCE BOUNDARIES</p><h2>Do not confuse market trading space with grid rights</h2>
 {borders.limitations.map((x,i)=><p key={i}>{x}</p>)}
-<Link href="/analysis/source-coverage">Original 2025 observation coverage ↗</Link>
+<p><Link href="/analysis/corridors-2025">Inspect the new separate SE1/SE3 source-capped market corridor model ↗</Link></p><Link href="/analysis/source-coverage">Original 2025 observation coverage ↗</Link>
 </section>
 </section>;
 }

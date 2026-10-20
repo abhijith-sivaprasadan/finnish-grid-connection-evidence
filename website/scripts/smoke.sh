@@ -42,6 +42,11 @@ check 200 "/api/v1/observed/coverage/2025"
 grep -q '"distinct_original_paired_intervals":12283' /tmp/grid-smoke-response.json
 grep -q '"verified_complete_days":125' /tmp/grid-smoke-response.json
 grep -q '"source_year_complete":false' /tmp/grid-smoke-response.json
+check 200 "/analysis/corridors-2025"
+grep -q "not a physical power grid" /tmp/grid-smoke-response.json
+check 200 "/api/v1/model/finland/corridors-2025"
+grep -q '"scenario_count":24' /tmp/grid-smoke-response.json
+grep -q '"real_operator_substation_connection_capacity":false' /tmp/grid-smoke-response.json
 check 200 "/analysis/borders-2025"
 grep -q "Observed" /tmp/grid-smoke-response.json
 check 200 "/api/v1/model/finland/winter-2025"
