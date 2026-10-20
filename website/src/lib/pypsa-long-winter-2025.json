@@ -1,0 +1,120 @@
+{
+  "classification": "model_scenario",
+  "source_run": 39419524961,
+  "artifact_id": 12263162884,
+  "selected_stress_cap_mw_assumed": 1500,
+  "all_assumed_cap_values_mw": [
+    1000,
+    1500,
+    2000
+  ],
+  "complete_2025_year": false,
+  "verified_operator_connection_capacity": false,
+  "project_nominal_mw": 100,
+  "project_mwh_per_window": 64800,
+  "scenario_count_all_caps": 48,
+  "baseline_count": 6,
+  "model_windows": [
+    {
+      "id": "winter27",
+      "start": "2025-01-18",
+      "end_exclusive": "2025-02-14",
+      "days": 27,
+      "source_sha256": "946b47fb46a21171e0119891384800bf16060a4845e317d22a60df5abb69de4c",
+      "baseline_slack_mwh_at_1500_assumed": 27444.6775,
+      "scenarios": [
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 0,
+          "incremental_model_penalty_slack_mwh": 11594.56
+        },
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 2,
+          "incremental_model_penalty_slack_mwh": 9263.9898
+        },
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 4,
+          "incremental_model_penalty_slack_mwh": 7762.219
+        },
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 8,
+          "incremental_model_penalty_slack_mwh": 5598.7239
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 0,
+          "incremental_model_penalty_slack_mwh": 8355.2175
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 2,
+          "incremental_model_penalty_slack_mwh": 6175.6092
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 4,
+          "incremental_model_penalty_slack_mwh": 4717.1643
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 8,
+          "incremental_model_penalty_slack_mwh": 2811.1534
+        }
+      ]
+    },
+    {
+      "id": "latewinter27",
+      "start": "2025-02-15",
+      "end_exclusive": "2025-03-14",
+      "days": 27,
+      "source_sha256": "d0189d056820c79b97ce4b27ab73e8e0503ad83d9875f38c8b7329a4bcc2eef1",
+      "baseline_slack_mwh_at_1500_assumed": 156137.5025,
+      "scenarios": [
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 0,
+          "incremental_model_penalty_slack_mwh": 30113.48
+        },
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 2,
+          "incremental_model_penalty_slack_mwh": 26670.7802
+        },
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 4,
+          "incremental_model_penalty_slack_mwh": 24776.3121
+        },
+        {
+          "flex_half_span_mw": 0,
+          "battery_duration_hours": 8,
+          "incremental_model_penalty_slack_mwh": 21909.3274
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 0,
+          "incremental_model_penalty_slack_mwh": 25285.88
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 2,
+          "incremental_model_penalty_slack_mwh": 22239.797
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 4,
+          "incremental_model_penalty_slack_mwh": 20372.5854
+        },
+        {
+          "flex_half_span_mw": 50,
+          "battery_duration_hours": 8,
+          "incremental_model_penalty_slack_mwh": 17783.6722
+        }
+      ]
+    }
+  ],
+  "scope": "Two independently optimal source-verified 27-day national single-bus source windows, not a continuous 54-day study. The 1,500 MW balancing stress ceiling is ARBITRARY and NOT operator-confirmed physical capacity. Negative or positive penalty slack is not observed shortage."
+}
