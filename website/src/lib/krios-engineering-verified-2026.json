@@ -1,0 +1,190 @@
+{
+  "source_utc": "2026-10-20",
+  "status": "solver_verified_artifact_summary_not_real_grid_approval",
+  "source_workflow_url": "https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39493594189",
+  "source_artifacts": {
+    "cigre_sha256": "aaaeac8c7d0da6f12ceeaec7201f7d0fc8e5c5bbc2cef2f54d3bc653d67b6504",
+    "pypsa_sha256": "13d9b62cc3d30dba600df4a191d582805c0b71b53a4371b8a7997a147b543d7d",
+    "cross_sha256": "5f8545a0e8b8164d6b52f5aa5056a591a37d79433cd164233f2818f651c5b529",
+    "osm_odbl_sha256": "6ff8b3f13779eac1bcc5f5f0bb74cdbe8378199c04906170544304b6cb5fe4df"
+  },
+  "cigre_hv": {
+    "benchmark_buses": 13,
+    "benchmark_lines": 9,
+    "benchmark_transformers": 6,
+    "real_network": false,
+    "power_factor_assumed": 0.95,
+    "reference_voltage_band_pu": [
+      0.9,
+      1.1
+    ],
+    "cases": [
+      {
+        "added_mw": 0,
+        "total_reference_load_mw": 1474,
+        "min_v_pu": 0.951046,
+        "max_v_pu": 1.043557,
+        "max_line_loading_percent": 78.3468,
+        "max_trafo_loading_percent": 68.0662,
+        "losses_mw": 53.36567,
+        "n1_tested": 15,
+        "n1_nonconverged": 10,
+        "n1_converged_with_reference_violation": 3
+      },
+      {
+        "added_mw": 50,
+        "total_reference_load_mw": 1524,
+        "min_v_pu": 0.93729,
+        "max_v_pu": 1.036555,
+        "max_line_loading_percent": 79.966,
+        "max_trafo_loading_percent": 69.4729,
+        "losses_mw": 62.016322,
+        "n1_tested": 15,
+        "n1_nonconverged": 10,
+        "n1_converged_with_reference_violation": 4
+      },
+      {
+        "added_mw": 100,
+        "total_reference_load_mw": 1574,
+        "min_v_pu": 0.912236,
+        "max_v_pu": 1.03,
+        "max_line_loading_percent": 82.0536,
+        "max_trafo_loading_percent": 71.2865,
+        "losses_mw": 72.62941,
+        "n1_tested": 15,
+        "n1_nonconverged": 10,
+        "n1_converged_with_reference_violation": 4
+      }
+    ]
+  },
+  "cigre_mv": {
+    "benchmark_buses": 15,
+    "benchmark_lines": 15,
+    "benchmark_transformers": 2,
+    "real_dutch_feeder": false,
+    "cases": [
+      {
+        "added_mw": 0,
+        "reference_total_load_mw": 44.7421,
+        "min_v_pu": 0.946916,
+        "max_trafo_loading_percent": 93.808,
+        "losses_mw": 0.164352
+      },
+      {
+        "added_mw": 0.5,
+        "reference_total_load_mw": 45.2421,
+        "min_v_pu": 0.946916,
+        "max_trafo_loading_percent": 93.808,
+        "losses_mw": 0.175523
+      },
+      {
+        "added_mw": 1,
+        "reference_total_load_mw": 45.7421,
+        "min_v_pu": 0.946916,
+        "max_trafo_loading_percent": 93.808,
+        "losses_mw": 0.19289
+      },
+      {
+        "added_mw": 2,
+        "reference_total_load_mw": 46.7421,
+        "min_v_pu": 0.946916,
+        "max_trafo_loading_percent": 93.889,
+        "losses_mw": 0.247457
+      }
+    ]
+  },
+  "identical_ac_crosssolver": {
+    "synthetic_110kv_threebus": true,
+    "original_CIGRE_crossvalidated": false,
+    "compared_bus_count": 3,
+    "compared_line_count": 3,
+    "maximum_voltage_difference_pu": 0,
+    "maximum_active_branch_flow_difference_mw": 0,
+    "tolerance_pu": 0.025,
+    "tolerance_mw": 1.5,
+    "passed": true
+  },
+  "fingrid_regional_v2": {
+    "source_national_original_csv_sha256": "ab0316e695bbea34cc16b498ade06746bcc5087485f2f6cfde4b6630341109e6",
+    "real_Fingrid_national_15min_intervals": 192,
+    "hypothetical_north_gen_fraction": 0.65,
+    "hypothetical_north_load_fraction": 0.45,
+    "operator_verified_line_limits": false,
+    "operator_approved_connectable_mw": null,
+    "scenarios": [
+      {
+        "name": "reference",
+        "line_cap_assumed_mva": 1500,
+        "near_cap_intervals": 149,
+        "max_flow_mw": 1500,
+        "assumed_north_balancing_mwh": 3926.5039,
+        "assumed_south_balancing_mwh": 25655.0424,
+        "model_slack_mwh": 0
+      },
+      {
+        "name": "flat_100mw",
+        "line_cap_assumed_mva": 1500,
+        "near_cap_intervals": 156,
+        "max_flow_mw": 1500,
+        "assumed_north_balancing_mwh": 4842.9549,
+        "assumed_south_balancing_mwh": 28899.5763,
+        "model_slack_mwh": 0
+      },
+      {
+        "name": "flex_100mw",
+        "line_cap_assumed_mva": 1500,
+        "near_cap_intervals": 153,
+        "max_flow_mw": 1500,
+        "assumed_north_balancing_mwh": 4154.5235,
+        "assumed_south_balancing_mwh": 29299.2869,
+        "model_slack_mwh": 0
+      },
+      {
+        "name": "flat_100mw_derated_corridor",
+        "line_cap_assumed_mva": 750,
+        "near_cap_intervals": 187,
+        "max_flow_mw": 750,
+        "assumed_north_balancing_mwh": 437.4873,
+        "assumed_south_balancing_mwh": 61157.6693,
+        "model_slack_mwh": 0
+      }
+    ]
+  },
+  "osm_input_uncertainty": {
+    "source_version": "OSM v0.6 2024",
+    "licensed": "ODbL-1.0",
+    "source_lines": 137,
+    "source_ac_buses": 104,
+    "operator_calibrated": false,
+    "graph_edge_disconnections": 22,
+    "assumed_rating_scale_cases": [
+      {
+        "factor": 0.75,
+        "source_nominal_rating_under_500_mva": 22,
+        "source_nominal_rating_under_1000_mva": 23,
+        "source_nominal_rating_under_1500_mva": 121
+      },
+      {
+        "factor": 1,
+        "source_nominal_rating_under_500_mva": 22,
+        "source_nominal_rating_under_1000_mva": 23,
+        "source_nominal_rating_under_1500_mva": 23
+      },
+      {
+        "factor": 1.25,
+        "source_nominal_rating_under_500_mva": 0,
+        "source_nominal_rating_under_1000_mva": 22,
+        "source_nominal_rating_under_1500_mva": 23
+      }
+    ]
+  },
+  "nonclaims": [
+    "No operator site connection capacity or reserved MW",
+    "No 2025 Finnish 110/220/400 kV network validation or calibration",
+    "HV and MV are unmodified CIGRE benchmarks with hypothetical added load",
+    "3-bus AC parity verifies only an identical simplified synthetic reference",
+    "Regional PyPSA uses arbitrary 1500/750 MVA corridor constraints and assumed spatial allocations",
+    "OSM scale thresholds are source templates, not observed flow or congestion",
+    "Failed CIGRE N-1 cases are not counted as secure operations"
+  ]
+}
