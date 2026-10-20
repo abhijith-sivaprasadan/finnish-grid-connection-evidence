@@ -65,12 +65,19 @@ check 200 "/api/v1/model/finland"
 grep -q '"publication_status":"verified_solver_output"' /tmp/grid-smoke-response.json
 grep -q '"verified_operator_connectability":false' /tmp/grid-smoke-response.json
 grep -q '"modelled_shortfall_under_assumption_mwh":1642.3275' /tmp/grid-smoke-response.json
+check 200 "/netherlands"
+grep -q "Congestion data" /tmp/grid-smoke-response.json
+check 200 "/api/v1/netherlands/source-summary"
+grep -q '"site_connection_feasibility_evaluated":false' /tmp/grid-smoke-response.json
+grep -q '"row_count":271' /tmp/grid-smoke-response.json
 check 200 "/screening"
 grep -q "Connection" /tmp/grid-smoke-response.json
 check 200 "/api/v1/screening?demand_mw=100&year=2030&direction=consumption&voltage=all"
 grep -q '"indicative_threshold_met":2' /tmp/grid-smoke-response.json
 grep -q '"unknown_not_captured":3' /tmp/grid-smoke-response.json
 grep -q '"operator_confirmed_feasible":0' /tmp/grid-smoke-response.json
+# Engineering pathway and selected configuration are separate from published MW.
+grep -q '"connection_pathway":"review_lower_voltage_switchyard"' /tmp/grid-smoke-response.json
 check 400 "/api/v1/screening?demand_mw=0"
 grep -q "INVALID_QUERY" /tmp/grid-smoke-response.json
 check 400 "/api/v1/screening?demand_mw=100&direction=production"
