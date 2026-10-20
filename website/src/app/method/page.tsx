@@ -13,7 +13,7 @@ export default function Method(){return <><section className="page-hero"><div cl
     <article className="research-card"><span className="kicker">02 · measured context</span><h3>National operational intervals</h3>
       <p>Authenticated Fingrid and ENTSO-E feeds stored with exact source-defined timestamps, units and retrieval history. Not a measurement of remaining substation capacity.</p></article>
     <article className="research-card"><span className="kicker">03 · simulated</span><h3>Scenario results</h3>
-      <p>Future model outputs must retain assumptions and version identity. The current public atlas does not claim a validated AC load-flow, N-1 network analysis or access to operator network models.</p></article>
+      <p>Solver-verified PyPSA historical national and abstract market-corridor scenarios preserve assumptions, source provenance and model identity. None is a validated Fingrid AC load-flow, actual N-1 security study or source of approved substation headroom.</p></article>
     <article className="research-card"><span className="kicker">04 · documentary</span><h3>Operator confirmation</h3>
       <p>Would require a specific, traceable operator document. There are no confirmed available-MW values in the current public source sample.</p></article>
    </div>
