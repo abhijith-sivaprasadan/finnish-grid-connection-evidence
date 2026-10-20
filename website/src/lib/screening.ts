@@ -74,9 +74,19 @@ export const FINGRID_CONNECTION_PATHWAY_SOURCE="https://www.fingrid.fi/en/grid/g
 export function assessConnectionPathway(input:ScreeningInput, stationVoltage:number|null){
  const v=stationVoltage;
  const actions=["Ask Fingrid to assess exact site coordinates, load profile, commissioning date, connection configuration, grid queue and technical limits."];
- const result=(status:ScreeningRow["connection_pathway"],note:string)=>({
-  connection_pathway:status,pathway_note:note,pathway_source_url:FINGRID_CONNECTION_PATHWAY_SOURCE,
-  next_actions:[...actions]});
+ const result=(status:ScreeningRow["connection_pathway"],note:string)=>{
+  const specific:string[]={
+   review_lower_voltage_switchyard:["Ask Fingrid whether a 110/220 kV switchyard or appropriate transformer arrangement exists at/near the named source point; do not assume its 400 kV label is an available 400 kV project bay."],
+   review_400kv_switchyard:["Ask Fingrid to assess a suitable 400 kV switchyard solution for the planned MW and commissioning timetable."],
+   line_220_400_prohibited:["Remove the proposed direct 220/400 kV transmission-line connection and examine a switchyard alternative."],
+   line_110_case_by_case:["Supply 110 kV line and transformer particulars for case-specific technical review; 40 MVA transformer limits cannot be inferred from the requested MW alone."],
+   connection_type_unspecified:["Specify the proposed line or switchyard arrangement and confirm the candidate point's physical voltage levels."],
+   station_voltage_unknown:["Obtain a source-backed voltage and connection arrangement before testing its applicable planning rules."],
+   nominal_switchyard_guidance_consistent:["Request written Fingrid confirmation of equipment ratings, available circuit-breaker bays, system-security limits and point-specific connection terms."]
+  }[status];
+  return {connection_pathway:status,pathway_note:note,pathway_source_url:FINGRID_CONNECTION_PATHWAY_SOURCE,
+          next_actions:[...specific,...actions]};
+ };
  if(input.connection_type==="unspecified")
   return result("connection_type_unspecified","Select and verify a proposed switchyard or transmission-line connection before assuming a viable route.");
  if(v===null || ![110,220,400].includes(v))
@@ -112,7 +122,8 @@ export function screenRecords(
    ...assessConnectionPathway(input,p.voltage_kv)
   };
   const blank=(status:EvidenceStatus):ScreeningRow=>({
-   ...basic,timing_evidence:"no_exact_year_capture",verified_reinforcement_for_this_point:false,
+   ...basic,
+   next_actions:[...(status==="unknown_not_captured"?["Capture or recheck the exact requested year and consumption direction from Fingrid Grid Scope; do not substitute other years."]:["Resolve the missing, duplicate, or conflicting source snapshot before using its indicative MW." ]),...basic.next_actions],timing_evidence:"no_exact_year_capture",verified_reinforcement_for_this_point:false,
    evidence_status:status,capacity_value:null,capacity_unit:null,
    observation_id:null,source_url:null,source_observed_at:null,validity_notes:null,
    source_review:"none",source_review_grade:null,source_review_date:null,evidence_count:evidence.length
