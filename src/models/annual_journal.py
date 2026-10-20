@@ -73,6 +73,47 @@ def source_row(record)->dict:
 def digest_rows(rows)->str:
     return hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(",",":")).encode()).hexdigest()
 
+def split_aligned_and_quarantined(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
+    """Never silently snap an operator timestamp to an assumed quarter hour.
+
+    Off-grid 15-minute native source intervals are immutable quarantined
+    originals, with their source provenance and exact UTC offset preserved.
+    Only valid aligned original rows count as paired study observations.
+    Other source/data errors still fail closed.
+    """
+    aligned,off_grid=[],[]
+    for row in rows:
+        try:
+            check_source_record(row,dataset_id,start,end)
+        except ValueError as exc:
+            if str(exc)!="Non-quarter-hour original source timestamp":
+                raise
+            # check_source_record already confirmed identity, duration, and window.
+            v=float(row["value"])
+            if not math.isfinite(v) or v<0:
+                raise ValueError("Nonphysical off-grid operator source row") from exc
+            canonical(row["retrieved_at"])
+            off_grid.append(row)
+        else:
+            aligned.append(row)
+    return aligned,off_grid
+
+
+def validate_quarantined(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
+    for row in rows:
+        try:
+            check_source_record(row,dataset_id,start,end)
+        except ValueError as exc:
+            if str(exc)!="Non-quarter-hour original source timestamp":
+                raise
+            v=float(row["value"])
+            if not math.isfinite(v) or v<0:
+                raise ValueError("Invalid quarantined source value") from exc
+            canonical(row["retrieved_at"])
+        else:
+            raise ValueError("Aligned original source must not be quarantined")
+
+
 
 def chunk_audit(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
     found={}
@@ -89,7 +130,7 @@ def chunk_audit(rows:list[dict],dataset_id:int,start:datetime,end:datetime):
             "status":"complete" if not missing else "original_missing"}
 
 
-def save_chunk(path:Path,dataset_id:int,start:datetime,end:datetime,rows:list[dict]):
+def save_chunk(path:Path,dataset_id:int,start:datetime,end:datetime,rows:list[dict],*,off_grid_rows=None):
     values=sorted(rows,key=lambda r:r["timestamp_utc"])
     analysis=chunk_audit(values,dataset_id,start,end)
     payload={"kind":"Fingrid_source_capture_not_model","dataset_id":dataset_id,
@@ -97,6 +138,12 @@ def save_chunk(path:Path,dataset_id:int,start:datetime,end:datetime,rows:list[di
              "source_window_end_utc":end.isoformat().replace("+00:00","Z"),
              "original_rows":values,"original_rows_sha256":digest_rows(values),
              "source_quality":analysis}
+    if off_grid_rows:
+        quarantine=sorted(off_grid_rows,key=lambda r:r["timestamp_utc"])
+        validate_quarantined(quarantine,dataset_id,start,end)
+        payload["off_grid_original_source_rows"]=quarantine
+        payload["off_grid_original_source_rows_sha256"]=digest_rows(quarantine)
+        payload["quarantine_status"]="operator_off_grid_timestamp_not_regular_15min_slot"
     path.parent.mkdir(parents=True,exist_ok=True)
     temp=path.with_suffix(".tmp")
     if path.exists():
@@ -120,6 +167,14 @@ def load_chunk(path:Path,dataset_id:int,start:datetime,end:datetime):
     if digest_rows(values)!=payload["original_rows_sha256"] or (
         chunk_audit(values,dataset_id,start,end)!=payload["source_quality"]):
         raise ValueError("Cached source window hash or completeness metadata inconsistent")
+    quarantined=payload.get("off_grid_original_source_rows",[])
+    if quarantined:
+        if (digest_rows(quarantined)!=payload.get("off_grid_original_source_rows_sha256") or
+            payload.get("quarantine_status")!="operator_off_grid_timestamp_not_regular_15min_slot"):
+            raise ValueError("Cached source quarantine hash or original identity inconsistent")
+        validate_quarantined(quarantined,dataset_id,start,end)
+    elif "off_grid_original_source_rows_sha256" in payload:
+        raise ValueError("Unexpected off-grid original source digest without original data")
     return payload
 
 
@@ -129,7 +184,7 @@ def report(directory:Path)->dict:
     all_windows=list(windows())
     problems=[]
     for dataset_id in DATASET_IDS:
-        counts={"chunks_persisted":0,"original_missing_slots":0,"uncaptured_expected_slots":0}
+        counts={"chunks_persisted":0,"original_missing_slots":0,"uncaptured_expected_slots":0,"quarantined_operator_source_intervals":0}
         for a,b in all_windows:
             path=directory/(chunk_key(dataset_id,a,b)+".json")
             expected=int((b-a).total_seconds()/900)
@@ -139,6 +194,12 @@ def report(directory:Path)->dict:
             payload=load_chunk(path,dataset_id,a,b)
             counts["chunks_persisted"]+=1
             counts["original_missing_slots"]+=len(payload["source_quality"]["source_missing_utc"])
+            counts["quarantined_operator_source_intervals"]+=len(payload.get("off_grid_original_source_rows",[]))
+            for row in payload.get("off_grid_original_source_rows",[]):
+                problems.append({"dataset_id":dataset_id,
+                  "timestamp_utc":row["timestamp_utc"],
+                  "interval_end_utc":row["interval_end_utc"],
+                  "status":"authentic_source_timestamp_off_grid_quarantined_not_interpolated"})
             for ts in payload["source_quality"]["source_missing_utc"]:
                 problems.append({"dataset_id":dataset_id,"timestamp_utc":ts,"status":"original_missing_at_capture"})
             for r in payload["original_rows"]:
@@ -275,7 +336,8 @@ def collect(directory:Path, *,execute=False,max_chunks=8,getter=None,client=None
                 deferred=True
                 break
             values=[source_row(r) for r in observations]
-            save_chunk(path,dataset_id,a,b,values)
+            aligned,quarantined=split_aligned_and_quarantined(values,dataset_id,a,b)
+            save_chunk(path,dataset_id,a,b,aligned,off_grid_rows=quarantined)
             num+=1
         if deferred:break
     state=report(directory)
