@@ -33,3 +33,29 @@ def test_synthetic_ac_benchmark_solver_is_finite():
  assert len(s["bus_v_pu"])==3
  assert len(s["line_from_p_mw"])==3
  assert all(.8<x<1.2 for x in s["bus_v_pu"].values())
+
+
+def test_nonconvergence_is_distinct_from_result_value_error():
+    from collections import Counter
+    original=run()
+    for case in original["hv"]:
+        n=case["n_minus_one"]
+        assert n is not None
+        types=Counter(row.get("reason_type") for row in n["cases"] if not row["converged"])
+        # Original solved CIGRE benchmark archive had 9 solver failures and
+        # one ValueError after removing transformer Trafo 9-1.
+        assert types=={"LoadflowNotConverged":9,"ValueError":1}
+        assert all(row.get("failure_classification") in (
+            "powerflow_nonconvergence","value_error_requires_manual_diagnosis")
+            for row in n["cases"] if not row["converged"])
+
+
+def test_buggy_exception_must_not_be_reported_as_grid_contingency(monkeypatch):
+    import pandapower.networks as pn
+    import src.models.cigre_engineering_lab as laboratory
+    network=pn.create_cigre_network_hv()
+    def fail_on_model_programming_error(_net):
+        raise KeyError("synthetic_index_bug")
+    monkeypatch.setattr(laboratory,"calculate",fail_on_model_programming_error)
+    with pytest.raises(KeyError,match="synthetic_index_bug"):
+        laboratory.nminus1(network)
