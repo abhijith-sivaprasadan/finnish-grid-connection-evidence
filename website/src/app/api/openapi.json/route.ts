@@ -12,6 +12,7 @@ export async function GET() {
       description:"Public read-only research evidence. Indicative source transcriptions are NOT operator-verified headroom. No additive capacity or network-studies claim."},
     servers:[{url:"/"}],
     paths:{
+      "/api/v1/observed/coverage/2025":{get:{summary:"Verified source coverage 2025; 125 original paired days, known source gaps and uncollected dates; no annual or network feasibility claim",responses:{200:success}}},
       "/api/v1/model/finland":{get:{summary:"Historical PyPSA Finland scenario output (modelled assumptions, no substation connectability claim)",responses:{200:success}}},
       "/api/v1/overview":{get:{summary:"Evidence counts and freshness",responses:{200:success,503:errors[503]}}},
       "/api/v1/health":{get:{summary:"Database availability",responses:{200:success,503:errors[503]}}},
