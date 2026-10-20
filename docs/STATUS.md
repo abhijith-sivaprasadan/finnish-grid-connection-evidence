@@ -1,69 +1,36 @@
-# Finnish Grid Atlas — canonical project status
+# Finnish Grid Atlas — canonical evidence status (20 October 2026)
 
-Last editorial verification: **19 October 2026 UTC**. This is a dated
-state-of-work record, not a live database metric. For live values, consult
-the [overview API](https://finnish-grid-atlas.vercel.app/api/v1/overview),
-[quality API](https://finnish-grid-atlas.vercel.app/api/v1/quality) and
-[health API](https://finnish-grid-atlas.vercel.app/api/v1/health).
-A successful endpoint read is not proof that the underlying source is current.
+This is an intentionally **dated research status**, not a claim of real-time Fingrid substation connectability, uninterrupted site availability, or completion of every proposed stretch task. Live storage counts and freshness can change: read the public [overview](https://finnish-grid-atlas.vercel.app/api/v1/overview), [quality](https://finnish-grid-atlas.vercel.app/api/v1/quality) and [health](https://finnish-grid-atlas.vercel.app/api/v1/health) endpoints at the time of use. If unreachable, do not quote live counters.
 
-## Deployed components
+## Krios-role Finland MVP: implemented
 
-- Production website: [Finnish Grid Atlas](https://finnish-grid-atlas.vercel.app/),
-  **Next.js in `website/`**. The `web/` folder is an archived prototype.
-- Storage: Neon PostgreSQL. A server-only restricted, read-only
-  `DATABASE_READ_URL` was confirmed connected on 18 October 2026.
-  No client-side database credentials or API tokens are published.
-- Historical operations: Fingrid national consumption dataset 124,
-  Fingrid national production dataset 74 and ENTSO-E actual total load A65.
-  These are **Finland-wide** readings, not a substation's available MW.
-  Raw storage keeps retrieval revisions; the latest-observations view
-  retains one version per source/interval.
-- On 18 October, public APIs returned **864 stored rows, 576 distinct
-  historical intervals and 288 retrieval revisions**. This is an
-  observation at that point in time, not a permanent number.
-- An unattended GitHub Actions source refresh succeeded on 18 October:
-  [workflow run 39125767276](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39125767276).
-  This is evidence of one scheduled success, not guaranteed continual uptime.
-- GitHub login connection was configured and PR #31 production deployed on **19 October 2026** (commit `b019632`). Further changes on draft PR #32 and draft PR #34 are **preview only**, not yet live on the production domain. A source commit/PR preview is not equivalent to a production release.
+The original 17 October [MVP plan](KRIOS_PORTFOLIO_RELEASE.md) ends at **Phase 3**, before PyPSA or Netherlands work. The code and source-recorded evidence implement that original MVP, subject to deployment freshness and source limitations:
 
-## Source evidence
+- **Point capacity:** Five selected Fingrid 400-kV Grid Scope connection points; 18 conditional direction/year MW observations from 17 Oct. **18/18 original values were matched** to reviewer-supplied screenshots on 18–19 Oct (17 exact tooltips, one panel MW). See [audit](audits/README.md). There are 12 **uncaptured** point/direction/year combinations out of 30 possible in the sample, not necessarily operator-published zero values. These are indicative estimates, not operator approval or reserved grid capacity.
+- **Source context:** Authenticated Fingrid 124/74 national consumption and production, plus ENTSO-E A65 load. End-to-end source clients, discrete original intervals, revision retention, timezone/units and licensed provenance. One unattended source refresh succeeded [18 Oct 2026](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39125767276), but success once does **not** verify ongoing schedules/uptime or portal-to-database numeric equality.
+- **Persistence:** Idempotent immutable SQLite/Streamlit evidence tool; hosted Neon PostgreSQL/Next.js source view and read-only REST APIs. The hosted database connection and earlier direct Vercel release were previously verified. Confirm the current live deployment commit separately; merging GitHub is **not** a production deploy.
+- **Selection workflow:** [source-qualified 100 MW screen](SCREENING_SPEC.md) compares exact consumption/year evidence, returns threshold-met/below/unknown states, and refuses to label indicative matches as technical feasibility.
+- **Case study:** [Krios-facing demonstration](KRIOS_DEMO.md) and source-qualified website case-study route. Source-scenario boundaries appear in the README, API and model documentation.
 
-- Original 17 October capture: **5 sampled Fingrid 400-kV connection points,
-  18 year/direction source-transcribed indicative MW figures**.
-- On 18–19 October, **all 18 original values matched human-supplied
-  screenshots** from Fingrid Grid Scope: **17 exact chart tooltips and
-  1 explicit MW panel number**, no observed numerical discrepancy.
-  See [audit ledger](audits/GRID_SCOPE_18_ROW_SCREENSHOT_RECHECK_2026_10_19.csv)
-  and [audit scope](audits/README.md). Reviewer screenshots remain
-  private pending redistribution-rights review.
-- **This validates the numerical transcription comparison only.**
-  It does not establish available substation headroom or reconstruct the original 17 October operator display,
-  authenticate a network calculation, show actual connectability,
-  allocate queue rights, or constitute Fingrid confirmation of available MW.
-- **12 of 30** possible sample point/direction/year intersections were not
-  transcribed. Unrecorded is **unknown**, not zero. Do not interpolate between
-  effective years or sum values across substations.
+## Completed beyond original MVP — modelling and research
 
-## Historical operator station inventory work (draft PR #34)
+- **Short national model:** Four solver-verified 48-hour PyPSA/HiGHS October 2026 cases, four times 192 quarter-hours. Modelled 1,500 MW balancing support, battery and flexibility are **assumptions**; numerical shortage slack is NOT Finnish measured energy unserved. [Methods](PYPSA_FINLAND.md). A separate, strictly validated local SQLite importer can now populate 12 metric records (4 cases × 3 metrics) in the reserved scenario_result table, without altering the 18 indicative observations. This importer does not automatically populate Neon, or backfill model data into published point MW.
+- **Long winter:** Two uninterrupted **27-day** 2025 source intervals, 48 project model solves and six baselines, total 54, with 1,000/1,500/2,000 MW *hypothetical* national balancing support caps. No complete 365-day annual PyPSA study exists.
+- **Commercial corridors:** 24 15-minute historical constrained SE1/SE3→Finland three-zone optimisation cases using source-verified Fingrid datasets 31, 32, 38, 39. Historical unused intraday commercial import capacity is NOT real branch thermal MVA or a guaranteed grid-access right. [Boundaries](THREE_ZONE_MARKET_CORRIDOR_LIMITATIONS_2025.md).
+- **Original historic Fingrid data:** **171** independently source-complete paired UTC 2025 calendar dates, 14 identified gap dates and 180 outside archived coverage; 17,640 authentic paired quarter-hours including partial days. Archive is incomplete; any missing/irregular native intervals are not invented or resampled. See [source batch #5](FINGRID_2025_COLLECTION_BATCH_05.md).
+- **Physical proxy research:** OpenStreetMap/PyPSA-Eur 2024 ODbL Finnish candidate with **107 Finland-labelled buses**, **137 domestic 220/400-kV lines**, a separate transformer/HVDC inventory, R/X/B template audit, 22 single-edge *graph-only* disconnections and a licence-qualified February 2025 geographical comparison with 468 third-party GIS segments. Map similarity is not operator-verified equipment, switching state, actual electrical N−1, or project connection headroom. The third-party GIS map has **no documented redistribution permission**, and raw GIS shapes were not published. See [physical-network proxy](FINLAND_OSM_V06_SOURCE_AUDIT_RESULTS.md), [structural N−1 boundaries](FINLAND_OSM_V06_STANDARD_IMPEDANCE_AND_N1.md), and [map provenance](FI_2025_GEOMETRIC_CONCORDANCE_RIGHTS_AUDIT.md).
 
-- Fingrid designation appendix: **128 transcribed named substation rows** (400/220/110-kV), but original printed summary **127**; source table caption refers to **1.1.2020** despite appearing on the **2024 designation** page. It does not verify 2026 status.
-- Separate staged CSV, validated independent local SQLite archival table, Vercel-previewed `/stations` search and read-only historical JSON. No new MW values or verified geographic coordinates.
-- Current/geo-linked operating inventory remains a research objective; Fingrid’s **138 substations for 2025** are a different date/scope and cannot serve as an automatic denominator.
-- This stage changes neither live Neon records nor the original five point / 18 capacity evidence sample.
+## Unfinished or deliberately excluded
 
-## Remaining scope for Krios-style grid analysis
+- **Operator-grade Finnish connection assessment**: zero confirmed capacity approvals, missing 2025 as-built audited 110/220/400-kV network, site-level R/X/B, thermal ratings, Q/P limits, switch schedules, queue terms, dynamic grid reinforcement effects and AC/N−1 validation. There is **no** defensible site-specific MW derived from PyPSA or geometry.
+- **Current Grid Scope refresh:** the original screenshot comparison verifies a dated Oct 17 source transcription, not today's figures; a new dated reviewer snapshot must be collected before treating numbers as present-day.
+- **Source operations:** repeated autonomous-refresh uptime and aligned operator-portal-to-Neon numeric spot checks remain owner-verifiable operational tasks. Dedicated original archive checks are distinct from live site freshness.
+- **Reinforcement-to-point mapping:** no operator-documented project relationships or released MW amounts are populated in the 5-point app; the empty grid-project table is deliberate.
+- **Phase 5 / Phase 6 (Netherlands stretch):** no successfully imported Dutch DSO congestion dataset and no completed pandapower Dutch feeder study. Never claim two-country operational coverage.
+- **Professional boundaries:** not a Krios deployment, Fingrid endorsed research, capacity reservation service, or utility-grade physical grid model.
 
-- **No verified source-to-point reinforcement project relationships** are
-  populated; project data remains a template, not an investment-ready forecast.
-- **No validated Finnish load-flow study**, operator-authenticated nodal
-  connection offers or power availability curve has been completed.
-- Netherlands congestion ingestion and pandapower/PyPSA sensitivity studies
-  remain planned research extensions, not accomplished work.
-- Upcoming priorities: verified reinforcement register, longer historical
-  operations, evidence-qualified candidate screening, bounded PyPSA sensitivity,
-  then a second market.
+## Proof and release trace
 
-See [dated evidence log](EVIDENCE_LOG.md), [roadmap](ROADMAP.md),
-[documentation/commit rules](CONTRIBUTING.md), and
-[operations runbook](SITE_OPERATIONS.md).
+GitHub PRs [#36](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/pull/36) (source-qualified screening), [#45](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/pull/45) (three-zone sensitivity), [#48](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/pull/48) (171 complete 2025 dates), [#49](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/pull/49) (licensed proxy), [#50](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/pull/50) (standard template and graph-only N−1), [#51](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/pull/51) (independent map proximity). Original station designation [#34](https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/pull/34) is **merged**, while alternative design PR #32 remains draft; do not confuse historical draft screenshots with deployed main.
+
+Release-level instructions: [Krios portfolio handoff](KRIOS_PORTFOLIO_RELEASE.md), [interview demonstration](KRIOS_DEMO.md), [README](../README.md) and dated [evidence log](EVIDENCE_LOG.md).
