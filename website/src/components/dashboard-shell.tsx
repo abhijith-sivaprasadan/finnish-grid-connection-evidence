@@ -13,6 +13,7 @@ const nav = [
   {href:"/operations",label:"System operations",hint:"National time series",icon:"chart",group:"EXPLORE"},
   {href:"/analysis",label:"PyPSA research",hint:"Model scenarios",icon:"chart",group:"EXPLORE"},
   {href:"/quality",label:"Data quality",hint:"Audit & coverage",icon:"check",group:"EXPLORE"},
+  {href:"/case-study",label:"Portfolio case study",hint:"Grid analyst demo",icon:"book",group:"REFERENCE"},
   {href:"/method",label:"Methodology",hint:"Evidence limits",icon:"book",group:"REFERENCE"},
   {href:"/api",label:"Developer API",hint:"Read-only endpoints",icon:"code",group:"REFERENCE"}
 ] as const;
