@@ -4,7 +4,7 @@ import json
 import pytest
 from src.models.fi_spatial_concordance_2025 import (
     check_metadata, prepare_pairs, sample_distances, audit_spatial,
-    load_osm_lines, ITEM_ID, SVC_OWNER
+    load_osm_lines, canonical_feature_sha256, ITEM_ID, SVC_OWNER
 )
 
 
@@ -85,3 +85,15 @@ def test_source_osm_audit_requires_odbl_and_checksums(tmp_path):
     audit.write_text(json.dumps(proof))
     with pytest.raises(ValueError,match="original/licence"):
         load_osm_lines(source,audit)
+
+
+def test_geometry_fingerprint_does_not_publish_geographic_records():
+    # Completely fake hosted features. Hash is reproducible and changes
+    # when geometry changes, without making a source feature ID public.
+    fake=[{"type":"Feature","properties":{"FID":42,"Tyyppi":"400"},
+           "geometry":{"type":"LineString","coordinates":[[25,61],[26,61]]}}]
+    first=canonical_feature_sha256(fake)
+    assert len(first)==64
+    assert canonical_feature_sha256(fake)==first
+    fake[0]["geometry"]["coordinates"][1][0]=27
+    assert canonical_feature_sha256(fake)!=first
