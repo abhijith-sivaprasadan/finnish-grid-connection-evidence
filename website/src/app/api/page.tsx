@@ -6,6 +6,7 @@ const endpoints=[
  ["GET","/api/v1/model/finland","Verified PyPSA single-zone model scenario results; historical 2026 sensitivities, not 2030 forecasts or substation headroom"],
  ["GET","/api/v1/model/finland/sensitivity","Source-verified 30-day 2025 PyPSA parameter sweep, 12 hypothetical model cases; not actual import capacity"],
  ["GET","/api/v1/model/finland/seasons","Three strictly source-verified 14-day 2025 seasonal PyPSA windows; source gaps and 36 hypothetical scenario outputs, not full-year data"],
+ ["GET","/api/v1/observed/coverage/2025","Original-archive source day inventory; 58 complete, 2 known-gap, 305 unarchived; no annual or capacity claim"],
  ["GET","/api/v1/screening?demand_mw=100&year=2030&direction=consumption&voltage=all","Evidence-only 100 MW / 2030 screening; no feasibility conclusion"],
  ["GET","/api/v1/points","Paginated list of sampled connection points"],
  ["GET","/api/v1/stations?voltage=220","Historical main-grid designation archive (2020 table label); archived identity only, no MW"],

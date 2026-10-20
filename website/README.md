@@ -6,6 +6,10 @@ the Python collector and existing Neon production PostgreSQL schema.
 
 ## Pages
 
+- `/analysis/source-coverage` — original Fingrid 2025 historical 58-day source coverage from independent verified archive captures, not an annual simulation; explicitly 2 days with known missing source intervals and 305 dates not present in reused archives
+- `/api/v1/observed/coverage/2025` — original-source evidence summary with source fingerprints and explicit non-annual status; no substation/2030 feasibility inference
+
+
 - `/analysis/seasons` — three source-audited matched 14-day winter/summer/autumn 2025 PyPSA studies, 36 actual optimized project cases; missing original source intervals and unverified annual coverage explicitly shown
 - `/api/v1/model/finland/seasons` — read-only seasonal model-scenario summaries with original source hashes and GitHub solver artifact; no inferred 2030 connectivity
 
