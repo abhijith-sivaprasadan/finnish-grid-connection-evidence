@@ -26,6 +26,7 @@ test("screenshots do not grant audit status to changed values or new captures",(
   {connection_point_id:"FI-FINGRID-UNKNOWN-400"},
   {observation_id:"new-2026-observation"},
   {source_observed_at:"2026-10-19T18:46:43Z"},
+  {source_url:"https://example.com/different-capture"},
  ]) {
   assert.equal(sourceReviewStatus({...base,...change}).status,"not_audited",JSON.stringify(change));
  }
