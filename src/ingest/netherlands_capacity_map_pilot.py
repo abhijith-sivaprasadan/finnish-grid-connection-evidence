@@ -40,7 +40,11 @@ def source_bytes(name, *, reader=urlopen):
 
 def inspect_csv(name, source, data):
     txt=data.decode("utf-8-sig")
-    reader=csv.DictReader(io.StringIO(txt, newline=""), delimiter=";")
+    try:
+        delimiter=csv.Sniffer().sniff(txt[:8000], delimiters=";,\\t").delimiter
+    except csv.Error as exc:
+        raise ValueError("CSV delimiter cannot be verified") from exc
+    reader=csv.DictReader(io.StringIO(txt, newline=""), delimiter=delimiter)
     columns=reader.fieldnames
     if not columns or len(columns)!=len(set(columns)) or len(columns)<3:
         raise ValueError("Unknown export schema or delimiter; manual review before claims")
@@ -62,6 +66,7 @@ def inspect_csv(name, source, data):
         "original_bytes":len(data),
         "rows":count,
         "original_columns":columns,
+        "delimiter":delimiter,
         "field_nonempty_counts":dict(sorted(nonempty.items())),
         "data_level":"feeding_areas_not_individual_verified_site_connections",
         "original_release_licence":"not_verified_for_raw_redistribution",
