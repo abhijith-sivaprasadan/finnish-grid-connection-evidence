@@ -1,10 +1,10 @@
 # Finland OSM v0.6 — verified original-source audit (20 October 2026)
 
-**Original independently successful Actions audit:** https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39457185877
+**Original independently successful Actions audit:** https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39458288987
 
-**ODbL-1.0 licensed Finnish-only extract and full JSON:** https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39457185877/artifacts/12280153734
+**ODbL-1.0 licensed Finnish-only extract and full JSON:** https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/actions/runs/39458288987/artifacts/12281970596
 
-**Original archive artifact SHA-256:** aee86dd808ddf36462541d4c32c8f9b5026260542c107af09612fef8dcca92a5. Retention 90 days; long-term reproducibility requires the five original Zenodo v0.6 records, not this expiring artifact.
+**Original archive artifact SHA-256:** 39a1a74ce0e232be9a17cea6840312c43e98b63c7c0e16b747e949d629bdb98c. Retention 90 days; long-term reproducibility requires the five original Zenodo v0.6 records, not this expiring artifact.
 
 ## Source authenticity, not equipment authenticity
 
