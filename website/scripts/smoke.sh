@@ -39,8 +39,8 @@ grep -q '"missing_in_compiled_capture":12' /tmp/grid-smoke-response.json
 check 200 "/analysis/source-coverage"
 grep -q "What history" /tmp/grid-smoke-response.json
 check 200 "/api/v1/observed/coverage/2025"
-grep -q '"distinct_original_paired_intervals":14966' /tmp/grid-smoke-response.json
-grep -q '"verified_complete_days":150' /tmp/grid-smoke-response.json
+grep -q '"distinct_original_paired_intervals":17640' /tmp/grid-smoke-response.json
+grep -q '"verified_complete_days":171' /tmp/grid-smoke-response.json
 grep -q '"source_year_complete":false' /tmp/grid-smoke-response.json
 check 200 "/analysis/corridors-2025"
 grep -q "not a physical power grid" /tmp/grid-smoke-response.json

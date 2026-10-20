@@ -42,20 +42,20 @@ export default function ArchiveCoverage(){
   <div className="cov-stats">
    <div><small>PAIRED HISTORICAL DAYS</small><strong>{evidence.verified_complete_days}</strong><span>Only the verified original-source windows</span></div>
    <div><small>PAIRED 15-MINUTE READINGS</small><strong>{evidence.distinct_original_paired_intervals.toLocaleString("en-US")}</strong><span>Verified Fingrid 124 and 74 observations</span></div>
-   <div><small>KNOWN OPERATOR-SOURCE GAP DAYS</small><strong>{counts.source_missing}</strong><span>Eleven original consumption slots missing across seven UTC dates</span></div>
+   <div><small>KNOWN OPERATOR-SOURCE GAP DAYS</small><strong>{counts.source_missing}</strong><span>25 authentic quarter-hour consumption gaps across 14 UTC dates</span></div>
    <div><small>NOT COVERED BY THESE ARCHIVES</small><strong>{counts.not_in_archives}</strong><span>May be available from Fingrid; not yet audited here</span></div>
   </div>
   <section className="cov-panel">
    <p className="cov-kicker">01 / SOURCE COVERAGE BY UTC CALENDAR DAY</p>
    <h2>365 days, three distinct evidence states</h2>
-   <div className="cov-legend"><span><i className="cov-complete"/>Verified original source pairs</span><span><i className="cov-source_missing"/>Source gap confirmed on recheck</span><span><i className="cov-not_in_archives"/>Not covered by imported archives</span></div>
+   <div className="cov-legend"><span><i className="cov-complete"/>Verified original source pairs</span><span><i className="cov-source_missing"/>Original quarter-hour source reading absent at capture</span><span><i className="cov-not_in_archives"/>Not covered by imported archives</span></div>
    <div className="cov-months" aria-label="Daily Fingrid source coverage during 2025">
     {months.map((month,index)=><div className="cov-month" key={month}>
       <div className="cov-month-name"><strong>{month}</strong><small>{days.filter(d=>d.month===index&&d.status==="complete").length} verified</small></div>
       <div className="cov-month-days">{days.filter(d=>d.month===index).map(d=><span key={d.date} className={"cov-date cov-"+d.status} title={d.date+" — "+labels[d.status]} aria-label={d.date+" — "+labels[d.status]}>{d.day}</span>)}</div>
      </div>)}
    </div>
-   <p className="cov-caption">An uncovered date does not mean Fingrid has no data; it means that date has not been verified in this particular archive bank. Jan 17, Feb 14, Mar 14, Mar 30, Apr 11, Apr 22 and Jul 11 have missing source-aligned observations; uncovered dates have not been verified in these archives.</p>
+   <p className="cov-caption">An uncovered date does not mean Fingrid has no data; it means that date has not been verified in this particular archive bank. Fourteen days have documented missing original consumption quarter-hour slots, including Jan 17, Feb 14, Mar 14, Mar 30, Apr 11, Apr 22, May 6/8/12–16, and Jul 11. The 30-minute native May 8 reading is preserved separately, not split into assumed quarter-hours. Uncovered dates have not been verified in these archives.</p>
   </section>
   <section className="cov-panel">
    <p className="cov-kicker">02 / CONTIGUOUS, SOURCE-COMPLETE PERIODS</p><h2>Original-data windows ready for separate historical modelling</h2>
@@ -67,7 +67,7 @@ export default function ArchiveCoverage(){
   <section className="cov-provenance">
    <div><p className="cov-kicker">OPERATOR DATA AND CODE VERIFICATION</p><h2>Independently reproducible inputs</h2><p>Original source fingerprints, native MWh/h units, 15-minute interval continuity and overlapping autumn numerical observations were validated without querying Fingrid again. See the CI result for the full audit.</p>
     <div className="cov-links"><a href={evidence.validation_run} target="_blank" rel="noreferrer">Verified archive job ↗</a><a href="https://data.fingrid.fi/en/datasets/124" target="_blank" rel="noreferrer">Fingrid 124 ↗</a><a href="https://data.fingrid.fi/en/datasets/74" target="_blank" rel="noreferrer">Fingrid 74 ↗</a></div></div>
-   <div><p className="cov-kicker">KNOWN SOURCE GAPS</p><h2>Do not fill missing observations</h2><p>Six original consumption quarter-hours are known missing across four source-gap dates; the earlier three were independently rechecked and still not returned. The problem is tracked as an original-data correction request, not a grid-connection infeasibility determination.</p><div className="cov-links"><a href={evidence.missing_recheck_run} target="_blank" rel="noreferrer">Missing-readings recheck ↗</a><a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/issues/40" target="_blank" rel="noreferrer">Operator correction issue ↗</a><Link href="/analysis/seasons">Validated seasonal PyPSA results ↗</Link></div></div>
+   <div><p className="cov-kicker">KNOWN SOURCE GAPS</p><h2>Do not fill missing observations</h2><p>Twenty-five authentic 15-minute consumption slots are unavailable across fourteen known gap dates in the combined coverage inventory. The original May 8 half-hour record and March 30 off-grid record are retained and never regridded. Some earlier gaps were separately rechecked; these newer gaps are not claimed independently corrected. These source anomalies do not prove grid-connection infeasibility.</p><div className="cov-links"><a href={evidence.missing_recheck_run} target="_blank" rel="noreferrer">Missing-readings recheck ↗</a><a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/issues/40" target="_blank" rel="noreferrer">Operator correction issue ↗</a><Link href="/analysis/seasons">Validated seasonal PyPSA results ↗</Link></div></div>
   </section>
  </section>;
 }
