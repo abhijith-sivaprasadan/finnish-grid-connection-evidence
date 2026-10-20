@@ -163,6 +163,57 @@ def summarize(tables: dict[str, tuple[list[dict], list[str]]], verified: dict) -
            "longitude_max": max(float(r["x"]) for r in fi_buses),
            "latitude_min": min(float(r["y"]) for r in fi_buses),
            "latitude_max": max(float(r["y"]) for r in fi_buses)}
+    ac_ids = {b["bus_id"] for b in fi_buses if str(b["dc"]).lower() in ("false", "f", "0")}
+
+    def component_sizes(edges):
+        adjacency = {key: set() for key in ac_ids}
+        for entry in edges:
+            a, b = entry["bus0"], entry["bus1"]
+            if a in adjacency and b in adjacency:
+                adjacency[a].add(b)
+                adjacency[b].add(a)
+        seen, sizes = set(), []
+        for root in adjacency:
+            if root in seen:
+                continue
+            stack, size = [root], 0
+            while stack:
+                current = stack.pop()
+                if current in seen:
+                    continue
+                seen.add(current)
+                size += 1
+                stack.extend(adjacency[current] - seen)
+            sizes.append(size)
+        return sorted(sizes, reverse=True)
+
+    line_templates = Counter(
+        (str(line.get("voltage", "")), str(line.get("type", "")),
+         str(line.get("i_nom", "")), str(line.get("circuits", "")),
+         str(line.get("s_nom", ""))) for line in lines)
+    length_by_voltage_m = Counter()
+    for line in lines:
+        length = float(line.get("length", "nan"))
+        if not math.isfinite(length) or length <= 0:
+            raise ValueError("A line route length is missing or invalid; cannot calculate distances")
+        length_by_voltage_m[str(line.get("voltage", ""))] += length
+    trace = {
+        "ac_only_connected_component_sizes": component_sizes(lines),
+        "ac_plus_source_transformer_component_sizes": component_sizes(lines + result["transformers"]),
+        "native_length_unit": "metres_from_source_not_kilometres",
+        "domestic_line_route_km_by_voltage": {
+            v: round(n / 1000, 5) for v, n in sorted(length_by_voltage_m.items())
+        },
+        "source_conductor_rating_templates": [
+            {"voltage_kv": key[0], "source_type": key[1],
+             "i_nom_source": key[2], "circuits": key[3],
+             "s_nom_source": key[4], "count": count}
+            for key, count in sorted(line_templates.items())
+        ],
+        "source_transformer_s_nom_values": sorted(
+            float(t["s_nom"]) for t in result["transformers"] if t.get("s_nom")
+        )
+    }
     manifest = {
         "record": DOI, "source_release": SOURCE_VERSION,
         "source_snapshot_year": 2024, "analysis_target_year": 2025,
@@ -179,6 +230,7 @@ def summarize(tables: dict[str, tuple[list[dict], list[str]]], verified: dict) -
             "domestic_ac_line_voltages_kv": dict(sorted(line_voltage_counts.items())),
             "under_construction_ac_line_count": under_construct(lines)},
         "electrical_parameter_inventory_ac_lines": line_params,
+        "proxy_topology_and_template_diagnostics": trace,
         "electrical_parameter_classification": {
             "r_x_b": "source_native_third_party_OSM_estimated_not_operator_measured",
             "nominal_current_or_rating": "source_if_present_not_Fingrid_certified; no thermal rating inferred",
