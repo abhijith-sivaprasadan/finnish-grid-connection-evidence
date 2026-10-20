@@ -1,0 +1,34 @@
+name: Official Netherlands capacity CSV source audit
+on:
+  push:
+    branches: [feature/krios-grid-readiness-nl-official-pilot]
+    paths:
+      - 'src/ingest/netherlands_capacity_map_pilot.py'
+      - 'tests/test_netherlands_capacity_map_pilot.py'
+      - '.github/workflows/nl-capacity-official-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test aggregate-only extraction and fail-closed source handling
+        run: |
+          python -m pip install pytest==8.4.2
+          python -m pytest -q tests/test_netherlands_capacity_map_pilot.py
+      - name: Request real current Netbeheer Nederland CSV export; record hashes and schema
+        run: |
+          python -m src.ingest.netherlands_capacity_map_pilot --out /tmp/nl-official/nl-source-audit.json
+      - name: Archive only source metadata, no third-party Dutch raw records
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nl-operator-capacity-map-metadata-only
+          path: /tmp/nl-official/nl-source-audit.json
+          retention-days: 45
