@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from src.db import connect
+from src.db import ROOT, connect
 from src.ingest.verified_model_scenarios import OBSERVED, PUBLISHED, run, validate_publication
 from src.ingest.manual_grid_scope import ingest
 
@@ -13,7 +13,7 @@ from src.ingest.manual_grid_scope import ingest
 def test_verified_scenarios_import_idempotent_isolated(tmp_path):
     path = tmp_path / "portfolio.sqlite"
     # Five genuine manually sourced Grid Scope points remain unchanged.
-    ingest(db_file=path)  # existing importer handles manual inputs and DB setup
+    ingest(ROOT / "data" / "manual", path)  # original manually sourced data, never fabricated
     first = run(path)
     second = run(path)
     assert first["inserted"] == 12 and first["metric_records"] == 12
