@@ -9,9 +9,11 @@ export const metadata:Metadata={
 
 const total=audit.original_csvs.reduce((sum,item)=>sum+item.row_count,0);
 const congest=audit.original_csvs.find(s=>s.key==="tennet_congestion");
-if(!congest||!("original_label_counts" in congest))throw new Error("Original TenneT categories missing");
-const consumption=congest.original_label_counts.afname;
-const injection=congest.original_label_counts.opwek;
+const statuses=congest && "original_label_counts" in congest
+  ? congest.original_label_counts : undefined;
+if(!statuses)throw new Error("Original TenneT categories missing");
+const consumption=statuses.afname;
+const injection=statuses.opwek;
 
 export default function NetherlandsPilot(){
  return <>
