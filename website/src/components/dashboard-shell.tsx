@@ -12,6 +12,8 @@ const nav = [
   {href:"/stations",label:"Station inventory",hint:"Historical names",icon:"nodes",group:"EXPLORE"},
   {href:"/connections",label:"Connection outlook",hint:"Capacity evidence",icon:"nodes",group:"EXPLORE"},
   {href:"/operations",label:"System operations",hint:"National time series",icon:"chart",group:"EXPLORE"},
+  {href:"/engineering",label:"Engineering lab",hint:"AC power flow & N−1",icon:"chart",group:"EXPLORE"},
+  {href:"/network-map",label:"OSM proxy map",hint:"2024 geography",icon:"nodes",group:"EXPLORE"},
   {href:"/analysis",label:"PyPSA research",hint:"Model scenarios",icon:"chart",group:"EXPLORE"},
   {href:"/quality",label:"Data quality",hint:"Audit & coverage",icon:"check",group:"EXPLORE"},
   {href:"/case-study",label:"Portfolio case study",hint:"Grid analyst demo",icon:"book",group:"REFERENCE"},
