@@ -31,6 +31,11 @@ jobs:
       - run: python -m pip install -r requirements.txt
       - run: python -m pytest -q
       - run: python -m src.cli import-manual
+      - name: Rebuild 4 solver-verified scenarios in separate SQLite evidence
+        run: |
+          python -m src.cli import-verified-model
+          python -m src.cli import-verified-model
+          python -c "from src.db import connect; c=connect(); db=c.__enter__(); assert db.execute('select count(*) from scenario_result').fetchone()[0] == 12; assert db.execute('select count(*) from capacity_observation').fetchone()[0] == 18; assert db.execute(\"select count(*) from capacity_observation where capacity_status='operator_confirmed'\").fetchone()[0] == 0; c.__exit__(None,None,None)"
       - run: python -m src.cli quality
       - run: python -m src.audit_integrity
 
