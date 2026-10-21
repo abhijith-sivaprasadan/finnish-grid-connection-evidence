@@ -26,6 +26,13 @@ export function ProxyNetworkMap(){
       <option value="all">220 + 400 kV AC</option><option value="400">400 kV</option><option value="220">220 kV</option>
      </select>
     </label>
+    <label style={{fontSize:13}}>Inspect node{" "}
+     <select aria-label="Select an original 2024 OSM proxy bus" value={selected??""}
+       onChange={e=>setSelected(e.target.value===""?null:Number(e.target.value))}>
+      <option value="">Select one…</option>
+      {visible.map(n=><option value={n.id} key={n.id}>Node {n.id+1} · {n.kv} kV · {n.lat.toFixed(3)}°N</option>)}
+     </select>
+    </label>
     <div style={{display:"flex",alignItems:"center",gap:8}}>
      <button type="button" aria-label="Zoom out" onClick={()=>setZoom(z=>Math.max(1,z/1.4))}>−</button>
      <span style={{fontSize:12}}>{zoom.toFixed(1)}×</span>
@@ -55,11 +62,11 @@ export function ProxyNetworkMap(){
       const a=project(n),active=n.id===selected;
       return <circle key={n.id} cx={a.x} cy={a.y} r={active?6:3}
         fill={n.kv===220?"#40d7a7":"#accbf4"} stroke={active?"#ffffff":"#183854"}
-        strokeWidth={active?2:0.7} role="button" tabIndex={0}
-        aria-label={"Select 2024 OSM proxy node "+n.id+", "+n.kv+" kilovolts"}
+        strokeWidth={active?2:0.7}
         onClick={()=>setSelected(n.id)}
-        onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelected(n.id);}}}
-        style={{cursor:"pointer"}}/>;
+        style={{cursor:"pointer"}}>
+          <title>{"OSM proxy node "+(n.id+1)+" · "+n.kv+" kV · "+n.lat.toFixed(3)+"°N, "+n.lon.toFixed(3)+"°E"}</title>
+        </circle>;
     })}
     <text x={30} y={32} fontSize={15} fill="white" fontWeight="bold">2024 OSM-derived · Finland proxy</text>
     <text x={30} y={52} fontSize={10} fill="#b6cbd9">Spatial source graph only · Not Fingrid as-built or site headroom</text>
@@ -68,7 +75,7 @@ export function ProxyNetworkMap(){
   <div style={{minWidth:0}}>
    <p className="eyebrow">Clickable approximate source points</p>
    <h3>{visible.length} source AC bus nodes</h3>
-   <p>Inspect a node by clicking its point on the map. Locations are rounded from the independently source-verified 2024 OSM/PyPSA-Eur v0.6 dataset. Lines show its 137 reconstructed domestic 220/400 kV source graph records, not operator-identified equipment.</p>
+   <p>Inspect a node by clicking the map or using the keyboard-accessible node selector. Locations are rounded from the independently source-verified 2024 OSM/PyPSA-Eur v0.6 dataset. Lines show its 137 reconstructed domestic 220/400 kV source graph records, not operator-identified equipment.</p>
    {focus&&!focus.dc? <div className="research-card" style={{marginBottom:16}}>
      <span className="kicker">Selected source record · number {focus.id+1}</span>
      <h3>OSM virtual AC bus {focus.id+1}</h3>
