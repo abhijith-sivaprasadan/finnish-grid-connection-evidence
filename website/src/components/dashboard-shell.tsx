@@ -6,19 +6,19 @@ import { GridMark } from "@/components/grid-mark";
 
 type Status = {mode:"neon"|"compiled_snapshot"|"unavailable"; latest:string|null; ageHours:number|null};
 const nav = [
-  {href:"/",label:"Overview",hint:"Workspace",icon:"overview",group:"EXPLORE"},
-  {href:"/screening",label:"Connection screening",hint:"Evidence triage",icon:"nodes",group:"EXPLORE"},
-  {href:"/netherlands",label:"Netherlands source pilot",hint:"Congestion evidence",icon:"chart",group:"EXPLORE"},
-  {href:"/stations",label:"Station inventory",hint:"Historical names",icon:"nodes",group:"EXPLORE"},
-  {href:"/connections",label:"Connection outlook",hint:"Capacity evidence",icon:"nodes",group:"EXPLORE"},
-  {href:"/operations",label:"System operations",hint:"National time series",icon:"chart",group:"EXPLORE"},
-  {href:"/engineering",label:"Engineering lab",hint:"AC power flow & N−1",icon:"chart",group:"EXPLORE"},
-  {href:"/network-map",label:"OSM proxy map",hint:"2024 geography",icon:"nodes",group:"EXPLORE"},
-  {href:"/analysis",label:"PyPSA research",hint:"Model scenarios",icon:"chart",group:"EXPLORE"},
-  {href:"/quality",label:"Data quality",hint:"Audit & coverage",icon:"check",group:"EXPLORE"},
-  {href:"/case-study",label:"Portfolio case study",hint:"Grid analyst demo",icon:"book",group:"REFERENCE"},
-  {href:"/method",label:"Methodology",hint:"Evidence limits",icon:"book",group:"REFERENCE"},
-  {href:"/api",label:"Developer API",hint:"Read-only endpoints",icon:"code",group:"REFERENCE"}
+  {href:"/",label:"Overview",hint:"What the evidence shows",icon:"overview",group:"START"},
+  {href:"/screening",label:"Connection screen",hint:"Explore a project request",icon:"nodes",group:"START"},
+  {href:"/connections",label:"Connection evidence",hint:"Recorded point estimates",icon:"nodes",group:"START"},
+  {href:"/operations",label:"System operations",hint:"Historical national data",icon:"chart",group:"ANALYSE"},
+  {href:"/engineering",label:"Electrical studies",hint:"AC, N−1 and sensitivity",icon:"chart",group:"ANALYSE"},
+  {href:"/network-map",label:"Network geography",hint:"2024 source proxy map",icon:"nodes",group:"ANALYSE"},
+  {href:"/analysis",label:"System scenarios",hint:"PyPSA sensitivity",icon:"chart",group:"ANALYSE"},
+  {href:"/quality",label:"Data & quality",hint:"Coverage and revisions",icon:"check",group:"SOURCES"},
+  {href:"/netherlands",label:"Netherlands pilot",hint:"Official congestion sources",icon:"chart",group:"SOURCES"},
+  {href:"/stations",label:"Station archive",hint:"Historical inventory",icon:"nodes",group:"SOURCES"},
+  {href:"/case-study",label:"Project walkthrough",hint:"Decisions and limitations",icon:"book",group:"ABOUT"},
+  {href:"/method",label:"Methods & sources",hint:"Evidence definitions",icon:"book",group:"ABOUT"},
+  {href:"/api",label:"Data API",hint:"Read-only endpoints",icon:"code",group:"ABOUT"}
 ] as const;
 type IconName=typeof nav[number]["icon"];
 function NavIcon({name}:{name:IconName}){
@@ -35,7 +35,7 @@ function NavIcon({name}:{name:IconName}){
 function Navigation({close}:{close?:()=>void}){
  const path=usePathname();
  return <nav className="shell-nav" aria-label="Main sections">
-  {(["EXPLORE","REFERENCE"] as const).map(group=><div className="shell-nav-group" key={group}>
+  {(["START","ANALYSE","SOURCES","ABOUT"] as const).map(group=><div className="shell-nav-group" key={group}>
     <p className="shell-group-label">{group}</p>
     {nav.filter(item=>item.group===group).map(item=><Link key={item.href} href={item.href}
        aria-current={path===item.href?"page":undefined}
@@ -73,10 +73,10 @@ export function DashboardShell({children,status}:{children:React.ReactNode;statu
   <aside className="shell-sidebar" aria-label="Workspace navigation">
     <Link className="shell-brand" href="/" aria-label="Finnish Grid Atlas overview">
       <span className="shell-brand-icon"><GridMark size={42}/></span>
-      <span><strong>Finnish Grid Atlas</strong><small>INDEPENDENT RESEARCH</small></span>
+      <span><strong>Finnish Grid Atlas</strong><small>GRID EVIDENCE DEMONSTRATOR</small></span>
     </Link>
-    <div className="shell-workspace"><span className="shell-workspace-dot"/><span>RESEARCH WORKSPACE</span><span className="shell-workspace-version">V1</span></div>
-    <Navigation/>
+    <div className="shell-workspace"><span className="shell-workspace-dot"/><span>SOURCE-LINKED ANALYSIS</span><span className="shell-workspace-version">MVP</span></div>
+    <div className="shell-nav-viewport" tabIndex={0} aria-label="Scroll through dashboard pages"><Navigation/></div>
     <div className="shell-sidebar-bottom">
       <div className="shell-source-note"><span className="shell-source-indicator"/> <strong>Source integrity first</strong>
         <p>Published estimates are not connection rights. National measurements are historical.</p>
@@ -87,18 +87,18 @@ export function DashboardShell({children,status}:{children:React.ReactNode;statu
   </aside>
   {menu&&<button className="shell-mobile-backdrop" type="button" aria-label="Close menu" onClick={()=>setMenu(false)}/>}
   {menu&&<aside id="mobile-atlas-nav" className="shell-mobile-sidebar open" aria-label="Mobile workspace navigation">
-    <div className="shell-mobile-header"><span>EXPLORE ATLAS</span><button type="button" onClick={()=>setMenu(false)} aria-label="Close navigation">×</button></div><Navigation close={()=>setMenu(false)}/>
+    <div className="shell-mobile-header"><span>SECTIONS</span><button type="button" onClick={()=>setMenu(false)} aria-label="Close navigation">×</button></div><div className="shell-nav-viewport" tabIndex={0} aria-label="Scroll through mobile pages"><Navigation close={()=>setMenu(false)}/></div>
   </aside>}
   <div className="shell-main">
     <header className="shell-topbar">
       <div className="shell-topbar-left">
         <button className="shell-menu-button" type="button" aria-label="Open navigation" aria-controls="mobile-atlas-nav" aria-expanded={menu} onClick={()=>setMenu(true)}>☰</button>
         <span className="shell-breadcrumb-root">ATLAS</span><span className="shell-breadcrumb-slash">/</span>
-        <strong>{current?.label??"Research workspace"}</strong>
+        <strong>{current?.label??"Overview"}</strong>
       </div>
       <div className="shell-topbar-actions">
         <span className={"shell-db-status"+(connected?" connected":" degraded")}>
-          <span className="shell-status-light"/>{connected?"Neon · connected":status.mode==="compiled_snapshot"?"Compiled snapshot":"Source unavailable"}
+          <span className="shell-status-light"/>{connected?"Historical data · connected":status.mode==="compiled_snapshot"?"Source snapshot":"Data unavailable"}
         </span>
         <button className="shell-command-button" type="button" onClick={()=>setPalette(true)} aria-label="Search pages, keyboard shortcut Control K">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="10.7" cy="10.7" r="6.4"/><path d="m15.4 15.4 5 5"/></svg>
@@ -106,20 +106,20 @@ export function DashboardShell({children,status}:{children:React.ReactNode;statu
         </button>
       </div>
     </header>
-    <div className="shell-ribbon"><span><span className="ribbon-square"/> Independent research · not affiliated with Fingrid or a TSO</span>
+    <div className="shell-ribbon"><span><span className="ribbon-square"/> Independent demonstrator · operator data and research models are distinct</span>
       <span>{status.latest ? "Latest historical interval · "+status.latest.slice(0,10)+" UTC"+(ageLabel?" · "+ageLabel:"") : "No verified current interval available"}</span>
     </div>
     <main id="main" className="shell-page">{children}</main>
-    <footer className="shell-footer"><span>Finnish Grid Atlas · Independent source-linked analysis</span><span>Indicative ≠ available connection capacity <span aria-hidden="true">·</span> <Link href="/method">Limitations</Link></span></footer>
+    <footer className="shell-footer"><span>Finnish Grid Atlas · Source-linked evidence demo</span><span>Indicative ≠ available connection capacity <span aria-hidden="true">·</span> <Link href="/method">Limitations</Link></span></footer>
   </div>
   {palette&&<div className="command-layer" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget){setPalette(false);setSearch("");}}}>
     <div role="dialog" aria-modal="true" aria-label="Search workspace" className="command-dialog">
       <div className="command-field"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.8" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg>
-        <input ref={inputRef} value={search} onChange={event=>setSearch(event.target.value)} placeholder="Find a workbench, source, or page…" aria-label="Search pages"
+        <input ref={inputRef} value={search} onChange={event=>setSearch(event.target.value)} placeholder="Find a page, source or analysis…" aria-label="Search pages"
          onKeyDown={event=>{if(event.key==="Enter"&&matches[0])go(matches[0].href);}}/>
         <button type="button" onClick={()=>{setPalette(false);setSearch("");}}>Esc</button>
       </div>
-      <p className="command-caption">PAGES AND WORKBENCHES</p>
+      <p className="command-caption">PAGES</p>
       <div className="command-results">{matches.length?matches.map(item=><button type="button" key={item.href} onClick={()=>go(item.href)}>
           <NavIcon name={item.icon}/><span><strong>{item.label}</strong><small>{item.hint}</small></span><span aria-hidden="true">↗</span>
         </button>):<p>No matching workspace pages.</p>}</div>
