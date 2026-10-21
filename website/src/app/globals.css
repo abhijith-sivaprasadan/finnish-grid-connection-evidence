@@ -1216,3 +1216,18 @@ tr:hover td {background:#fbfdff}
  .mvp-matrix-detail{margin:12px;flex-direction:column}
  .mvp-matrix-footer{padding:12px 16px}
 }
+
+
+/* Distinct scientific model families: focus on one, never pretend identical inputs. */
+.mvp-studies{display:grid;gap:18px}
+.mvp-study-tabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px;background:#fff;border:1px solid #d9e5ef;border-radius:12px}
+.mvp-study-tabs button{min-height:41px;cursor:pointer;padding:10px 14px;border:1px solid #dce6f0;border-radius:9px;
+ color:#4b6c8d;background:#f7fafc;font:800 11px var(--display);transition:background .15s,border-color .15s}
+.mvp-study-tabs button:hover{background:#ebf3fb;border-color:#91b8df}
+.mvp-study-tabs button[aria-pressed=true]{background:#163e67;border-color:#163e67;color:#fff}
+.mvp-study-focus{min-width:0}
+.mvp-study-focus>.research-card{max-width:100%;min-height:440px}
+.mvp-study-focus>.research-card>p:not(.footnote){max-width:820px;font-size:12px;line-height:1.8}
+.mvp-study-focus .grid-2{gap:12px}
+.mvp-study-focus .research-card .research-card{background:#f8fbfe;border:1px solid #e0eaf3;box-shadow:none}
+@media(max-width:620px){.mvp-study-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;overscroll-behavior-inline:contain;scroll-snap-type:x proximity}.mvp-study-tabs button{white-space:nowrap;flex:0 0 auto;scroll-snap-align:start}.mvp-study-focus>.research-card{padding:18px;min-height:0}}
