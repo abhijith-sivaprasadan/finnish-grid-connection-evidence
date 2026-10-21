@@ -5,23 +5,23 @@ import winter from "@/lib/pypsa-long-winter-2025.json";
 import model from "@/lib/pypsa-scenario-results.json";
 
 export const metadata:Metadata={
- title:"Grid analyst portfolio case study",
- description:"An independently developed Finnish grid-data and indicative power-availability screener: source-reviewed substations, operator national series, auditable data storage and explicitly hypothetical PyPSA sensitivity."
+ title:"Evidence workflow · Finnish Grid Atlas",
+ description:"How original grid source records become reproducible screening decisions, with separate national operations and independently solved benchmark engineering."
 };
 
 const evidence=[
  {n:"01",title:"Own the grid data",detail:"Authenticated Fingrid consumption/production (datasets 124/74) and ENTSO-E A65 load are ingested as dated national operational intervals, keeping source units, retrieval revisions and integrity checks.",href:"/operations",link:"Explore real time-series evidence"},
  {n:"02",title:"Understand current and future availability",detail:"Five selected Fingrid Grid Scope points and 18 reviewed indicative observations are recorded separately by direction and published effective year. Missing combinations are unknown, not zero.",href:"/connections",link:"Inspect point-year evidence"},
  {n:"03",title:"Screen candidate requests",detail:"A 100 MW / 2030 example classifies exact-year source thresholds, uncertain or absent records and unit mismatches. It does not approve or rank physically connectable sites.",href:"/screening?demand_mw=100&year=2030&direction=consumption&voltage=all",link:"Run the 100 MW evidence screen"},
- {n:"04",title:"Model and communicate uncertainty",detail:"Source-anchored PyPSA studies of national operating stress, two 27-day winters, and market-corridor assumptions are clearly separated from point capacity. No verified AC/N-1 or site headroom model is implied.",href:"/analysis",link:"Inspect sensitivity and provenance"}
+ {n:"04",title:"Model and communicate uncertainty",detail:"Source-anchored PyPSA studies of national operating stress, two 27-day winters, and market-corridor assumptions are clearly separated from point capacity. No operator-calibrated Finnish AC/N−1 or site headroom model is implied.",href:"/analysis",link:"Inspect sensitivity and provenance"}
 ];
 
 export default function CaseStudy(){
  return <>
   <section className="page-hero"><div className="wrap">
-   <p className="eyebrow">Portfolio / energy & grids / independent case study</p>
+   <p className="eyebrow">HOW THE PRODUCT WORKS / EVIDENCE TO DECISION</p>
    <h1>From grid data to <em>decision evidence.</em></h1>
-   <p className="lede">A Finland-focused proof of concept built around the deliverables of a Grid Analyst role: source stewardship, conditional capacity outlooks, operational context, and clearly qualified model scenarios. This is personal research, not a Krios or Fingrid production system. An independently audited Netherlands capacity-map source pilot is linked separately, without comparing congestion categories to Finnish MW.</p>
+   <p className="lede">The demonstrator follows a practical grid-assessment sequence: collect original source readings, qualify what is missing, screen a proposed request, then test independent model assumptions. It is not a Fingrid product or a connection-approval service. The Netherlands congestion-source pilot remains separate from Finnish station MW.</p>
    <div className="action-row"><Link className="button" href="/screening?demand_mw=100&year=2030&direction=consumption&voltage=all">Start with a 100 MW screening request ↗</Link><Link className="button secondary" href="/connections">Inspect published estimates ↗</Link></div>
   </div></section>
   <section className="section compact"><div className="wrap">
@@ -33,9 +33,9 @@ export default function CaseStudy(){
    <p className="footnote">Counts measure captured evidence, not the number of available grid sites. The 18 screenshot matches check transcription only; they are not operator-approved capacity. The 2025 archive is incomplete, with {archive.known_missing_source_days} source-gap dates and {archive.not_covered_by_archives_days} dates not covered by its collected files.</p>
   </div></section>
   <section className="section"><div className="wrap">
-   <div className="section-intro"><p className="eyebrow">Role-specific capability mapping</p><h2>Four activities. Four reproducible outputs.</h2><p>Every claim links to a working analysis or dated source audit.</p></div>
+   <div className="section-intro"><p className="eyebrow">Four stages of the evidence workflow</p><h2>Four activities. Four reproducible outputs.</h2><p>Every claim links to a working analysis or dated source audit.</p></div>
    <div className="grid-2">{evidence.map(e=><article className="research-card" key={e.n}>
-     <span className="kicker">{e.n} / role deliverable</span><h3>{e.title}</h3><p>{e.detail}</p><Link href={e.href}>{e.link} ↗</Link>
+     <span className="kicker">{e.n} / workflow stage</span><h3>{e.title}</h3><p>{e.detail}</p><Link href={e.href}>{e.link} ↗</Link>
    </article>)}</div>
   </div></section>
   <section className="section compact"><div className="wrap">
@@ -64,7 +64,7 @@ export default function CaseStudy(){
     <Link href="/network-map">Interactive 2024 OSM proxy geography <span>104 high-voltage AC source nodes; not the five named Grid Scope points →</span></Link>
     <Link href="/netherlands">Netherlands official congestion-data pilot <span>Source-verified 896 records, metadata only →</span></Link>
     <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence" target="_blank" rel="noreferrer">Source repository <span>Python / Next.js / SQLite / Neon / tests ↗</span></a>
-    <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/blob/main/docs/KRIOS_DEMO.md" target="_blank" rel="noreferrer">Short interview demonstration <span>Source observations, screening and models ↗</span></a>
+    <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/blob/main/docs/KRIOS_DEMO.md" target="_blank" rel="noreferrer">Technical walkthrough <span>Source observations, screening and models ↗</span></a>
     <a href="https://github.com/abhijith-sivaprasadan/finnish-grid-connection-evidence/blob/main/docs/STATUS.md" target="_blank" rel="noreferrer">Dated release status <span>What works, what is not independently verified ↗</span></a>
     <a href="https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/" target="_blank" rel="noreferrer">Original Fingrid Grid Scope <span>Indicative operator viewer and disclaimers ↗</span></a>
    </div>

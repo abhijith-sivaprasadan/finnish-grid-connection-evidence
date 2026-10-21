@@ -37,22 +37,46 @@ test("Shell navigates, supports mobile and keyboard search, and reports status h
  assert.match(shell,/compiled_snapshot/);
  assert.match(shell,/No verified current interval available/);
 });
-test("Research overview surfaces trustworthy source counts, trends and audit gaps",()=>{
+test("Recruiter-facing overview exposes source-limited decision flow rather than a workbench homepage",()=>{
  const home=read("src/app/page.tsx");
+ const matrix=read("src/components/evidence-matrix.tsx");
  const trends=read("src/components/overview-trends.tsx");
  const connections=read("src/app/connections/page.tsx");
- assert.match(home,/Grid connection evidence/);
- assert.match(home,/compiled_snapshot/);
- assert.match(home,/Fingrid|source records/i);
+ assert.match(home,/From grid evidence to/);
+ assert.match(home,/screenRecords\(/);
+ assert.match(home,/EvidenceMatrix/);
  assert.match(home,/operationalWindow\(latest,1\)/);
- assert.match(home,/Not captured in sample/);
- assert.match(home,/Screenshot comparison/);
+ assert.match(home,/Source snapshot|source snapshot|source evidence|source records/i);
+ assert.match(home,/Screenshot transcription reviews/);
+ assert.match(home,/Uncaptured sample cells/);
+ assert.match(home,/0\s*operator|operator_confirmed_feasible/);
+ assert.match(matrix,/effective_year/);
+ assert.match(matrix,/sourceReviewStatus/);
+ assert.match(matrix,/Not captured/);
+ assert.match(matrix,/aria-pressed/);
+ assert.match(matrix,/unknown, not zero/i);
  assert.match(trends,/No stored observations/);
  assert.match(trends,/historical intervals/i);
  assert.match(connections,/Open filtered API JSON/);
  assert.match(connections,/initialPointId/);
  assert.match(connections,/not imply zero capacity/);
 });
+
+test("Navigation is decision-first and scrollable even in short or mobile viewports",()=>{
+ const shell=read("src/components/dashboard-shell.tsx");
+ const css=read("src/app/globals.css");
+ assert.match(shell,/shell-nav-viewport/);
+ assert.match(shell,/Scroll through dashboard pages/);
+ assert.match(shell,/Scroll through mobile pages/);
+ assert.match(shell,/START/);
+ assert.match(shell,/ANALYSE/);
+ assert.match(shell,/SOURCES/);
+ assert.match(css,/\.shell-nav-viewport\s*\{/);
+ assert.match(css,/overscroll-behavior-y:contain/);
+ assert.match(css,/overflow-y:auto/);
+ assert.match(css,/\.shell-mobile-sidebar\.open\s*\{/);
+});
+
 test("Matrix, quality and operations preserve source links, nulls and interaction",()=>{
  const matrix=read("src/components/connection-workbench.tsx");
  const quality=read("src/components/quality-workbench.tsx");

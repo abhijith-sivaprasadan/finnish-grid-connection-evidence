@@ -22,9 +22,9 @@ export default async function Screening({searchParams}:{searchParams:SP}){
  try{evidence=await evidenceCatalogue();}catch{error="The read-only evidence store is unavailable. No sample numbers were substituted.";}
  return <section className="sc-page">
   <header className="sc-hero">
-    <div className="sc-eyebrow">RESEARCH WORKSPACE / FINLAND / EVIDENCE TRIAGE</div>
-    <h1>Connection <em>screening.</em></h1>
-    <p>Compare a proposed electricity-consumption request against recorded Fingrid Grid Scope figures. Review capacity evidence, Fingrid connection-pathway guidance and next actions separately. A threshold match does not establish that a 100 MW project can use a specific 400 kV bay.</p>
+    <div className="sc-eyebrow">CONNECTION ASSESSMENT / FINLAND / SOURCE QUALIFIED</div>
+    <h1>Assess a <em>connection request.</em></h1>
+    <p>Start with a proposed load, target year and connection arrangement. The results separate published MW estimates, engineering connection-pathway guidance and the evidence still needed for an operator enquiry.</p>
     <div className="sc-hero-links"><Link href="/connections">Inspect capacity records ↗</Link><Link href="/stations">Historical station names ↗</Link><Link href="/method">Source limitations ↗</Link></div>
   </header>
   {error&&<p className="notice warn" role="alert">{error}</p>}

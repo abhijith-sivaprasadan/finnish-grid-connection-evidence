@@ -9,12 +9,12 @@ const caseStudy=readFileSync("src/app/case-study/page.tsx","utf8");
 const analysis=readFileSync("src/app/analysis/page.tsx","utf8");
 const shell=readFileSync("src/components/dashboard-shell.tsx","utf8");
 
-test("Krios case study has all four role deliverables and source limits",()=>{
+test("Independent workflow page presents four evidence stages and source limits",()=>{
  for(const label of ["Own the grid data","Understand current and future availability",
                     "Screen candidate requests","Model and communicate uncertainty"])
    assert.ok(caseStudy.includes(label), label);
- assert.match(caseStudy,/not a Krios or Fingrid production system/i);
- assert.match(caseStudy,/no(?:t|ne) validated|Neither validates|not a historic/i);
+ assert.match(caseStudy,/not a Fingrid product or a connection-approval service/i);
+ assert.match(caseStudy,/not operator-calibrated|neither validates|not a historic/i);
  assert.match(caseStudy,/operator-confirmed capacity count of/i);
  assert.match(shell,/href:"\/case-study"/);
 });
@@ -34,7 +34,7 @@ test("analysis count must be projected from audited source not stale Oct-19 stri
 });
 
 test("source-cluster case study distinguishes Grid Scope estimates from model scenarios",()=>{
- assert.match(caseStudy,/not a site|not operator|not a connect/i);
+ assert.match(caseStudy,/not a site|not operator|not a connect|connection-approval/i);
  assert.match(caseStudy,/source review|screenshot|source-record|screenshots/i);
  assert.match(caseStudy,/modelled|model|PyPSA/i);
  assert.match(caseStudy,/\/screening\?demand_mw=100/);

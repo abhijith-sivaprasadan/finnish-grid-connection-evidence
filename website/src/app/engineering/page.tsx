@@ -5,9 +5,9 @@ import report from "@/lib/krios-engineering-verified-2026.json";
 export const metadata:Metadata={title:"Electrical engineering lab · CIGRE and PyPSA",description:"Verified pandapower HV/MV AC, N−1, independent PyPSA nonlinear AC comparison and hypothetical Finnish regional sensitivity."};
 export default function Engineering(){
  return <><section className="page-hero"><div className="wrap">
- <p className="eyebrow">Krios portfolio / electrical reference engineering</p>
- <h1>From data to <em>power-system physics.</em></h1>
- <p className="lede">Reproducible high-voltage and medium-voltage AC simulations, explicit N−1 outage outcomes, independently verified solver comparison, and carefully qualified Finnish transfer-model assumptions. Reference benchmarks are not physical Finnish or Dutch connection networks.</p>
+ <p className="eyebrow">BENCHMARK ENGINEERING / VERIFIED SOLVER OUTPUT</p>
+ <h1>Test electrical <em>constraints.</em></h1>
+ <p className="lede">Explore how additional demand affects voltage, loading and contingency outcomes on standard CIGRE reference networks. Separate PyPSA scenarios illustrate regional assumptions; none represents an operator-calibrated connection study.</p>
  <div className="action-row"><Link href="/network-map" className="button">Explore 2024 OSM topology ↗</Link><a className="button secondary" target="_blank" rel="noreferrer" href={report.source_workflow_url}>Inspect numerical solver run ↗</a></div>
  </div></section>
  <section className="section"><div className="wrap"><EngineeringScenarioExplorer/></div></section>

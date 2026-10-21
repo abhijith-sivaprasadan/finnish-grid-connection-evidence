@@ -1,68 +1,98 @@
 import Link from "next/link";
-import { overview, coverage } from "@/lib/repository";
-import { evidenceCatalogue } from "@/lib/catalogue";
-import { operationalWindow } from "@/lib/workbench";
-import { OverviewTrends } from "@/components/overview-trends";
-import type { Capacity,Operation,Point } from "@/lib/types";
-import { sourceReviewStatus } from "@/lib/verification";
+import {overview} from "@/lib/repository";
+import {evidenceCatalogue} from "@/lib/catalogue";
+import {operationalWindow} from "@/lib/workbench";
+import {OverviewTrends} from "@/components/overview-trends";
+import {EvidenceMatrix} from "@/components/evidence-matrix";
+import {parseScreening,screenRecords} from "@/lib/screening";
+import {sourceReviewStatus} from "@/lib/verification";
+import type {Capacity,Operation,Point} from "@/lib/types";
 
 export const dynamic="force-dynamic";
-const short=(name:string)=>name.replace(/\s+\d+\s*kV$/i,"");
 export default async function Home(){
- const results=await Promise.allSettled([overview(),evidenceCatalogue(),coverage()]);
+ const results=await Promise.allSettled([overview(),evidenceCatalogue()]);
  const summary=results[0].status==="fulfilled"?results[0].value:null;
- const stations:Point[]=results[1].status==="fulfilled"?results[1].value.stations:[];
- const capacity:Capacity[]=results[1].status==="fulfilled"?results[1].value.observations:[];
- const counts=results[2].status==="fulfilled"?results[2].value.coverage:null;
+ const catalogue=results[1].status==="fulfilled"?results[1].value:null;
+ const points:Point[]=catalogue?.stations??[];
+ const capacities:Capacity[]=catalogue?.observations??[];
+ const totalCells=points.length*[...new Set(capacities.map(r=>r.effective_year).filter(y=>y!==null))].length*2;
+ const reviewed=capacities.filter(row=>sourceReviewStatus(row).status==="screenshot_match").length;
+ const screen=catalogue&&points.length>0?screenRecords(points,capacities,parseScreening(new URLSearchParams("demand_mw=100&year=2030&direction=consumption&connection_type=switchyard"))):null;
  const latest=summary?.newest_operational_interval_utc??null;
  const age=latest?Math.max(0,Math.floor((Date.now()-Date.parse(latest))/3600000)):null;
  let operations:Operation[]=[];
- if(latest&&summary?.data_mode==="neon")try{operations=(await operationalWindow(latest,1)).data;}catch{}
- const year=capacity.map(c=>c.effective_year).filter((x):x is number=>x!==null).sort((a,b)=>a-b)[0]??null;
- const byCell=new Map<string,Capacity[]>();
- for(const row of capacity){const k=[row.connection_point_id,row.direction,row.effective_year].join("|");byCell.set(k,[...(byCell.get(k)||[]),row]);}
- const reading=(p:Point,d:"production"|"consumption")=>year===null?[]:byCell.get([p.connection_point_id,d,year].join("|"))??[];
- const recorded=counts?.published??0, gaps=counts?.missing_in_compiled_capture??0;
- const screenshotMatches=capacity.filter(c=>sourceReviewStatus(c).status==="screenshot_match").length;
- return <div className="df-home">
-   <header className="df-home-header">
-    <div><p className="df-overline">FINLAND / PUBLIC GRID EVIDENCE</p><h1>Grid connection evidence</h1><p>Inspect the available source records before drawing conclusions. Five original stations are a research sample—not Finland's full network.</p></div>
-    <div className="df-header-actions"><Link href="/screening" className="button">Screen a 100 MW connection ↗</Link> <Link href="/connections">Source matrix →</Link></div>
-   </header>
-   <div className="dashboard-archive-link"><div><strong>Historical main-grid station archive</strong><span>128 source-listed rows · printed 127 · table heading 1.1.2020 · not a current capacity register</span></div><Link href="/stations">Explore source names ↗</Link></div>
-   <div className="dashboard-archive-link"><div><strong>NEW · PyPSA Finland historical demand sensitivity</strong><span>192 real source intervals · 4 HiGHS-optimal scenarios · hypothetical 1,500 MW balancing cap, not grid availability</span></div><Link href="/analysis">Explore system model ↗</Link></div>
-   <section className="df-home-stats" aria-label="Recorded data summary">
-    <div><span>Substations in this dataset</span><strong>{summary?.points??"—"}</strong><small>Not a national catalogue</small></div>
-    <div><span>Recorded indicative values</span><strong>{summary?.capacity_observations??"—"}</strong><small>Dated Fingrid transcriptions</small></div>
-    <div><span>Not captured in sample</span><strong>{counts?.missing_in_compiled_capture??"—"}</strong><small>Unknown, not zero MW</small></div>
-    <div><span>Screenshot comparison</span><strong>{screenshotMatches}<small> / {capacity.length}</small></strong><small>Transcription only · not network validation</small></div>
-   </section>
-   <div className="df-home-main">
-    <section className="df-home-panel">
-     <div className="df-panel-head"><div><p className="df-overline">01 / CONNECTION CAPACITY SOURCE RECORDS</p><h2>What was actually recorded</h2><p>Individually recorded indicative values for {year??"the available"} effective year; showing up to 15 of {stations.length} stations here. Inspect the explorer for all catalogue records.</p></div><Link href="/connections">Inspect all years ↗</Link></div>
-     <div className="df-table-scroll" role="region" tabIndex={0} aria-label="Recorded source capacity values by station">
-      <table className="df-home-table"><thead><tr><th scope="col">Substation</th><th scope="col">Production · {year??"—"}</th><th scope="col">Consumption · {year??"—"}</th><th scope="col">Open</th></tr></thead><tbody>
-      {stations.slice(0,15).map(p=><tr key={p.connection_point_id}><th scope="row"><strong>{short(p.name)}</strong><small>{p.voltage_kv??"—"} kV</small></th>
-      {(["production","consumption"] as const).map(d=>{const list=reading(p,d);return <td key={d}>{list.length===1?<><strong>{list[0].capacity_value} {list[0].capacity_unit}</strong><small>Indicative · source capture</small></>:<span className="df-not-captured">{list.length>1?"Needs reconciliation":"Not captured"}</span>}</td>;})}
-      <td><Link href={"/connections?point_id="+encodeURIComponent(p.connection_point_id)}>Inspect ↗</Link></td></tr>)}
-      </tbody></table>{stations.length===0&&<p className="df-empty">The source catalogue is currently unavailable. No data has been substituted.</p>}</div>
-     <footer className="df-panel-footer"><span>{recorded} recorded / {gaps} uncaptured intersections in the selected capture matrix. Not a percentage of Finnish substations.</span><a href="https://www.fingrid.fi/en/grid/grid-connection-agreement-phases/grid-scope/" rel="noreferrer" target="_blank">Fingrid Grid Scope ↗</a></footer>
-    </section>
-    <aside className="df-home-aside">
-     <div className="df-aside-card"><p className="df-overline">EVIDENCE CLASSIFICATION</p><h3>What you can conclude</h3>
-      <div className="df-class-row"><strong>Source figures</strong><span>{screenshotMatches} screenshot-matched original records</span></div>
-      <div className="df-class-row"><strong>Source coverage</strong><span>{stations.length} sampled connection points only</span></div>
-      <div className="df-class-row"><strong>Physical grid headroom</strong><span>Not established</span></div>
-      <div className="df-class-row"><strong>Guaranteed connectability</strong><span>Not established</span></div>
-      <Link href="/quality#audit">Review the audit →</Link>
-     </div>
-     <div className="df-aside-card compact"><p className="df-overline">OPERATIONS FRESHNESS</p><h3>{age!==null?age>=24?Math.floor(age/24)+" days old":age+" hours old":"Unavailable"}</h3>
-      <p>Latest historical national interval: {latest?latest.slice(0,16).replace("T"," ")+" UTC":"not recorded"}.</p>
-      <p>{summary?.data_mode==="neon"?"Read-only source database connected.":summary?.data_mode==="compiled_snapshot"?"Compiled source snapshot mode.":"Evidence store unavailable."}</p>
-      <Link href="/operations">Examine national operations →</Link></div>
-    </aside>
+ if(latest&&summary?.data_mode==="neon")try{operations=(await operationalWindow(latest,1)).data;}catch{ /* Show a genuine empty source state. */ }
+ return <div className="mvp-home">
+  <header className="mvp-hero">
+   <div className="mvp-hero-content">
+    <p className="df-overline">Finland · Grid evidence &amp; engineering</p>
+    <h1>From grid evidence to <em>the next decision.</em></h1>
+    <p className="mvp-hero-lead">Explore an indicative 100 MW demand request, trace the published source figures, and see which engineering questions remain open.</p>
+    <div className="mvp-hero-actions">
+     <Link className="button" href="/screening?demand_mw=100&year=2030&connection_type=switchyard">Explore the 100 MW case <span aria-hidden="true">↗</span></Link>
+     <Link className="mvp-hero-text-link" href="/case-study">How the analysis works →</Link>
+    </div>
+    <p className="mvp-hero-qualification">Independent demonstration using a five-point Fingrid Grid Scope sample. Not an operator connection offer.</p>
    </div>
-   <section className="df-operations-section"><div className="df-panel-head"><div><p className="df-overline">02 / NATIONAL SYSTEM CONTEXT</p><h2>Separate national operations</h2><p>Historical source series complement the evidence dataset, but do not establish substation-specific capacity.</p></div><Link href="/operations">All intervals ↗</Link></div><OverviewTrends rows={operations}/></section>
-   <section className="df-roadmap-note"><h2>Why not every substation?</h2><p>The catalogue currently reflects a deliberately limited, manually transcribed and screenshot-reviewed capture. Fingrid's map shows broader infrastructure, but not every station has a published capacity calculation. A larger inventory must distinguish registered stations, stations with source observations, and stations still awaiting review.</p><Link href="/method">Read source limitations →</Link></section>
-  </div>;
+   <aside className="mvp-hero-result" aria-label="Illustrative 2030 screening result">
+    <span className="mvp-hero-eyebrow">Illustrative request · 2030</span>
+    <strong className="mvp-hero-big">100 <small>MW</small></strong>
+    <span className="mvp-hero-result-title">Demand · indicative screening</span>
+    {screen?<div className="mvp-hero-findings">
+      <div><strong>{screen.summary.indicative_threshold_met}</strong><span>Published thresholds met</span></div>
+      <div><strong>{screen.summary.unknown_not_captured}</strong><span>Requested-year values missing</span></div>
+      <div><strong>{screen.summary.operator_confirmed_feasible}</strong><span>Operator-confirmed connection offers</span></div>
+     </div>:<p className="mvp-hero-empty">The source evidence is unavailable. No outcome has been substituted.</p>}
+    <Link href="/screening?demand_mw=100&year=2030&connection_type=switchyard">Review results and connection pathway →</Link>
+   </aside>
+  </header>
+
+  <section className="mvp-flow" aria-label="Explore the evidence workflow">
+   <Link href="/screening"><span>01 / Assess</span><strong>Screen a request</strong><small>Choose MW, year and connection arrangement</small><b aria-hidden="true">↗</b></Link>
+   <Link href="/connections"><span>02 / Verify</span><strong>Inspect the evidence</strong><small>See captured values, unknowns and source dates</small><b aria-hidden="true">↗</b></Link>
+   <Link href="/engineering"><span>03 / Test</span><strong>Examine electrical effects</strong><small>Explore separate benchmark AC and PyPSA studies</small><b aria-hidden="true">↗</b></Link>
+  </section>
+
+  <section className="mvp-kpis" aria-label="Scope of source evidence">
+   <div><span>Original sampled grid points</span><strong>{catalogue?points.length:"—"}</strong><small>400 kV-labelled sources in this sample</small></div>
+   <div><span>Indicative MW records</span><strong>{catalogue?capacities.length:"—"}</strong><small>Captured 17 October 2026</small></div>
+   <div><span>Uncaptured sample cells</span><strong>{catalogue?Math.max(0,totalCells-capacities.length):"—"}</strong><small>Unknown, never treated as zero</small></div>
+   <div><span>Screenshot transcription reviews</span><strong>{catalogue?reviewed+" / "+capacities.length:"—"}</strong><small>Not physical network validation</small></div>
+  </section>
+
+  <section className="mvp-main-grid">
+   <div className="mvp-matrix-panel">
+    <EvidenceMatrix points={points} observations={capacities}/>
+   </div>
+   <aside className="mvp-context" aria-label="Data interpretation">
+    <div className="mvp-context-card">
+     <p className="df-overline">How to interpret</p><h2>A lead is not a connection.</h2>
+     <p>Fingrid's Grid Scope values are indicative. Matching a requested MW number does not identify a suitable voltage arrangement, physical headroom, queue position or reinforcement.</p>
+     <Link href="/screening">See pathway checks →</Link>
+    </div>
+    <div className="mvp-context-card compact">
+     <p className="df-overline">Location and network context</p><h2>Explore the source topology</h2>
+     <p>The interactive 2024 OSM-derived map shows virtual AC nodes and links; the five named Grid Scope points have <strong>not</strong> been matched to these nodes.</p>
+     <Link href="/network-map">Open the network map ↗</Link>
+    </div>
+   </aside>
+  </section>
+
+  <section className="mvp-operations df-operations-section">
+   <div className="df-panel-head"><div><p className="df-overline">Separate evidence · historical system operations</p>
+    <h2>National electricity, not local capacity</h2>
+    <p>Fingrid and ENTSO-E source series from the most recently stored UTC day. Different definitions and units remain separate.</p>
+   </div><Link href="/operations">Explore time series ↗</Link></div>
+   <OverviewTrends rows={operations}/>
+   <div className="mvp-operations-meta">Latest source interval: {latest?latest.replace("T"," ").slice(0,16)+" UTC":"unavailable"}{age!==null?" · "+(age>=24?Math.floor(age/24)+" days":age+" hours")+" old":""} · Historical observations only.</div>
+  </section>
+
+  <section className="mvp-next">
+   <div><span className="df-overline">For deeper technical review</span><h2>Run the model. Keep its assumptions visible.</h2>
+    <p>Reference CIGRE AC and N−1 cases, regional PyPSA scenarios and an ODbL-source geographic view. Model outputs do not overwrite the published station evidence.</p>
+   </div>
+   <div className="mvp-next-actions"><Link className="button" href="/engineering">Explore engineering studies ↗</Link><Link href="/analysis">System-level PyPSA scenarios →</Link><Link href="/quality">Data quality and provenance →</Link></div>
+  </section>
+  <footer className="mvp-home-note">Five source points ≠ Finnish national coverage. Neither a published threshold nor a benchmark model establishes operator-approved connection capacity. <Link href="/method">Method and evidence definitions ↗</Link></footer>
+ </div>;
 }
