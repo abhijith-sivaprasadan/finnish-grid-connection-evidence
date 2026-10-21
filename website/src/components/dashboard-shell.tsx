@@ -32,17 +32,18 @@ function NavIcon({name}:{name:IconName}){
  };
  return <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6">{paths[name]}</svg>;
 }
+function isActivePage(path:string,href:string){return path===href||(href!=="/"&&path.startsWith(href+"/"));}
 function Navigation({close}:{close?:()=>void}){
  const path=usePathname();
  return <nav className="shell-nav" aria-label="Main sections">
   {(["START","ANALYSE","SOURCES","ABOUT"] as const).map(group=><div className="shell-nav-group" key={group}>
     <p className="shell-group-label">{group}</p>
     {nav.filter(item=>item.group===group).map(item=><Link key={item.href} href={item.href}
-       aria-current={path===item.href?"page":undefined}
-       onClick={close} className={"shell-nav-link"+(path===item.href?" current":"")}>
+       aria-current={isActivePage(path,item.href)?"page":undefined}
+       onClick={close} className={"shell-nav-link"+(isActivePage(path,item.href)?" current":"")}>
       <span className="shell-nav-icon"><NavIcon name={item.icon}/></span>
       <span className="shell-nav-text"><strong>{item.label}</strong><small>{item.hint}</small></span>
-      {path===item.href&&<span className="shell-nav-indicator" aria-hidden="true"/>}
+      {isActivePage(path,item.href)&&<span className="shell-nav-indicator" aria-hidden="true"/>}
     </Link>)}
   </div>)}
  </nav>;
@@ -64,7 +65,7 @@ export function DashboardShell({children,status}:{children:React.ReactNode;statu
  useEffect(()=>{if(palette){inputRef.current?.focus();}},[palette]);
  useEffect(()=>{setMenu(false);},[pathname]);
  const matches=nav.filter(x=>(x.label+" "+x.hint).toLowerCase().includes(search.toLowerCase()));
- const current=nav.find(n=>n.href===pathname);
+ const current=nav.find(n=>n.href===pathname)??nav.find(n=>isActivePage(pathname,n.href));
  const connected=status.mode==="neon";
  const ageLabel=status.ageHours!==null?status.ageHours>=24?Math.floor(status.ageHours/24)+"d old":status.ageHours+"h old":null;
  const go=(href:string)=>{router.push(href);setPalette(false);setSearch("");};
