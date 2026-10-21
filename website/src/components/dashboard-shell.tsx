@@ -106,7 +106,7 @@ export function DashboardShell({children,status}:{children:React.ReactNode;statu
         </button>
       </div>
     </header>
-    <div className="shell-ribbon"><span><span className="ribbon-square"/> Independent demonstrator · operator data and research models are distinct</span>
+    <div className="shell-ribbon"><span><span className="ribbon-square"/> Independent research · not affiliated with Fingrid or a TSO</span>
       <span>{status.latest ? "Latest historical interval · "+status.latest.slice(0,10)+" UTC"+(ageLabel?" · "+ageLabel:"") : "No verified current interval available"}</span>
     </div>
     <main id="main" className="shell-page">{children}</main>
