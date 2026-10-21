@@ -91,7 +91,7 @@ export default async function Home(){
    <div><span className="df-overline">For deeper technical review</span><h2>Run the model. Keep its assumptions visible.</h2>
     <p>Reference CIGRE AC and N−1 cases, regional PyPSA scenarios and an ODbL-source geographic view. Model outputs do not overwrite the published station evidence.</p>
    </div>
-   <div className="mvp-next-actions"><Link className="button" href="/engineering">Explore engineering studies ↗</Link><Link href="/quality">Data quality and provenance →</Link></div>
+   <div className="mvp-next-actions"><Link className="button" href="/engineering">Explore engineering studies ↗</Link><Link href="/analysis">System-level PyPSA scenarios →</Link><Link href="/quality">Data quality and provenance →</Link></div>
   </section>
   <footer className="mvp-home-note">Five source points ≠ Finnish national coverage. Neither a published threshold nor a benchmark model establishes operator-approved connection capacity. <Link href="/method">Method and evidence definitions ↗</Link></footer>
  </div>;
