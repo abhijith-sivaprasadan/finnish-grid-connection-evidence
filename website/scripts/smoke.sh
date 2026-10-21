@@ -89,7 +89,7 @@ check 400 "/api/v1/screening?demand_mw=0"
 grep -q "INVALID_QUERY" /tmp/grid-smoke-response.json
 check 400 "/api/v1/screening?demand_mw=100&direction=production"
 check 200 "/stations"
-grep -q "Station inventory" /tmp/grid-smoke-response.json
+grep -q "What the archive does not tell us" /tmp/grid-smoke-response.json
 check 200 "/api/v1/stations?voltage=220"
 grep -q '"count":13' /tmp/grid-smoke-response.json
 check 400 "/api/v1/stations?voltage=750"
