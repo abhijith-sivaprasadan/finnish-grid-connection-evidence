@@ -6,10 +6,10 @@ import "./globals.css";
 export const dynamic="force-dynamic";
 export const metadata:Metadata={
   metadataBase:new URL("https://finnish-grid-atlas.vercel.app"),
-  title:{default:"Finnish Grid Atlas — Independent grid research",template:"%s | Finnish Grid Atlas"},
-  description:"An independent Finnish grid evidence workspace. Explore conditional connection estimates, national historical operations, completeness and source provenance.",
+  title:{default:"Finnish Grid Atlas — Grid evidence and connection screening",template:"%s | Finnish Grid Atlas"},
+  description:"Explore a source-linked Finnish grid connection-screening demonstration, historic national operations, electrical reference studies and transparent evidence limitations.",
   robots:{index:true,follow:true},
-  openGraph:{title:"Finnish Grid Atlas",description:"Independent grid evidence and connection outlook for Finland.",type:"website",siteName:"Finnish Grid Atlas"},
+  openGraph:{title:"Finnish Grid Atlas",description:"Source-linked connection screening and transparent Finnish grid engineering context.",type:"website",siteName:"Finnish Grid Atlas"},
   twitter:{card:"summary_large_image"}
 };
 export default async function RootLayout({children}:{children:React.ReactNode}){
