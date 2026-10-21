@@ -10,14 +10,23 @@ export function EngineeringScenarioExplorer(){
  const [hv,setHv]=useState(100);
  const [mv,setMv]=useState(2);
  const [regional,setRegional]=useState("flat_100mw_derated_corridor");
+ const [study,setStudy]=useState<"hv"|"mv"|"regional"|"ac"|"osm">("hv");
  const h=results.cigre_hv.cases.find(x=>x.added_mw===hv)??results.cigre_hv.cases[0];
  const h0=results.cigre_hv.cases[0];
  const m=results.cigre_mv.cases.find(x=>x.added_mw===mv)??results.cigre_mv.cases[0];
  const m0=results.cigre_mv.cases[0];
  const r=results.fingrid_regional_v2.scenarios.find(x=>x.name===regional)??results.fingrid_regional_v2.scenarios[0];
  const r0=results.fingrid_regional_v2.scenarios[0];
- return <div style={{display:"grid",gap:28}}>
- <section className="research-card">
+ return <div className="mvp-studies">
+ <div className="mvp-study-tabs" role="group" aria-label="Select electrical study">
+  <button type="button" aria-pressed={study==="hv"} onClick={()=>setStudy("hv")}>High-voltage AC & N−1</button>
+  <button type="button" aria-pressed={study==="mv"} onClick={()=>setStudy("mv")}>Medium-voltage feeder</button>
+  <button type="button" aria-pressed={study==="regional"} onClick={()=>setStudy("regional")}>Finnish PyPSA v2</button>
+  <button type="button" aria-pressed={study==="ac"} onClick={()=>setStudy("ac")}>Solver comparison</button>
+  <button type="button" aria-pressed={study==="osm"} onClick={()=>setStudy("osm")}>Topology uncertainty</button>
+ </div>
+ <div className="mvp-study-focus" aria-live="polite">
+{study==="hv"&& <section className="research-card" aria-label="High-voltage AC and N minus one">
   <span className="kicker">01 / Nonlinear AC + N−1 / standard 13-bus CIGRE high-voltage reference</span>
   <h3>Hypothetical data-centre connection</h3>
   <p>Actual pandapower 3.5.6 solver results. The additional load is connected at a chosen benchmark bus, at an assumed power factor of 0.95. These are not actual Fingrid station calculations.</p>
@@ -31,8 +40,8 @@ export function EngineeringScenarioExplorer(){
    <Stat title="N−1 unresolved outages" value={h.n1_nonconverged+" / "+h.n1_tested} detail={h.n1_converged_with_reference_violation+" converged outage cases also violated illustrative loading or voltage thresholds"}/>
   </div>
   <p className="footnote">One outage per physical reference line or transformer, 15 total. Non-converged studies are never treated as passes. A 0.9–1.1 pu flag is illustrative, not a Finnish grid code guarantee.</p>
- </section>
- <section className="research-card">
+ </section>}
+{study==="mv"&& <section className="research-card" aria-label="Medium-voltage distribution feeder">
   <span className="kicker">02 / Medium-voltage feeder / standard 15-bus CIGRE benchmark</span>
   <h3>Realistic scale for feeder demonstration</h3>
   <p>Generic CIGRE MV network with wind/PV. Added loads stay within 0–2 MW—not an invented 100 MW MV grid connection in the Netherlands.</p>
@@ -45,8 +54,8 @@ export function EngineeringScenarioExplorer(){
    <Stat title="Model feeder losses" value={m.losses_mw.toFixed(4)+" MW"} detail={difference(m.losses_mw,m0.losses_mw,4)+" MW vs reference"}/>
    <Stat title="Total model load" value={m.reference_total_load_mw.toFixed(2)+" MW"} detail="Existing generic feeder plus hypothetical project"/>
   </div>
- </section>
- <section className="research-card">
+ </section>}
+{study==="regional"&& <section className="research-card" aria-label="Regional Finnish PyPSA">
   <span className="kicker">03 / PyPSA v2 / real Fingrid timestamps, fictional geography</span>
   <h3>Regional transfer-assumption sensitivity</h3>
   <p>Two assumed Finnish regions, with 65% of recorded generation and 45% of recorded demand assigned north. The national source readings are authentic; the geographic shares and line ratings are invented inputs.</p>
@@ -59,8 +68,8 @@ export function EngineeringScenarioExplorer(){
    <Stat title="Hypothetical southern balancing" value={r.assumed_south_balancing_mwh.toFixed(1)+" MWh"} detail="Optimized assumption; not historical import or procurement"/>
    <Stat title="Model shortage relaxation" value={r.model_slack_mwh.toFixed(0)+" MWh"} detail="All four cases have fictional balancing resources; zero does not validate Finnish reliability"/>
   </div>
- </section>
- <section className="research-card">
+ </section>}
+{study==="ac"&& <section className="research-card" aria-label="Independent AC solver comparison">
   <span className="kicker">04 / AC verification / independent software stacks</span>
   <h3>pandapower versus PyPSA</h3>
   <p>Both packages independently solved the same explicitly specified artificial 110 kV, three-bus nonlinear AC network—not the CIGRE HV benchmark.</p>
@@ -68,8 +77,8 @@ export function EngineeringScenarioExplorer(){
    <Stat title="Largest bus-voltage difference" value={results.identical_ac_crosssolver.maximum_voltage_difference_pu+" pu"} detail={"Predeclared tolerance "+results.identical_ac_crosssolver.tolerance_pu+" pu"}/>
    <Stat title="Largest line active-flow difference" value={results.identical_ac_crosssolver.maximum_active_branch_flow_difference_mw+" MW"} detail={"Predeclared tolerance "+results.identical_ac_crosssolver.tolerance_mw+" MW"}/>
   </div>
- </section>
- <section className="research-card">
+ </section>}
+{study==="osm"&& <section className="research-card" aria-label="Finnish OSM source topology uncertainty">
   <span className="kicker">05 / ODbL Finnish source proxy / not 2025 calibration</span>
   <h3>Uncertainty in source-assigned line ratings</h3>
   <p>The following bars count 2024 OSM model records with hypothetical nominal rating below 1,500 MVA. These are NOT overloaded transmission lines or observed congestion.</p>
@@ -81,6 +90,7 @@ export function EngineeringScenarioExplorer(){
    </div>)}
   </div>
   <p>Across 137 source line records, {results.osm_input_uncertainty.graph_edge_disconnections} edge-removals disconnect the partial original graph. That is a topological observation, not operator N−1 compliance. Physical calibration remains blocked pending actual equipment, topology, spatial injection and measurement evidence.</p>
- </section>
+ </section>}
+ </div>
  </div>;
 }
