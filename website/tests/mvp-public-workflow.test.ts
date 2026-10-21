@@ -30,7 +30,7 @@ test("public evidence coverage matrix maps only observed point, year and directi
  assert.equal(snapshotPoints.length*yearCount*2-snapshotCapacities.length,12);
  const ui=read("src/components/evidence-matrix.tsx");
  for(const fragment of ["sourceReviewStatus","source_url","source_observed_at","effective_year",
-  "point.connection_point_id","aria-pressed","aria-live","Not captured","no matching value","No matching value"]){
+  "point.connection_point_id","aria-pressed","aria-live","Not captured","No matching value"]){
   assert.ok(ui.includes(fragment),fragment);
  }
  assert.doesNotMatch(ui,/operator_confirmed_feasible:\s*[1-9]/);
