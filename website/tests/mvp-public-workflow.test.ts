@@ -52,4 +52,7 @@ test("screening and geographic map keep separate identities and source disclaime
  assert.match(sourceMap,/not Fingrid-certified substations/);
  assert.match(sourceMap,/ODbL 1.0/);
  assert.match(sourceMap,/onClick/);
+ assert.match(sourceMap,/aria-label="Select an original 2024 OSM proxy bus"/);
+ assert.match(sourceMap,/visible\.map\(n=><option/);
+ assert.doesNotMatch(sourceMap,/tabIndex=\{0\}/);
 });
