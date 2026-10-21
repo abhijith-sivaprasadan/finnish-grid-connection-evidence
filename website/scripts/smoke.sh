@@ -55,10 +55,10 @@ check 200 "/api/v1/model/finland/borders-2025"
 grep -q '"observed_quarter_hour_count":2880' /tmp/grid-smoke-response.json
 grep -q '"guaranteed_import_rights":false' /tmp/grid-smoke-response.json
 check 200 "/engineering"
-grep -q "power-system physics" /tmp/grid-smoke-response.json
+grep -q "Test electrical" /tmp/grid-smoke-response.json
 grep -q "Hypothetical data-centre connection" /tmp/grid-smoke-response.json
 check 200 "/network-map"
-grep -q "Explore the network" /tmp/grid-smoke-response.json
+grep -q "network geography" /tmp/grid-smoke-response.json
 check 200 "/api/v1/model/engineering"
 grep -q '"operator_approved_site_mw":null' /tmp/grid-smoke-response.json
 check 200 "/case-study"
@@ -114,8 +114,10 @@ check 200 "/operations?days=2"
 check 503 "/api/v1/health"
 grep -q '"status":"degraded"' /tmp/grid-smoke-response.json
 check 200 "/"
-grep -q "Compiled source snapshot" /tmp/grid-smoke-response.json
-grep -q "Grid connection evidence" /tmp/grid-smoke-response.json
-grep -q "What was actually recorded" /tmp/grid-smoke-response.json
-grep -q "RESEARCH WORKSPACE" /tmp/grid-smoke-response.json
+grep -q "From grid evidence to" /tmp/grid-smoke-response.json
+grep -q "What is known, and where the gaps are" /tmp/grid-smoke-response.json
+grep -q "SOURCE-LINKED ANALYSIS" /tmp/grid-smoke-response.json
+grep -q "Source snapshot" /tmp/grid-smoke-response.json
+grep -q "Screen a request" /tmp/grid-smoke-response.json
+grep -q "Capture" /tmp/grid-smoke-response.json
 echo "All no-secret production route and public snapshot smoke checks passed."
