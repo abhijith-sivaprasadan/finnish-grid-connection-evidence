@@ -73,7 +73,9 @@ edit of the original October 17 2026 source snapshot.
   collector reuses a single paced Fingrid HTTP client across all dataset and
   recovery-day requests to respect Fingrid's per-key two-second limit.
   Manual dispatch with `day` and `backfill_days` remains a strict, all-or-nothing
-  1–7-day operation. Runs stay confined to `main`; source credentials and the
+  1–7-day operation. To run the same guarded catch-up immediately, choose
+  `recover_days=10` and leave `backfill_days=1` in the workflow dispatch form.
+  Runs stay confined to `main`; source credentials and the
   writer URL remain private. There is no push-triggered production ingestion.
 - **Emergency stop:** set GitHub Actions repository variable
   `ENABLE_PUBLIC_REFRESH=false` (exact lowercase string), or disable the
