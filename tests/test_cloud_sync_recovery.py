@@ -110,6 +110,6 @@ def test_error_redaction_including_database_exception():
 
 def test_recovery_day_count_and_manual_backfill_are_mutually_exclusive():
     with pytest.raises(ValueError, match="either manual backfill or rolling recovery"):
-        cloud_sync.run(backfill_days=3, recover_days=7, today=date(2026, 11, 2))
+        cloud_sync.run(backfill_days=3, recover_days=10, today=date(2026, 11, 2))
     with pytest.raises(ValueError, match="rolling recovery"):
-        cloud_sync.run(recover_days=8, today=date(2026, 11, 2))
+        cloud_sync.run(recover_days=11, today=date(2026, 11, 2))
