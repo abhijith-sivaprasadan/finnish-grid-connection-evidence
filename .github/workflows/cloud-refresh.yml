@@ -48,7 +48,7 @@ jobs:
       BACKFILL: ${{ inputs.backfill_days || '1' }}
       # Scheduled runs recover missing fully published days without duplicating
       # verified existing days. Manual dispatch keeps strict requested backfill.
-      RECOVER_DAYS: ${{ github.event_name == 'schedule' && '7' || '1' }}
+      RECOVER_DAYS: ${{ github.event_name == 'schedule' && '10' || '1' }}
     steps:
       - uses: actions/checkout@v4
         with:
