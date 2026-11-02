@@ -113,3 +113,48 @@ def test_recovery_day_count_and_manual_backfill_are_mutually_exclusive():
         cloud_sync.run(backfill_days=3, recover_days=10, today=date(2026, 11, 2))
     with pytest.raises(ValueError, match="rolling recovery"):
         cloud_sync.run(recover_days=11, today=date(2026, 11, 2))
+
+
+def test_all_failed_recovery_must_not_report_green_with_existing_older_day(monkeypatch):
+    engine = FakeEngine()
+    calls = []
+    monkeypatch.setattr(cloud_sync, "_verified_existing_days",
+                        lambda _engine, _days: {date(2026, 10, 28)})
+
+    def syncer(*, day, scope, db, today, include_generation):
+        calls.append(day)
+        raise SourceError("Source rejected credentials; check your API subscription and key")
+
+    with pytest.raises(cloud_sync.HostedImportError,
+                       match="2026-10-30: SOURCE_FETCH: UPSTREAM_AUTH"):
+        cloud_sync.run(
+            day="2026-10-30", today=date(2026, 11, 2), recover_days=3,
+            url="postgresql://dummy.invalid/no-secrets", syncer=syncer,
+            engine_factory=lambda _: engine)
+    assert calls == ["2026-10-29", "2026-10-30"]
+    assert engine.disposed
+
+
+def test_partial_backfill_still_imports_valid_older_day_but_reports_failure(monkeypatch):
+    engine = FakeEngine()
+    uploads = []
+    monkeypatch.setattr(cloud_sync, "_verified_existing_days",
+                        lambda _engine, _days: set())
+
+    def syncer(*, day, scope, db, today, include_generation):
+        if day == "2026-10-30":
+            raise SourceError("Source rejected credentials; check your API subscription and key")
+        populate_complete_day(day, db)
+
+    with pytest.raises(cloud_sync.HostedImportError,
+                       match="2026-10-30: SOURCE_FETCH: UPSTREAM_AUTH"):
+        cloud_sync.run(
+            day="2026-10-30", today=date(2026, 11, 2), recover_days=2,
+            url="postgresql://dummy.invalid/no-secrets", syncer=syncer,
+            engine_factory=lambda _: engine,
+            writer=lambda _, batches: uploads.append(batches) or {"ok": True})
+    assert len(uploads) == 1
+    assert len(uploads[0]["operational_series"]) == 288
+    assert all(row["timestamp_utc"].startswith("2026-10-29")
+               for row in uploads[0]["operational_series"])
+    assert engine.disposed
