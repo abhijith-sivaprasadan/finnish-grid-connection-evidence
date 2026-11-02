@@ -63,17 +63,29 @@ edit of the original October 17 2026 source snapshot.
   atomically into Neon. Public production readback verified **576** total
   operational rows, latest UTC interval ending 2026-10-17 00:00.
   The original 18 indicative Grid Scope transcriptions were later screenshot-matched on 18–19 October (17 tooltips and one explicit panel MW). Not physical capacity validation.
-- `.github/workflows/cloud-refresh.yml` now runs at **07:17 UTC daily** with
-  a conservative **three-day publication lag** and one completed UTC day per
-  run. It remains confined to `main` and standard runners; upstream API
-  credentials and the database writer are restricted to private Actions.
-  There is no unguarded push-to-ingest trigger.
+- `.github/workflows/cloud-refresh.yml` runs at **07:17 UTC daily** with
+  a conservative **three-day publication lag**. Scheduled runs now inspect a
+  **10-day rolling recovery window**, skip previously stored days only after
+  verifying full continuous coverage of Fingrid 124/74 and ENTSO-E A65, and
+  stage each missing day separately. Only complete days are mirrored to Neon;
+  incomplete days are reported using credential-safe `day / stage / error code`
+  warnings, never raw connection strings or source response bodies. The
+  collector reuses a single paced Fingrid HTTP client across all dataset and
+  recovery-day requests to respect Fingrid's per-key two-second limit.
+  Manual dispatch with `day` and `backfill_days` remains a strict, all-or-nothing
+  1–7-day operation. Runs stay confined to `main`; source credentials and the
+  writer URL remain private. There is no push-triggered production ingestion.
 - **Emergency stop:** set GitHub Actions repository variable
   `ENABLE_PUBLIC_REFRESH=false` (exact lowercase string), or disable the
   workflow from GitHub Actions. Setting it to `true` or leaving it unset
   permits approved scheduled runs. Manual workflow dispatch remains available
   while scheduled runs are disabled. To avoid the next run, stop it before
   07:17 UTC. A daily successful collection is not real-time telemetry.
+- **Recovery status is not a freshness guarantee:** a scheduled import can
+  report partial progress when some UTC days lack complete source publication.
+  A green recovery job does not imply the public feed is current. Keep the
+  independent site monitor's 168-hour default threshold rather than enlarging
+  it to hide an ingestion failure.
 - The scheduled `.github/workflows/site-monitor.yml` checks the public site daily with **no secrets**. Since production Neon was verified, the scheduled job now requires a connected database, nonempty stored observations and valid, nonstale operational rows from Fingrid 124, Fingrid 74 and ENTSO-E A65. Source URLs, units and timestamps are checked. Default freshness ceiling is `MAX_OPERATIONAL_AGE_HOURS=168`; the GitHub repository variable can tune that ceiling. A failing run should trigger workflow notifications according to the owner's GitHub preferences. This does **not** perform source ingestion.
 - Test one intentional invalid-filter HTTP 400 and one real source link in each
   direction. Do not claim a 200 website health response validates the physical
