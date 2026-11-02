@@ -16,6 +16,14 @@ on:
           - "1"
           - "3"
           - "7"
+      recover_days:
+        description: "Rolling recovery: 1 (normal) or 10 (catch up missed days; backfill_days must be 1)"
+        default: "1"
+        required: false
+        type: choice
+        options:
+          - "1"
+          - "10"
   schedule:
     # Once daily. Avoid high-frequency jobs and Neon free-tier usage.
     - cron: "17 7 * * *"
@@ -46,6 +54,9 @@ jobs:
       # Scheduled runs keep the conservative three-day publication lag.
       TARGET_DAY: ${{ inputs.day }}
       BACKFILL: ${{ inputs.backfill_days || '1' }}
+      # Scheduled runs recover missing fully published days without duplicating
+      # verified existing days. Manual dispatch keeps strict requested backfill.
+      RECOVER_DAYS: ${{ github.event_name == 'schedule' && '10' || inputs.recover_days || '1' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,4 +76,4 @@ jobs:
       - name: Resolve writer URL securely from Neon GitHub integration
         run: python -m src.neon_connection --export-github-env
       - name: Fetch, validate and append into hosted PostgreSQL
-        run: python -m src.cloud_sync --day "$TARGET_DAY" --backfill-days "$BACKFILL"
+        run: python -m src.cloud_sync --day "$TARGET_DAY" --backfill-days "$BACKFILL" --recover-days "$RECOVER_DAYS"

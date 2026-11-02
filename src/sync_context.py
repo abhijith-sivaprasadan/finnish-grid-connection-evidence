@@ -17,7 +17,7 @@ import sqlite3
 from src.db import connect, db_path, insert
 from src.ingest.entsoe import fetch as fetch_entsoe
 from src.ingest.fingrid import DATASETS, fetch as fetch_fingrid
-from src.ingest.http import SourceError
+from src.ingest.http import HttpClient, SourceError
 from src.live_entsoe import completed_utc_day
 from src.quality import report
 
@@ -45,7 +45,8 @@ def _expect(records, *, source, dataset_id, metric=None, unit, start, end):
 
 
 def sync(day="", *, scope="both", db=None, include_generation=False,
-         fingrid_getter=None, entsoe_getter=None, today=None):
+         fingrid_getter=None, entsoe_getter=None, today=None, on_stage=None,
+         fingrid_client=None):
     """Retrieve real data before writing any row. Return safe aggregate metadata."""
     start, end = completed_utc_day(day, today=today)
     if scope not in SCOPES:
@@ -67,10 +68,20 @@ def sync(day="", *, scope="both", db=None, include_generation=False,
     rows = []
     source_counts = Counter()
 
+    # Fingrid enforces one request per two seconds PER API KEY. Reuse a
+    # single pacing client for datasets 124 and 74 instead of resetting its
+    # clock between requests (and between recovery days when supplied).
+    shared_fingrid_client = (fingrid_client or HttpClient()) if (
+        do_fingrid and fingrid_getter is None) else None
     if do_fingrid:
         for dataset_id in (124, 74):
             metric, unit = DATASETS[dataset_id]
-            fetched = fg(dataset_id, start, end)
+            if on_stage:
+                on_stage(f"FINGRID_{dataset_id}_FETCH")
+            fetched = (fg(dataset_id, start, end, client=shared_fingrid_client)
+                       if fingrid_getter is None else fg(dataset_id, start, end))
+            if on_stage:
+                on_stage(f"FINGRID_{dataset_id}_VALIDATE")
             _expect(fetched, source="fingrid", dataset_id=str(dataset_id),
                     metric=metric, unit=unit, start=start, end=end)
             source_counts[f"fingrid:{dataset_id}"] = len(fetched)
@@ -78,7 +89,11 @@ def sync(day="", *, scope="both", db=None, include_generation=False,
 
     if do_entsoe:
         for kind in (("load", "generation") if include_generation else ("load",)):
+            if on_stage:
+                on_stage(f"ENTSOE_{dataset_id}_FETCH")
             fetched = ee(kind, start, end)
+            if on_stage:
+                on_stage(f"ENTSOE_{dataset_id}_VALIDATE")
             dataset_id = {"load": "A65", "generation": "A75"}[kind]
             metric = "electricity_consumption" if kind == "load" else None
             _expect(fetched, source="entsoe", dataset_id=dataset_id,
@@ -94,6 +109,8 @@ def sync(day="", *, scope="both", db=None, include_generation=False,
     if len(set(identities)) != len(identities):
         raise ValueError("Duplicate records in source responses; database not changed")
 
+    if on_stage:
+        on_stage("STAGING_DATABASE_WRITE")
     target = db_path(db)
     with connect(target) as conn:
         # Connection manager rolls back every operation if any insert fails.

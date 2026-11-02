@@ -144,3 +144,26 @@ def test_generation_is_opt_in_and_not_silently_called(tmp_path, monkeypatch):
     with pytest.raises(ValueError, match="scope both or entsoe"):
         sync_context.sync(DAY, scope="fingrid", include_generation=True,
                           db=tmp_path / "other.sqlite", today=TODAY)
+
+
+def test_default_fingrid_requests_share_one_pacing_client(tmp_path, monkeypatch):
+    """The two datasets must not reset Fingrid's per-key two-second throttle."""
+    from src.ingest.http import HttpClient
+
+    monkeypatch.setenv("FINGRID_API_KEY", "TEST_KEY")
+    monkeypatch.setenv("ENTSOE_API_TOKEN", "TEST_TOKEN")
+    clients = []
+    records = fixtures()
+
+    def fingrid_spy(dataset_id, start, end, client=None):
+        clients.append(client)
+        return [r for r in records if r.source == "fingrid"
+                and r.dataset_id == str(dataset_id)]
+
+    monkeypatch.setattr(sync_context, "fetch_fingrid", fingrid_spy)
+    _, entsoe_getter = mock_fetchers()
+    sync_context.sync(DAY, db=tmp_path / "paced.sqlite", today=TODAY,
+                      entsoe_getter=entsoe_getter)
+    assert len(clients) == 2
+    assert isinstance(clients[0], HttpClient)
+    assert clients[0] is clients[1]
