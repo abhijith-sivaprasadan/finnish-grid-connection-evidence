@@ -83,10 +83,10 @@ def _safe_failure_code(exc):
             return "UPSTREAM_RATE_LIMIT"
         if "acknowledgement" in message:
             return "UPSTREAM_ACKNOWLEDGEMENT"
-        if "no " in message and "records" in message:
-            return "UPSTREAM_EMPTY"
         if "http " in message:
             return "UPSTREAM_HTTP"
+        if "no " in message and "records" in message:
+            return "UPSTREAM_EMPTY"
         return "UPSTREAM_NETWORK_OR_SOURCE"
     if isinstance(exc, (ValueError, KeyError, TypeError)):
         return "INVALID_SOURCE_SCHEMA_OR_DAY_COVERAGE"
