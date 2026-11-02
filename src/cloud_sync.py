@@ -224,6 +224,21 @@ def run(*, day="", backfill_days=1, recover_days=1, url=None, today=None,
                 # Fixed stage and error code only; never raw HTTP or driver text.
                 print(f"::warning::Missing verified UTC day {item['day']}: "
                       f"{item['stage']} / {item['code']}", flush=True)
+        # The most recent publication-safe UTC day must be present for the
+        # scheduled refresh to be green. Earlier recovered days have already
+        # been mirrored atomically, but they do NOT mean the current pipeline
+        # is healthy. This also prevents a fully failed recovery from exiting 0
+        # merely because older complete days were found in PostgreSQL.
+        if target not in already_complete and target.isoformat() not in observed_counts:
+            current_failure = next(
+                (item for item in failed if item["day"] == target.isoformat()), None
+            )
+            if current_failure is not None:
+                raise HostedImportError(
+                    current_failure["day"], current_failure["stage"],
+                    current_failure["code"]
+                )
+            raise HostedImportError(target.isoformat(), "RECOVERY_TARGET", "NOT_VALIDATED")
         return {
             "status": ("hosted_postgres_mirror_partial" if failed else
                        "hosted_postgres_mirror_completed"),

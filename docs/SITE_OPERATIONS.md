@@ -69,7 +69,12 @@ edit of the original October 17 2026 source snapshot.
   verifying full continuous coverage of Fingrid 124/74 and ENTSO-E A65, and
   stage each missing day separately. Only complete days are mirrored to Neon;
   incomplete days are reported using credential-safe `day / stage / error code`
-  warnings, never raw connection strings or source response bodies. The
+  warnings, never raw connection strings or source response bodies.
+  **If the latest publication-safe UTC day is still missing, the scheduled
+  refresh fails (exit 2) even if older UTC days were successfully recovered.**
+  `UPSTREAM_AUTH` for `ENTSOE_A65_FETCH` means the ENTSO-E token or
+  endpoint access must be checked; do not disable A65 verification to force a
+  green build. The
   collector reuses a single paced Fingrid HTTP client across all dataset and
   recovery-day requests to respect Fingrid's per-key two-second limit.
   Manual dispatch with `day` and `backfill_days` remains a strict, all-or-nothing

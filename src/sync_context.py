@@ -89,12 +89,12 @@ def sync(day="", *, scope="both", db=None, include_generation=False,
 
     if do_entsoe:
         for kind in (("load", "generation") if include_generation else ("load",)):
+            dataset_id = {"load": "A65", "generation": "A75"}[kind]
             if on_stage:
                 on_stage(f"ENTSOE_{dataset_id}_FETCH")
             fetched = ee(kind, start, end)
             if on_stage:
                 on_stage(f"ENTSOE_{dataset_id}_VALIDATE")
-            dataset_id = {"load": "A65", "generation": "A75"}[kind]
             metric = "electricity_consumption" if kind == "load" else None
             _expect(fetched, source="entsoe", dataset_id=dataset_id,
                     metric=metric, unit="MW", start=start, end=end)

@@ -167,3 +167,19 @@ def test_default_fingrid_requests_share_one_pacing_client(tmp_path, monkeypatch)
     assert len(clients) == 2
     assert isinstance(clients[0], HttpClient)
     assert clients[0] is clients[1]
+
+
+def test_provider_stage_labels_identify_entsoe_a65_not_fingrid(tmp_path, monkeypatch):
+    """Diagnostics must identify the upstream feed that really failed."""
+    monkeypatch.setenv("FINGRID_API_KEY", "TEST_KEY")
+    monkeypatch.setenv("ENTSOE_API_TOKEN", "TEST_TOKEN")
+    fg, ee = mock_fetchers()
+    stages = []
+    result = sync_context.sync(
+        DAY, db=tmp_path / "stages.sqlite", today=TODAY,
+        fingrid_getter=fg, entsoe_getter=ee, on_stage=stages.append)
+    assert result["records_retrieved"] == 3
+    assert "FINGRID_74_FETCH" in stages
+    assert "ENTSOE_A65_FETCH" in stages
+    assert "ENTSOE_A65_VALIDATE" in stages
+    assert "ENTSOE_74_FETCH" not in stages
