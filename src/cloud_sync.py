@@ -98,7 +98,7 @@ def _safe_failure_code(exc):
 def _verified_existing_days(engine, days):
     """Skip only *fully* valid stored UTC days in rolling recovery.
 
-    Read the last seven days through the database writer's private connection.
+    Read the last ten days through the database writer's private connection.
     An incomplete prior write is never treated as a complete day.
     """
     if not days:
@@ -131,8 +131,8 @@ def run(*, day="", backfill_days=1, recover_days=1, url=None, today=None,
         syncer=sync, writer=mirror, engine_factory=engine_for):
     if type(backfill_days) is not int or not 1 <= backfill_days <= 7:
         raise ValueError("Limit historical batch to 1–7 completed days")
-    if type(recover_days) is not int or not 1 <= recover_days <= 7:
-        raise ValueError("Limit rolling recovery to 1–7 completed days")
+    if type(recover_days) is not int or not 1 <= recover_days <= 10:
+        raise ValueError("Limit rolling recovery to 1–10 completed days")
     if recover_days > 1 and backfill_days != 1:
         raise ValueError("Select either manual backfill or rolling recovery")
     today = today or datetime.now(timezone.utc).date()
@@ -242,7 +242,7 @@ def main(argv=None):
     p.add_argument("--day", default="", help="Latest completed UTC day, default 3 days ago")
     p.add_argument("--backfill-days", type=int, default=1, help="Strict manual range 1..7")
     p.add_argument("--recover-days", type=int, default=1,
-                   help="Rolling recovery 1..7; skip only verified existing days")
+                   help="Rolling recovery 1..10; skip only verified existing days")
     args = p.parse_args(argv)
     try:
         print(json.dumps(run(day=args.day, backfill_days=args.backfill_days,
