@@ -16,7 +16,7 @@ import sqlite3
 
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
-from src.ingest.http import SourceError
+from src.ingest.http import HttpClient, SourceError
 from tempfile import TemporaryDirectory
 
 from src.cloud_store import collect_sqlite_rows, engine_for, mirror
@@ -147,6 +147,9 @@ def run(*, day="", backfill_days=1, recover_days=1, url=None, today=None,
     count = recover_days if recovery else backfill_days
     days = [target - timedelta(days=i) for i in reversed(range(count))]
     stage = ["STAGING"]
+    # One Fingrid client paces the API key across *every* recovery day.
+    # Fresh clients per dataset/day otherwise bypass provider throttling.
+    fingrid_client = HttpClient() if syncer is sync else None
     def update_stage(name):
         stage[0] = name
 
@@ -158,6 +161,7 @@ def run(*, day="", backfill_days=1, recover_days=1, url=None, today=None,
             kwargs = {}
             if syncer is sync:
                 kwargs["on_stage"] = update_stage
+                kwargs["fingrid_client"] = fingrid_client
             syncer(day=selected.isoformat(), scope="both", db=local_db,
                    today=today, include_generation=False, **kwargs)
             stage[0] = "VERIFY_UTC_DAY"
