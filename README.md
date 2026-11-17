@@ -194,3 +194,13 @@ Primary sources: [Fingrid Grid Scope](https://www.fingrid.fi/en/grid/grid-connec
 Source data retains the operator's rights and terms; no blanket data licence is
 asserted. This code is intended for the linked public portfolio repository; live API imports
 into a **local** database is an optional exercise; hosted Neon source ingestion\nand a screenshot comparison of the original Grid Scope 18-row sample have been completed.
+
+<!-- portfolio-reader-guide-2026:start -->
+## Engineering portfolio reader's guide (November 2026)
+
+**What to inspect:** Finnish grid-connection evidence atlas and source-coverage audit; distinguish public-source reproduction, model screening and commercial/operator-grade validation.
+
+**Portfolio case:** [Project context and evidence](https://abhijith-sivaprasadan.github.io/projects/finnish-grid-connection-evidence.html) · [Armada 2026 employer-facing selection](https://abhijith-sivaprasadan.github.io/for/armada-2026.html).
+
+These navigation links do not supersede the research status, assumptions, provenance, licences or validation limits documented above. This repository is not an employer-commissioned deliverable unless explicitly stated in its original project record.
+<!-- portfolio-reader-guide-2026:end -->
